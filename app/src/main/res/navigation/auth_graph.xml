@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/auth_entry_fragment">
+
+    <fragment
+        android:id="@+id/auth_entry_fragment"
+        android:name="com.example.seen.ui.authentication.fragments.AuthEntryFragment"
+        android:label="fragment_auth_entry"
+        tools:layout="@layout/fragment_auth_entry">
+        <action
+            android:id="@+id/action_entryFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.seen.ui.authentication.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.example.seen.ui.authentication.fragments.SignupFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" >
+        <action
+            android:id="@+id/action_signupFragment_to_questionnaireContainerFragment"
+            app:destination="@id/questionnaireContainerFragment" />
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountMadeFragment"
+        android:name="com.example.seen.ui.authentication.fragments.AccountMadeFragment"
+        android:label="fragment_account_made"
+        tools:layout="@layout/fragment_account_made" />
+    <fragment
+        android:id="@+id/questionnaireContainerFragment"
+        android:name="com.example.seen.ui.authentication.fragments.QuestionnaireContainerFragment"
+        android:label="fragment_questionnaire_container"
+        tools:layout="@layout/fragment_questionnaire_container" >
+        <action
+            android:id="@+id/action_questionnaireContainerFragment_to_accountMadeFragment"
+            app:destination="@id/accountMadeFragment"
+            app:popUpTo="@id/questionnaireContainerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

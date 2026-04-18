@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">سين</string>
+
+    <!-- entry fragment -->
+    <string name="login">تسجيل الدخول</string>
+    <string name="make_account">إنشاء حساب</string>
+
+    <!-- login fragment -->
+    <string name="login_now">سجل الدخول الآن</string>
+    <string name="email_hint">البريد الإلكتروني</string>
+    <string name="password_hint">كلمة المرور</string>
+    <string name="dont_have_account">ليس لديك حساب؟ </string>
+    <string name="register_now">أنشئ حسابًا جديدًا</string>
+
+    <string name="error_email_empty">يرجى إدخال البريد الإلكتروني</string>
+    <string name="error_email_invalid">يرجى إدخال بريد إلكتروني صحيح</string>
+    <string name="error_password_empty">يرجى إدخال كلمة المرور</string>
+    <string name="error_password_short">يجب أن تكون كلمة المرور 6 أحرف على الأقل</string>
+    <string name="error_password_spaces">لا يمكن أن تحتوي كلمة المرور على مسافات</string>
+    <string name="loading">جاري التحميل</string>
+    <string name="login_succesful">تم تسجيل الدخول بنجاح</string>
+    <string name="error_login">فشل تسجيل الدخول</string>
+
+
+    <!-- signup fragment -->
+    <string name="create_account_now">أنشئ حسابك الآن</string>
+    <string name="first_name">الاسم الاول</string>
+    <string name="last_name">اسم العائلة</string>
+    <string name="phone_hint">رقم الهاتف</string>
+    <string name="confirm_password_hint">تأكيد كلمة المرور</string>
+    <string name="continue_signup">استمرار</string>
+    <string name="already_has_account"> هل لديك حساب بالفعل؟</string>
+
+    <string name="error_first_name_empty">الرجاء ملء حقل الاسم الأول</string>
+    <string name="error_last_name_empty">الرجاء ملء حقل اسم العائلة</string>
+    <string name="error_phone_empty">الرجاء ملء حقل رقم الهاتف</string>
+    <string name="error_phone_invalid">الرجاء إدخال رقم هاتف صحيح</string>
+    <string name="error_confirm_password_empty">الرجاء تأكيد كلمة المرور</string>
+    <string name="error_password_not_match">كلمتا المرور غير متطابقتين</string>
+
+
+    <!-- QuestionnaireContainer fragment -->
+    <string name="signed_up_successfully">تم انشاء الحساب بنجاح</string>
+
+    <!-- Quesionnaire1 fragment -->
+    <string name="gender">النوع</string>
+    <string name="male">ذكر</string>
+    <string name="female">انثى</string>
+    <string name="birthdate">تاريخ الميلاد</string>
+    <string name="et_birthdate">شهر/يوم/سنة</string>
+    <string name="weight">الوزن</string>
+    <string name="et_weight">الوزن (كجم)</string>
+    <string name="height">الطول</string>
+    <string name="et_height">الطول (سم)</string>
+    <string name="next">التالي</string>
+    <string name="back">العودة</string>
+
+    <string name="error_height">الرجاء ادخال طول صحيح</string>
+    <string name="error_weight">الرجاء ادخال وزن صحيح</string>
+    <string name="error_fill_fields">يرجى ملء جميع الحقول المطلوبة</string>
+
+
+
+    <!-- Quesionnaire2 fragment -->
+    <string name="user_diabetes_type">ما نوع السكّري الذي لديك؟</string>
+    <string name="other">اخرى</string>
+
+    <string name="error_enter_type">الرجاء تحديد نوع السكري</string>
+
+
+    <!-- Quesionnaire3 fragment -->
+    <string name="user_insulin_therapy">كيف تفضل أخذ جرعتك من الإنسولين</string>
+    <string name="pens_syringes">أقلام / حقن</string>
+    <string name="pump">مضخة</string>
+    <string name="no_insulin">لا استخدم الإنسولين</string>
+
+    <string name="error_enter_insulin_therapy">الرجاء اختيار العلاج بالأنسولين</string>
+
+
+    <!-- AccountMade fragment -->
+    <string name="account_made">تم إنشاء حسابك بنجاح!</string>
+    <string name="welcome_msg">سعداء بانضمامك لينا! يلا نبدأ نتابع سكرّك مع بعض خطوة بخطوة.</string>
+
+    <!-- AuthViewModel -->
+    <string name="error_internet_connection">لا يوجد اتصال بالإنترنت</string>
+    <string name="error_io_dispatcher">فشل الشبكة</string>
+    <string name="error_conversion">خطأ في التحويل</string>
+
+    <!-- EntryHomeFragmeny -->
+    <string name="welcome_to">أهلًا بيك في</string>
+    <string name="home_welcome_msg">تحكّم في رحلتك مع السكر باهتمام، دعم، وثقة.</string>
+    <string name="start_now">ابدأ الان</string>
+
+    <!-- OnboardingContainer fragment -->
+    <string name="skip">تخطي</string>
+
+    <!-- OnBoarding1 fragment -->
+    <string name="on_boarding_1_title">تابع مستوى السكر بسهولة</string>
+    <string name="on_boarding_1_body">سجّل قراءاتك اليومية وتعلّم جسمك أكتر كل يوم.</string>
+
+    <!-- OnBoarding2 fragment -->
+    <string name="on_boarding_2_title">خليك متواصل، وخليك دايمًا مدعوم</string>
+    <string name="on_boarding_2_body">انضم إلى مجتمع داعم يشارك فيه مرضى السكري تجاربهم ونصائحهم ودوافعهم.</string>
+
+    <!-- OnBoarding3 fragment -->
+    <string name="on_boarding_3_title">شارك حالتك الصحية مع عائلتك</string>
+    <string name="on_boarding_3_body">اسمح لأفراد عائلتك بمتابعة حالتك الصحية والاطمئنان عليك في أي وقت.</string>
+    <string name="start">ابدأ</string>
+
+
+
+
+
+</resources>

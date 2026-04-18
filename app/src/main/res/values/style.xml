@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="progressDotInactive">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@drawable/ic_auth_dot_inactive</item>
+    </style>
+
+    <style name="progressDotActive">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@drawable/ic_auth_dot_active</item>
+    </style>
+
+</resources>

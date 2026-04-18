@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary">#6976EB</color>
+    <color name="secondary">#ADB4F3</color>
+    <color name="background">#FFFFFF</color>
+
+
+
+    <color name="streak">#F65629</color>
+    <color name="badge">#FD8F01</color>
+    <color name="bad_sugar_reading">#FF0404</color>
+    <color name="mid_sugar_reading">#FFC727</color>
+    <color name="good_sugar_reading">#0BAB7C</color>
+    <color name="divider">#C2C3CB</color>
+    <color name="text">#323142</color>
+    <color name="text_questionnaire">#3B3D53</color>
+    <color name="text_entry_page">#23262F</color>
+
+
+    <!-- Dark shades -->
+    <color name="dark_1">#2B3695</color>
+    <color name="dark_2">#1F1A5F</color>
+    <color name="dark_3">#161A41</color>
+
+    <color name="black">#FF000000</color>
+    <color name="grey">#ACADB9</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+</resources>
