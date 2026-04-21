@@ -34,7 +34,7 @@
         android:gravity="start"
         android:layout_marginTop="30dp"
         android:text="@string/on_boarding_3_title"
-        android:textColor="@color/text_entry_page"
+        android:textColor="@color/text_main"
         android:textSize="27sp"
         android:lineSpacingExtra = "-5dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -103,6 +103,14 @@
     <string name="on_boarding_3_body">Allow your family members to monitor your health and check on you at any time.</string>
     <string name="start">Start</string>
 
+    <!-- HomeFragment -->
+    <string name="hello_username">Hello, </string>
+    <string name="type_1">Type 1 Diabetes</string>
+    <string name="type_2">Type 2 Diabetes</string>
+    <string name="type_lada">Type LADA Diabetes</string>
+    <string name="type_mody">Type MODY Diabetes</string>
+    <string name="type_gestational">Type gestational Diabetes</string>
+
     
 
 
