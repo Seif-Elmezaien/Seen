@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity()
-data class Logs(
+data class Log(
     @PrimaryKey(autoGenerate = true)
     val log_id : Int,
     val user_id : Int,

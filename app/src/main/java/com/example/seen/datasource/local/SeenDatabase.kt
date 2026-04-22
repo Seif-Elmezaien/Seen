@@ -2,19 +2,21 @@ package com.example.seen.datasource.local
 
 import android.content.Context
 import androidx.room.Database
-import com.example.seen.domain.model.entites.Logs
+import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
 import com.example.seen.domain.model.entites.User
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.seen.datasource.local.dao.LogDao
+import com.example.seen.datasource.local.dao.UserDao
 
 
 @Database(
     entities = [
         User::class,
-        Logs::class,
+        Log::class,
         RecordGlucose::class,
         RecordMeal::class,
         RecordMedication::class
@@ -22,7 +24,9 @@ import androidx.room.RoomDatabase
     version = 1
 )
 abstract class SeenDatabase : RoomDatabase() {
-    abstract val seenDao: SeenDao
+    abstract val userDao: UserDao
+    abstract val logDao: LogDao
+
 
 
     companion object {
@@ -38,7 +42,7 @@ abstract class SeenDatabase : RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 SeenDatabase::class.java,
-                "seen_db.db"
+                "seen.db"
             ).build()
     }
 }

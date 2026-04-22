@@ -5,7 +5,7 @@ import androidx.room.Relation
 
 data class FullLog(
     @Embedded
-    val logs: Logs,
+    val log: Log,
 
     @Relation(
     parentColumn = "log_id",   // the log_id in Logs
