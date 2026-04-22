@@ -1,6 +1,6 @@
 package com.example.seen.domain.model.authentication
 
-import com.example.seen.domain.model.User
+import com.example.seen.domain.model.entites.User
 
 data class LoginAndSignupResponse(
     val message: String,

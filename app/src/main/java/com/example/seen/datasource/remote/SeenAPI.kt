@@ -1,6 +1,5 @@
 package com.example.seen.datasource.remote
 
-import com.example.seen.domain.model.User
 import com.example.seen.domain.model.authentication.CheckEmailRequest
 import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse

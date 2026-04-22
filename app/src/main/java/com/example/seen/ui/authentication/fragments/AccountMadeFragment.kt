@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.seen.databinding.FragmentAccountMadeBinding
-import com.example.seen.domain.model.User
 import com.example.seen.ui.MainActivity
 
 class AccountMadeFragment : Fragment() {

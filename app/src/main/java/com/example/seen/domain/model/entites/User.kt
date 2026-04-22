@@ -1,7 +1,11 @@
-package com.example.seen.domain.model
+package com.example.seen.domain.model.entites
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity()
 data class User(
+    @PrimaryKey(autoGenerate = false)
     var id: Int,
     var first_name: String,
     var last_name: String,

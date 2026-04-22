@@ -1,7 +1,6 @@
 package com.example.seen.ui.authentication.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -11,14 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.viewModels
 import com.example.seen.R
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.seen.databinding.FragmentQuestionnaireContainerBinding
-import com.example.seen.domain.model.User
+import com.example.seen.domain.model.entites.User
 import com.example.seen.domain.model.authentication.SignupRequest
-import com.example.seen.ui.MainActivity
 import com.example.seen.ui.authentication.AuthActivity
 import com.example.seen.ui.authentication.adapter.QuestionnaireContainerAdapter
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
