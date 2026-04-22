@@ -115,6 +115,12 @@
     <string name="type_lada">سكري من النوع ذاتي المناعة</string>
     <string name="type_mody">سكري الشباب الناضجين</string>
     <string name="type_gestational">سكري من النوع الحملي</string>
+    <string name="today">اليوم</string>
+    <string name="yesterday">أمس</string>
+    <string name="blood_sugar_level">مستوى السكر (mg/dL)</string>
+
+
+
 
 
 

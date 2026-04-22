@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -84,6 +85,104 @@
                 android:contentDescription="notification"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdHomeGraph"
+                android:layout_width="0dp"
+                android:layout_height="340dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="40dp"
+                android:elevation="5dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvUserDiabetesType">
+
+                <LinearLayout
+                    android:id="@+id/llHomeGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/llDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvToday"
+                            android:layout_width="66dp"
+                            android:layout_height="31dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="40dp"
+                            android:fontFamily="@font/cairo_bold"
+                            android:background="@drawable/bg_tab_active"
+                            android:gravity="center"
+                            android:text="@string/today"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvYesterday"
+                            android:layout_width="70dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="40dp"
+                            android:fontFamily="@font/cairo_bold"
+                            android:gravity="center"
+                            android:text="@string/yesterday"
+                            android:textColor="@color/text_main"
+                            android:textSize="10sp" />
+
+
+                        <ImageView
+                            android:id="@+id/ivCalendar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginStart="50dp"
+                            android:src="@drawable/ic_calendar_home"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginEnd="25dp"
+                        android:background="@color/primary" />
+
+                    <com.patrykandpatrick.vico.views.cartesian.CartesianChartView
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="225dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginEnd="25dp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:text="@string/blood_sugar_level"
+                        android:drawableStart="@drawable/ic_legend_dot"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/grey"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

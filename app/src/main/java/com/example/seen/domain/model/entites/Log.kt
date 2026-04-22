@@ -3,7 +3,7 @@ package com.example.seen.domain.model.entites
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity()
+@Entity(tableName = "logs")
 data class Log(
     @PrimaryKey(autoGenerate = true)
     val log_id : Int,

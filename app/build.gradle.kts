@@ -90,4 +90,8 @@ dependencies {
 
     //indecator
     implementation ("me.relex:circleindicator:2.1.6")
+
+    // Chart
+    implementation("com.patrykandpatrick.vico:core:2.0.0")
+    implementation("com.patrykandpatrick.vico:views:2.0.0")
 }

@@ -28,7 +28,7 @@ interface LogDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecordGlucose(recordGlucose: RecordGlucose): Long
 
-    @Update()
+    @Update
     suspend fun updateRecordGlucose(recordGlucose: RecordGlucose)
 
     @Delete
@@ -38,7 +38,7 @@ interface LogDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecordMeal(recordMeal: RecordMeal) : Long
 
-    @Update()
+    @Update
     suspend fun updateRecordMeal(recordMeal: RecordMeal)
 
     @Delete
@@ -48,7 +48,7 @@ interface LogDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecordMedication(recordMedication: RecordMedication): Long
 
-    @Update()
+    @Update
     suspend fun updateRecordMedication(recordMedication: RecordMedication)
 
     @Delete
@@ -56,7 +56,7 @@ interface LogDao {
 
     //get All Logs
     @Transaction()
-    @Query("SELECT * FROM Log ORDER BY created_at DESC")
+    @Query("SELECT * FROM logs ORDER BY created_at DESC")
     fun getAllLogs() : LiveData<List<FullLog>>
 
 }

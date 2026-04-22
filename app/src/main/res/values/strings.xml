@@ -110,6 +110,9 @@
     <string name="type_lada">Type LADA Diabetes</string>
     <string name="type_mody">Type MODY Diabetes</string>
     <string name="type_gestational">Type gestational Diabetes</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="blood_sugar_level">Blood sugar level (mg/dL)</string>
 
     
 
