@@ -90,7 +90,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cdHomeGraph"
                 android:layout_width="0dp"
-                android:layout_height="340dp"
+                android:layout_height="320dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginTop="40dp"
@@ -158,10 +158,11 @@
                         android:layout_marginEnd="25dp"
                         android:background="@color/primary" />
 
-                    <com.patrykandpatrick.vico.views.cartesian.CartesianChartView
+
+                    <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chart"
                         android:layout_width="match_parent"
-                        android:layout_height="225dp"
+                        android:layout_height="165dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="25dp"
                         android:layout_marginEnd="25dp"
@@ -172,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/cairo_semibold"
+                        android:layout_marginTop="30dp"
                         android:text="@string/blood_sugar_level"
                         android:drawableStart="@drawable/ic_legend_dot"
                         android:drawablePadding="5dp"
