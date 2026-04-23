@@ -81,9 +81,11 @@ class HomeFragment : Fragment() {
             spaceMin = 1f
             spaceMax = 1f
             setDrawGridLines(true)
+            axisLineColor = Color.parseColor("#A6A6A6")
+            axisLineWidth = 1f
             gridColor = Color.parseColor("#828898")
             textColor = colorText
-            textSize = 12f
+            textSize = 8f
         }
 
         // --- Y Axis (Left) ---
@@ -93,10 +95,12 @@ class HomeFragment : Fragment() {
             granularity = 30f
             spaceMin = 1f
             spaceMax = 1f
+            axisLineColor = Color.parseColor("#A6A6A6")
+            axisLineWidth = 1f
             setDrawGridLines(true)
             gridColor = Color.parseColor("#828898")
             textColor = colorText
-            textSize = 12f
+            textSize = 8f
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return englishFormat.format(value)

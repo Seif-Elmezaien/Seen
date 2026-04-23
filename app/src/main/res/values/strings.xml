@@ -113,6 +113,8 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="blood_sugar_level">Blood sugar level (mg/dL)</string>
+    <string name="blood_sugar_level_graph">Blood sugar</string>
+    <string name="time">Time</string>
 
     
 
