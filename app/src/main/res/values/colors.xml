@@ -3,11 +3,12 @@
 
     <color name="primary">#6976EB</color>
     <color name="secondary">#ADB4F3</color>
+    <color name="secondary_2">#D7DAF3</color>
     <color name="background">#FFFFFF</color>
 
 
 
-    <color name="streak">#F65629</color>
+    <color name="alert_streak">#F65629</color>
     <color name="badge">#FD8F01</color>
     <color name="bad_sugar_reading">#FF0404</color>
     <color name="mid_sugar_reading">#FFC727</color>

@@ -54,7 +54,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/cairo_bold"
                 android:gravity="start"
-                android:text="@string/hello_username"
+                android:text="اهلا، منصور"
                 android:textColor="@color/text_main"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf ="@+id/guideline_v50"
@@ -92,10 +92,10 @@
                 android:layout_width="0dp"
                 android:layout_height="330dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 android:layout_marginTop="40dp"
-                android:elevation="5dp"
+                android:layout_marginEnd="30dp"
                 app:cardCornerRadius="12dp"
+                app:cardElevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUserDiabetesType">
@@ -110,17 +110,17 @@
                         android:id="@+id/llDate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tvToday"
                             android:layout_width="66dp"
                             android:layout_height="31dp"
-                            android:layout_marginTop="20dp"
                             android:layout_marginStart="40dp"
-                            android:fontFamily="@font/cairo_bold"
+                            android:layout_marginTop="20dp"
                             android:background="@drawable/bg_tab_active"
+                            android:fontFamily="@font/cairo_bold"
                             android:gravity="center"
                             android:text="@string/today"
                             android:textColor="@color/white"
@@ -130,8 +130,8 @@
                             android:id="@+id/tvYesterday"
                             android:layout_width="70dp"
                             android:layout_height="40dp"
-                            android:layout_marginTop="20dp"
                             android:layout_marginStart="40dp"
+                            android:layout_marginTop="20dp"
                             android:fontFamily="@font/cairo_bold"
                             android:gravity="center"
                             android:text="@string/yesterday"
@@ -143,9 +143,9 @@
                             android:id="@+id/ivCalendar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
                             android:layout_marginStart="50dp"
-                            android:src="@drawable/ic_calendar_home"/>
+                            android:layout_marginTop="30dp"
+                            android:src="@drawable/ic_calendar_home" />
 
                     </LinearLayout>
 
@@ -153,8 +153,8 @@
                         android:id="@+id/view"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:layout_marginTop="10dp"
                         android:layout_marginStart="25dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="25dp"
                         android:background="@color/primary" />
 
@@ -162,13 +162,13 @@
                         android:id="@+id/tvChartTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10sp"
+                        android:layout_gravity="left"
                         android:layout_marginLeft="40dp"
-                        android:text="@string/blood_sugar_level_graph"
-                        android:textSize="10sp"
-                        android:textColor="@color/grey"
+                        android:layout_marginTop="10sp"
                         android:fontFamily="@font/cairo_semibold"
-                        android:layout_gravity="left" />
+                        android:text="@string/blood_sugar_level_graph"
+                        android:textColor="@color/grey"
+                        android:textSize="10sp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -189,13 +189,13 @@
                             android:id="@+id/tvXTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/cairo_semibold"
                             android:layout_marginBottom="2dp"
+                            android:fontFamily="@font/cairo_semibold"
                             android:text="@string/time"
                             android:textColor="@color/grey"
                             android:textSize="10sp"
-                            app:layout_constraintLeft_toRightOf="@+id/chart"
-                            app:layout_constraintBottom_toBottomOf="parent" />
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@+id/chart" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -204,18 +204,388 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
-                        android:fontFamily="@font/cairo_semibold"
-                        android:text="@string/blood_sugar_level"
                         android:drawableStart="@drawable/ic_legend_dot"
                         android:drawablePadding="5dp"
+                        android:fontFamily="@font/cairo_semibold"
                         android:gravity="center"
+                        android:text="@string/blood_sugar_level"
                         android:textColor="@color/grey"
                         android:textSize="10sp" />
-
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdAlert"
+                android:layout_width="0dp"
+                android:layout_height="88dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="20dp"
+                app:cardBackgroundColor="@color/alert_streak"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_v50"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cdHomeGraph">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clAlert"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/tvAlertTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/ic_alert_title"
+                        android:drawablePadding="15dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="تغريد منصور"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivAlertBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/ic_alert_body"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvAlertBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/cairo_medium"
+                        android:text="مساعدة عاجلة"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/ivAlertArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="23dp"
+                        android:layout_marginBottom="15dp"
+                        android:src="@drawable/ic_arrow_white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdChatbot"
+                android:layout_width="0dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="10dp"
+                app:cardBackgroundColor="@color/secondary_2"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cdAlert"
+                app:layout_constraintStart_toStartOf="@id/guideline_v50"
+                app:layout_constraintTop_toBottomOf="@+id/cdHomeGraph">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clChatbot"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/tvChatbotTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/ic_chatbot_title"
+                        android:drawablePadding="15dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="المساعد الذكي"
+                        android:textColor="@color/text_questionnaire"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivChatbotBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_chatbot_body"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvChatbotBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/cairo_medium"
+                        android:text="تحدث معنا"
+                        android:textColor="@color/text_questionnaire"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/ivChatbotArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:src="@drawable/ic_arrow_black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdChallenges"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cdChatbot">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clChallenges"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_home_card_grediant"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/tvChallengesTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/ic_reminder_title"
+                        android:drawablePadding="15dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="تحدَّ نفسك"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivChallengesBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:src="@drawable/ic_reminder_body"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/tvChallengesBody"
+                        android:layout_width="244dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/cairo_medium"
+                        android:text="ابدأ بتحديات بسيطة، واستمر لتحقق فرقًا حقيقيًا في صحتك."
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/ivChallengesArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_arrow_white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdReminder"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cdChallenges">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clReminder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_home_card_grediant"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/tvReminderTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/ic_reminder_title"
+                        android:drawablePadding="15dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="اضبط التذكير الخاص بك"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivReminderBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:src="@drawable/ic_reminder_body"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvReminderBody"
+                        android:layout_width="244dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/cairo_medium"
+                        android:text="حدّد الوقت المناسب لتلقي تنبيهات منتظمة تساعدك على متابعة بياناتك الصحية بدقة."
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/ivReminderArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_arrow_white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdAddLogs"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cdReminder">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clAddLogs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_home_card_grediant"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/tvAddLogsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/ic_add_logs_title"
+                        android:drawablePadding="15dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="إضافة سجل جديد"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivAddLogsBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:src="@drawable/ic_add_logs_body"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvAddLogsBody"
+                        android:layout_width="244dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/cairo_medium"
+                        android:text="سجّل مستوى السكر والوجبات والأدوية
+لمتابعة حالتك اليومية بسهولة."
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/ivAddLogsArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:src="@drawable/ic_add_log_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
