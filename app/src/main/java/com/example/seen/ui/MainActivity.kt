@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkToken(): String? {
-        val sharedPref = getSharedPreferences("token", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("Auth", MODE_PRIVATE)
         return sharedPref.getString("token", null)
     }
 

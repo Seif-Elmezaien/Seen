@@ -43,7 +43,7 @@ class QuestionnaireContainerFragment : Fragment() {
 
         val adapter = QuestionnaireContainerAdapter(this)
         binding.vpQuestionnaire.adapter = adapter
-        sharedPref = requireActivity().getSharedPreferences("token", Context.MODE_PRIVATE)!!
+        sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)!!
         editor = sharedPref.edit()
 
         // Link CircleIndicator to ViewPager2

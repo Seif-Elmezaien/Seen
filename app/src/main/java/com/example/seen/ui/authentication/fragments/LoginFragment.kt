@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
      */
     private fun initDependencies(){
         viewModel = (activity as AuthActivity).viewModel
-        sharedPref = requireActivity().getSharedPreferences("token", Context.MODE_PRIVATE)!!
+        sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)!!
         editor = sharedPref.edit()
     }
 
