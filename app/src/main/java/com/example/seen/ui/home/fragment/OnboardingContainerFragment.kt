@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.seen.R
 import com.example.seen.databinding.FragmentOnboardingContainerBinding
@@ -35,7 +36,13 @@ class OnboardingContainerFragment : Fragment() {
 
         binding.tvskip.setOnClickListener {
             onBoardingFinished()
-            findNavController().navigate(R.id.action_onboardingContainerFragment_to_homeFragment)
+            findNavController().navigate(
+                R.id.action_onboardingContainerFragment_to_homeFragment,
+                null,
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.homeEntryFragment, true)
+                    .build()
+            )
         }
 
         binding.btnGoNext.setOnClickListener {
@@ -43,7 +50,13 @@ class OnboardingContainerFragment : Fragment() {
                 binding.vpOnBoarding.currentItem += 1
             } else {
                 onBoardingFinished()
-                findNavController().navigate(R.id.action_onboardingContainerFragment_to_homeFragment)
+                findNavController().navigate(
+                    R.id.action_onboardingContainerFragment_to_homeFragment,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(R.id.homeEntryFragment, true)
+                        .build()
+                )
             }
         }
 

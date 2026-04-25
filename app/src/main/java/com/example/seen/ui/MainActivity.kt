@@ -11,9 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.seen.R
 import com.example.seen.databinding.ActivityMainBinding
 import com.example.seen.ui.authentication.AuthActivity
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,20 +36,8 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = binding.bottomNavigationView
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-
             when (destination.id) {
-
-                R.id.onboardingContainerFragment -> {
-                    binding.bottomAppBar.visibility = View.GONE
-                    binding.fabAddLogs.visibility = View.GONE
-                }
-
-                R.id.homeEntryFragment -> {
-                    binding.bottomAppBar.visibility = View.GONE
-                    binding.fabAddLogs.visibility = View.GONE
-                }
-
-                else -> {
+                R.id.homeFragment -> {
                     binding.bottomAppBar.visibility = View.VISIBLE
                     binding.fabAddLogs.visibility = View.VISIBLE
                 }
