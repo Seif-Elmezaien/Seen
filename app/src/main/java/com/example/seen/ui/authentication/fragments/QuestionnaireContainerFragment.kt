@@ -128,6 +128,7 @@ class QuestionnaireContainerFragment : Fragment() {
                         "Error: ${response.message}",
                         Toast.LENGTH_SHORT
                     ).show()
+                    viewModel.resetSignupState()
                 }
 
                 is Resource.Loading -> {}

@@ -49,8 +49,6 @@ class SignupFragment : Fragment() {
 
         viewModel = (activity as AuthActivity).viewModel
 
-        findNavController().navigate(R.id.action_signupFragment_to_questionnaireContainerFragment)
-
         clearErrorOnFocus(
             binding.etFirstName,
             binding.etLastName,
@@ -187,6 +185,7 @@ class SignupFragment : Fragment() {
                 is Resource.Error -> {
                     setButtonLoading(false)
                     Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                    viewModel.resetEmailExistState()
                 }
 
                 is Resource.Loading -> {setButtonLoading(true)}

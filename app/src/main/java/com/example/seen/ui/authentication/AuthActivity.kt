@@ -3,6 +3,7 @@ package com.example.seen.ui.authentication
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.seen.databinding.AuthMainBinding
 import com.example.seen.datasource.local.SeenDatabase
@@ -21,12 +22,21 @@ class AuthActivity : AppCompatActivity() {
         binding = AuthMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //to make the app in portrait mode only
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setUpSystemSettings()
 
         val authRepository = AuthRepository()
         val userRepository = UserRepository(SeenDatabase(this))
         val viewModelProviderFactory = AuthViewModelProviderFactory(application, authRepository, userRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(AuthViewModel::class.java)
+    }
+
+    private fun setUpSystemSettings(){
+        // screen rotation
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        // status bar color
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
     }
 }

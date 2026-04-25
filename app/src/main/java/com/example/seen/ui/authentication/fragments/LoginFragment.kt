@@ -149,7 +149,10 @@ class LoginFragment : Fragment() {
                     Log.d("LoginFragment", "Token: $token")
                     Log.d("LoginFragment", "User: ${response.data?.user}")
 
-                    Toast.makeText(requireContext(), getString(R.string.login_succesful), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.login_succesful),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     viewModel.resetLoginState()
                     goToMain()
                 }
@@ -162,6 +165,7 @@ class LoginFragment : Fragment() {
                         "Error: ${response.message}",
                         Toast.LENGTH_SHORT
                     ).show()
+                    viewModel.resetLoginState()
                 }
                 is Resource.Loading -> { setButtonLoading(true) }
 
