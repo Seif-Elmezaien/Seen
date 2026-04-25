@@ -88,10 +88,12 @@ dependencies {
     kapt ("com.github.bumptech.glide:compiler:4.11.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
-    //indecator
+    // Indicator
     implementation ("me.relex:circleindicator:2.1.6")
 
     // Chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    // Bottom_nav_bar
+    implementation("com.google.android.material:material:1.11.0")
 }

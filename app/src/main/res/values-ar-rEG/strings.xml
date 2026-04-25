@@ -108,6 +108,12 @@
     <string name="on_boarding_3_body">اسمح لأفراد عائلتك بمتابعة حالتك الصحية والاطمئنان عليك في أي وقت.</string>
     <string name="start">ابدأ</string>
 
+    <!-- bottom_nav_menu -->
+    <string name="home">الرئيسية</string>
+    <string name="community">المجتمع</string>
+    <string name="report">التقارير</string>
+    <string name="more">المزيد</string>
+
     <!-- HomeFragment -->
     <string name="hello_username">اهلا، </string>
     <string name="type_1">سكري من النوع الاول</string>

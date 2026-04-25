@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miHome"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home"/>
+
+    <item
+        android:id="@+id/miCommunity"
+        android:title="@string/community"
+        android:icon="@drawable/ic_community"/>
+
+    <item
+        android:id="@+id/placeholder"
+        android:enabled="false"
+        android:title=""/>
+
+    <item
+        android:id="@+id/miReports"
+        android:title="@string/report"
+        android:icon="@drawable/ic_reports"/>
+
+    <item
+        android:id="@+id/miMore"
+        android:title="@string/more"
+        android:icon="@drawable/ic_more"/>
+
+</menu>
