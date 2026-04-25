@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.seen.R
 import com.example.seen.databinding.FragmentLoginBinding
 import com.example.seen.domain.model.authentication.LoginRequest
-import com.example.seen.domain.model.entites.User
 import com.example.seen.ui.MainActivity
 import com.example.seen.ui.authentication.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
@@ -147,7 +146,6 @@ class LoginFragment : Fragment() {
                     if (token != null) {
                         setToken(token)
                     }
-                    addUserToDatabase(response.data!!.user)
                     Log.d("LoginFragment", "Token: $token")
                     Log.d("LoginFragment", "User: ${response.data?.user}")
 
@@ -178,10 +176,6 @@ class LoginFragment : Fragment() {
     private fun setToken(token: String) {
         editor.putString("token", token)
         editor.apply()
-    }
-
-    private fun addUserToDatabase(user: User) {
-        // Wait until there is database
     }
 
     /**

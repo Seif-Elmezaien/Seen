@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.seen.databinding.AuthMainBinding
+import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.AuthRepository
+import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.example.seen.ui.authentication.viewmodel.AuthViewModelProviderFactory
 
@@ -23,7 +25,8 @@ class AuthActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         val authRepository = AuthRepository()
-        val viewModelProviderFactory = AuthViewModelProviderFactory(application, authRepository)
+        val userRepository = UserRepository(SeenDatabase(this))
+        val viewModelProviderFactory = AuthViewModelProviderFactory(application, authRepository, userRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(AuthViewModel::class.java)
     }
 }

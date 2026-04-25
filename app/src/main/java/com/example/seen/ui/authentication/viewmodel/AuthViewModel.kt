@@ -7,8 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.seen.R
-import com.example.seen.SeenApplication
+import com.example.seen.util.SeenApplication
 import com.example.seen.datasource.repository.AuthRepository
+import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.authentication.CheckEmailRequest
 import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
@@ -22,7 +23,8 @@ import retrofit2.Response
 
 class AuthViewModel(
     app: Application,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : AndroidViewModel(app) {
 
     private val _loginState = MutableLiveData<Resource<LoginAndSignupResponse>?>()
@@ -39,7 +41,15 @@ class AuthViewModel(
 
     fun login(loginRequest: LoginRequest) = viewModelScope.launch {
         _loginState.postValue(Resource.Loading())
-        _loginState.postValue(safeApiCall { authRepository.login(loginRequest) })
+
+        val result = safeApiCall { authRepository.login(loginRequest) }
+        _loginState.postValue(result)
+
+        if (result is Resource.Success) {
+            result.data?.let { response ->
+                userRepository.upsertUser(response.user)
+            }
+        }
     }
 
     fun checkEmailExist(email: CheckEmailRequest) = viewModelScope.launch {
@@ -49,7 +59,15 @@ class AuthViewModel(
 
     fun signup(user: SignupRequest) = viewModelScope.launch {
         _signupState.postValue(Resource.Loading())
-        _signupState.postValue(safeApiCall { authRepository.signup(user) })
+
+        val result = safeApiCall { authRepository.signup(user) }
+        _signupState.postValue(result)
+
+        if (result is Resource.Success) {
+            result.data?.let { response ->
+                userRepository.upsertUser(response.user)
+            }
+        }
     }
 
     fun resetLoginState() {

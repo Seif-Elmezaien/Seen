@@ -110,7 +110,6 @@ class QuestionnaireContainerFragment : Fragment() {
                     if (token != null) {
                         setToken(token)
                     }
-                    addUserToDatabase(response.data!!.user)
                     Log.d("QuestionnaireContainerFragment", "Token: $token")
                     Log.d("QuestionnaireContainerFragment", "User: ${response.data?.user}")
 
@@ -140,10 +139,6 @@ class QuestionnaireContainerFragment : Fragment() {
     private fun setToken(token: String) {
         editor.putString("token", token)
         editor.apply()
-    }
-
-    private fun addUserToDatabase(user: User) {
-        // Wait until there is database
     }
 
     private fun goToAccountMade() {

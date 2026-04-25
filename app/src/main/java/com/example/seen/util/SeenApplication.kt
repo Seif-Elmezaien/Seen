@@ -1,4 +1,4 @@
-package com.example.seen
+package com.example.seen.util
 
 import android.app.Application
 
