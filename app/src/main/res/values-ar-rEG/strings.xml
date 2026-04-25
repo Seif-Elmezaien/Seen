@@ -116,11 +116,17 @@
     <string name="type_mody">سكري الشباب الناضجين</string>
     <string name="type_gestational">سكري من النوع الحملي</string>
     <string name="today">اليوم</string>
-    <string name="yesterday">أمس</string>
+    <string name="yesterday">الأمس</string>
     <string name="blood_sugar_level">مستوى السكر (mg/dL)</string>
     <string name="blood_sugar_level_graph">مستوى السكر</string>
     <string name="time">الوقت</string>
-
+    <string name="alert_title">تغريد منصور</string>
+    <string name="alert_body">مساعدة عاجلة</string>
+    <string name="chatbot_title">المساعد الذكي</string>
+    <string name="chatbot_body">تحدث معنا</string>
+    <string name="reminder_title">اضبط التذكير الخاص بك</string>
+    <string name="reminder_body">حدّد الوقت المناسب لتلقي تنبيهات منتظمة تساعدك على متابعة بياناتك الصحية بدقة.</string>
+    <string name="today_date">ديسمبر 5, 2025</string>
 
 
 

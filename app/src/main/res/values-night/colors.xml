@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#6976EB</color>
+    <color name="secondary">#ADB4F3</color>
+    <color name="secondary_2">#D7DAF3</color>
+    <color name="background">#0A0E27</color>
+
+    <color name="title">#FFFFFF</color>
+    <color name="description">#99A1AF</color>
+    <color name="card_title">#FFFFFF</color>
+    <color name="links">#ADB4F3</color>
+
+
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

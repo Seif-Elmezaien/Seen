@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import com.example.seen.databinding.ActivityMainBinding
 import com.example.seen.ui.authentication.AuthActivity
 
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val token = checkToken()
 

@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         val englishFormat = NumberFormat.getInstance(Locale.ENGLISH)
 
         val colorPrimary = ContextCompat.getColor(requireContext(), R.color.primary)
-        val colorText = ContextCompat.getColor(requireContext(), R.color.grey)
+        val colorText = ContextCompat.getColor(requireContext(), R.color.white)
 
         val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_legend_dot)
 
@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
         )
 
         val dataSet = LineDataSet(entries, "Blood Glucose Level").apply {
-            color = colorPrimary //Line color
+            color = Color.parseColor("#FFFFFF") //Line color
             lineWidth = 2.5f
             setDrawFilled(true)
             fillDrawable = areaBackground
@@ -81,9 +81,9 @@ class HomeFragment : Fragment() {
             spaceMin = 1f
             spaceMax = 1f
             setDrawGridLines(true)
-            axisLineColor = Color.parseColor("#A6A6A6")
+            axisLineColor = Color.parseColor("#FFFFFF")
             axisLineWidth = 1f
-            gridColor = Color.parseColor("#828898")
+            gridColor = Color.parseColor("#1AFFFFFF")
             textColor = colorText
             textSize = 8f
         }
@@ -95,10 +95,10 @@ class HomeFragment : Fragment() {
             granularity = 30f
             spaceMin = 1f
             spaceMax = 1f
-            axisLineColor = Color.parseColor("#A6A6A6")
+            axisLineColor = Color.parseColor("#FFFFFF")
             axisLineWidth = 1f
             setDrawGridLines(true)
-            gridColor = Color.parseColor("#828898")
+            gridColor = Color.parseColor("#1AFFFFFF")
             textColor = colorText
             textSize = 8f
             valueFormatter = object : ValueFormatter() {
@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
             isDragEnabled = true
             setScaleEnabled(false)
             setPinchZoom(false)
-            setBackgroundColor(Color.WHITE)
+            setBackgroundColor(Color.TRANSPARENT)
             animateX(1000) // Animate on load
         }
 

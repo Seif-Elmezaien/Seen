@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvItemHomeLogs"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_margin="30dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:background="#0DFFFFFF"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_home_log_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLogTitle"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="عندما استيقظت"
+            android:textColor="@color/title"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLogReadingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/cairo"
+            android:text="8:00 صباحا"
+            android:textColor="@color/title"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLogReadingType"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/cairo_medium"
+            android:text="قياس سكر صائم"
+            android:textColor="@color/title"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogTitle" />
+
+        <TextView
+            android:id="@+id/tvLogReadingValue"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:background="@drawable/bg_sugar_mid_reading"
+            android:fontFamily="@font/cairo_medium"
+            android:gravity="center"
+            android:text="120 mg/ml"
+            android:textColor="@color/mid_sugar_reading"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
