@@ -1,6 +1,7 @@
-package com.example.seen.ui.authentication
+package com.example.seen.ui.activites
 
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -25,8 +26,9 @@ class AuthActivity : AppCompatActivity() {
         setUpSystemSettings()
 
         val authRepository = AuthRepository()
-        val userRepository = UserRepository(SeenDatabase(this))
-        val viewModelProviderFactory = AuthViewModelProviderFactory(application, authRepository, userRepository)
+        val userRepository = UserRepository(SeenDatabase.Companion(this))
+        val viewModelProviderFactory =
+            AuthViewModelProviderFactory(application, authRepository, userRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(AuthViewModel::class.java)
     }
 
@@ -35,7 +37,7 @@ class AuthActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         // status bar color
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.statusBarColor = Color.TRANSPARENT
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
     }

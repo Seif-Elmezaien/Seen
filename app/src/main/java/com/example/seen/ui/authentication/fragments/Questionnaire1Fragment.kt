@@ -12,7 +12,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.example.seen.R
 import com.example.seen.databinding.FragmentQuestionnaire1Binding
-import com.example.seen.ui.authentication.AuthActivity
+import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.google.android.material.button.MaterialButton
 import java.util.Calendar

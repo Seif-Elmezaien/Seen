@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.seen.databinding.FragmentQuestionnaireContainerBinding
 import com.example.seen.domain.model.entites.User
 import com.example.seen.domain.model.authentication.SignupRequest
-import com.example.seen.ui.authentication.AuthActivity
+import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.adapter.QuestionnaireContainerAdapter
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.example.seen.util.Resource

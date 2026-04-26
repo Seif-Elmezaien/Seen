@@ -115,7 +115,7 @@
     <string name="more">المزيد</string>
 
     <!-- HomeFragment -->
-    <string name="hello_username">اهلا، </string>
+    <string name="hello_username">اهلا،</string>
     <string name="type_1">سكري من النوع الاول</string>
     <string name="type_2">سكري من النوع الثاني</string>
     <string name="type_lada">سكري من النوع ذاتي المناعة</string>

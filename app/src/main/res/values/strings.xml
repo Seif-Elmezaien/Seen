@@ -110,7 +110,7 @@
     <string name="more">More</string>
 
     <!-- HomeFragment -->
-    <string name="hello_username">Hello, </string>
+    <string name="hello_username">Hello,</string>
     <string name="type_1">Type 1 Diabetes</string>
     <string name="type_2">Type 2 Diabetes</string>
     <string name="type_lada">Type LADA Diabetes</string>

@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.seen.R
 import com.example.seen.databinding.FragmentQuestionnaire3Binding
-import com.example.seen.ui.authentication.AuthActivity
+import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.google.android.material.button.MaterialButton
 import kotlin.getValue

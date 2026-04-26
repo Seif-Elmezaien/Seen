@@ -17,7 +17,7 @@ import com.example.seen.R
 import com.example.seen.databinding.FragmentSignupBinding
 import com.example.seen.domain.model.authentication.CheckEmailRequest
 import com.example.seen.domain.model.authentication.SignupRequest
-import com.example.seen.ui.authentication.AuthActivity
+import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.example.seen.util.Resource
 import kotlinx.coroutines.launch

@@ -1,7 +1,8 @@
-package com.example.seen.ui
+package com.example.seen.ui.activites
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.seen.R
 import com.example.seen.databinding.ActivityMainBinding
-import com.example.seen.ui.authentication.AuthActivity
+import com.example.seen.ui.activites.AuthActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         // status bar color
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.statusBarColor = Color.TRANSPARENT
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         // bottomNavBar background error

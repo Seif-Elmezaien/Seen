@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.seen.R
 import com.example.seen.databinding.FragmentLoginBinding
 import com.example.seen.domain.model.authentication.LoginRequest
-import com.example.seen.ui.MainActivity
-import com.example.seen.ui.authentication.AuthActivity
+import com.example.seen.ui.activites.MainActivity
+import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.example.seen.util.Resource
 

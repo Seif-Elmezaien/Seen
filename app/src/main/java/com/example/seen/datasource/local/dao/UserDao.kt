@@ -14,7 +14,7 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertUser(user: User) : Long
 
-    @Query("SELECT * FROM User")
+    @Query("SELECT * FROM User LIMIT 1")
     fun getUser() : LiveData<User>
 
     @Delete

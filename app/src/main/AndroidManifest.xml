@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Seen">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activites.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.authentication.AuthActivity"
+        <activity android:name=".ui.activites.AuthActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan">
 

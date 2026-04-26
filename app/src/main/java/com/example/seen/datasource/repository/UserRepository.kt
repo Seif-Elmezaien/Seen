@@ -14,7 +14,7 @@ class UserRepository(
     suspend fun upsertUser(user: User) =
         db.userDao.upsertUser(user)
 
-    fun getAllUsers() =
+    fun getUser() =
         db.userDao.getUser()
 
     suspend fun deleteUser(user: User) =

@@ -2,13 +2,20 @@ package com.example.seen.ui.home.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.seen.R
 import com.example.seen.databinding.FragmentHomeBinding
+import com.example.seen.datasource.local.SeenDatabase
+import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.ui.home.viewmodel.HomeViewModel
+import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -23,6 +30,8 @@ class HomeFragment : Fragment() {
     var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
 
+    private lateinit var viewModel: HomeViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +44,60 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeViewModel()
+        setUserInfo()
         setUpLineChart()
+
+        binding.cdAlert.setOnClickListener {
+
+        }
+
+        binding.cdChatbot.setOnClickListener {
+
+        }
+
+        binding.cdReminder.setOnClickListener {
+
+        }
     }
+
+    private fun initializeViewModel(){
+
+        // Application context to avoid leaks
+        val db = SeenDatabase(requireContext().applicationContext)
+        val userRepository = UserRepository(db)
+        val logRepository = LogRepository(db)
+
+        // create factory
+        val factory = HomeViewModelProviderFactory(
+            requireActivity().application,
+            userRepository,
+            logRepository
+        )
+
+        // initialize ViewModel
+        viewModel = ViewModelProvider(this, factory)
+            .get(HomeViewModel::class.java)
+    }
+
+    private fun setUserInfo(){
+        viewModel.getUser().observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.tvUserName.text = getString(R.string.hello_username) + " " + user.first_name
+                binding.tvUserDiabetesType.text = getString(setUserDiabetesType(user.diabetes_type))
+            }
+        }
+    }
+
+    private fun setUserDiabetesType(userDiabetesType: String) =
+         when(userDiabetesType){
+            "Type1" -> R.string.type_1
+            "Type2" -> R.string.type_2
+            "LADA"  -> R.string.type_lada
+            "MODY"  -> R.string.type_mody
+            "Gestational" -> R.string.type_gestational
+            else -> R.string.type_1
+        }
 
     private fun setUpLineChart() {
 
