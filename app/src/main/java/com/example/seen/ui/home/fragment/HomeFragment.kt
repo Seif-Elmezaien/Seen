@@ -1,8 +1,8 @@
 package com.example.seen.ui.home.fragment
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +14,7 @@ import com.example.seen.databinding.FragmentHomeBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
 import com.github.mikephil.charting.components.XAxis
@@ -22,7 +23,9 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.NumberFormat
+import java.util.Calendar
 import java.util.Locale
 
 
@@ -31,6 +34,7 @@ class HomeFragment : Fragment() {
     val binding get() = _binding!!
 
     private lateinit var viewModel: HomeViewModel
+    private lateinit var userLogs: List<FullLog>
 
 
     override fun onCreateView(
@@ -59,6 +63,40 @@ class HomeFragment : Fragment() {
         binding.cdReminder.setOnClickListener {
 
         }
+
+        binding.tvToday.setOnClickListener {
+            resetDateSelector()
+            binding.tvToday.apply {
+                background = requireContext().getDrawable(R.drawable.bg_tab_active)
+                setTextColor(requireContext().getColor(R.color.primary))
+                isEnabled = false
+            }
+
+            val todayDate = System.currentTimeMillis()
+            getUserLogs(todayDate)
+        }
+
+        binding.tvYesterday.setOnClickListener {
+            resetDateSelector()
+            binding.tvYesterday.apply {
+                background = requireContext().getDrawable(R.drawable.bg_tab_active)
+                setTextColor(requireContext().getColor(R.color.primary))
+                isEnabled = false
+            }
+
+            val yesterdayDate = System.currentTimeMillis() - 24 * 60 * 60 * 1000
+            getUserLogs(yesterdayDate)
+        }
+
+        binding.ivCalendar.setOnClickListener {
+            resetDateSelector()
+            binding.ivCalendar.apply {
+                background = requireContext().getDrawable(R.drawable.bg_tab_active)
+                setColorFilter(requireContext().getColor(R.color.primary))
+                isEnabled = false
+            }
+            showDatePicker()
+        }
     }
 
     private fun initializeViewModel(){
@@ -85,6 +123,7 @@ class HomeFragment : Fragment() {
             if (user != null) {
                 binding.tvUserName.text = getString(R.string.hello_username) + " " + user.first_name
                 binding.tvUserDiabetesType.text = getString(setUserDiabetesType(user.diabetes_type))
+                binding.tvAlertTitle.text = getString(R.string.alert_title) + " " + user.first_name
             }
         }
     }
@@ -98,6 +137,46 @@ class HomeFragment : Fragment() {
             "Gestational" -> R.string.type_gestational
             else -> R.string.type_1
         }
+
+    private fun resetDateSelector(){
+
+        // reset all buttons
+        val views = listOf(
+            binding.tvToday,
+            binding.tvYesterday,
+        )
+
+        views.forEach {
+            it.background = null
+            it.setTextColor(requireContext().getColor(R.color.text_grey))
+            it.isEnabled = true
+        }
+
+        binding.ivCalendar.apply {
+            background = null
+            setColorFilter(requireContext().getColor(R.color.text_grey))
+            isEnabled = true
+        }
+    }
+
+    private fun showDatePicker() {
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .build()
+
+        picker.addOnPositiveButtonClickListener { selectedDateMillis ->
+            getUserLogs(selectedDateMillis)
+        }
+
+        picker.show(parentFragmentManager, "DATE_PICKER")
+    }
+
+    private fun getUserLogs(date : Long = System.currentTimeMillis()){
+        viewModel.getLogByDate(date).observe(viewLifecycleOwner) { logs ->
+
+        }
+    }
 
     private fun setUpLineChart() {
 

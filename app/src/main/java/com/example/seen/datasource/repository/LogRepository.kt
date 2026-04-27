@@ -51,4 +51,7 @@ class LogRepository(
     // get all Logs
     fun getAllLogs() =
         db.logDao.getAllLogs()
+
+    fun getLogsByDate(startOfDay: Long, endOfDay: Long) =
+        db.logDao.getLogByDate(startOfDay, endOfDay)
 }

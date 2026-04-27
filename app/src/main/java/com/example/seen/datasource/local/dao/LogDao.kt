@@ -59,4 +59,8 @@ interface LogDao {
     @Query("SELECT * FROM logs ORDER BY created_at DESC")
     fun getAllLogs() : LiveData<List<FullLog>>
 
+    @Transaction()
+    @Query("SELECT * FROM logs WHERE created_at BETWEEN :startOfDay AND :endOfDate ORDER BY created_at DESC")
+    fun getLogByDate(startOfDay: Long, endOfDate: Long) : LiveData<List<FullLog>>
+
 }

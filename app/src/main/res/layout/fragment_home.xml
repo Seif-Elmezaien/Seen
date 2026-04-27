@@ -458,14 +458,14 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tvTodayDate"
+                android:id="@+id/tvChosenDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/cairo_semibold"
                 android:gravity="start"
-                android:text="@string/today_date"
+                android:text="@string/log_date"
                 android:textColor="@color/text_grey"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -476,7 +476,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTodayDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tvChosenDate" />
 
 
 
