@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.fragment.ReminderFragment">
+    tools:context=".ui.more.fragment.MoreFragment">
 
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/cairo"
         android:gravity="center"
-        android:text="reminder"
+        android:text="More"
         android:textColor="@color/title"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

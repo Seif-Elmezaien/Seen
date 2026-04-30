@@ -1,22 +1,22 @@
-package com.example.seen.ui.reminder.fragment
+package com.example.seen.ui.home.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.seen.databinding.FragmentAddLogsBinding
 import com.example.seen.databinding.FragmentReminderBinding
 
-
-class ReminderFragment : Fragment() {
-    var _binding: FragmentReminderBinding? = null
+class AddLogsFragment : Fragment() {
+    var _binding: FragmentAddLogsBinding? = null
     val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentReminderBinding.inflate(inflater, container, false)
+        _binding = FragmentAddLogsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

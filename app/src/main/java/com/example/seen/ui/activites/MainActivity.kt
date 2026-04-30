@@ -34,26 +34,29 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
                     as NavHostFragment
         val navController = navHostFragment.navController
-        val bottomNav = binding.bottomNavigationView
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> {
                     binding.bottomAppBar.visibility = View.VISIBLE
                     binding.fabAddLogs.visibility = View.VISIBLE
+
+                    // Setup BottomNavigationView
+                    binding.bottomNavigationView.setupWithNavController(navController)
                 }
             }
         }
+
+        binding.fabAddLogs.setOnClickListener {
+            navController.navigate(R.id.addLogsFragment)
+        }
+
 
     }
 
     private fun checkToken(): String? {
         val sharedPref = getSharedPreferences("Auth", MODE_PRIVATE)
         return sharedPref.getString("token", null)
-    }
-
-    private fun initializeDependencies(){
-
     }
 
     private fun setUpSystemSettings(){

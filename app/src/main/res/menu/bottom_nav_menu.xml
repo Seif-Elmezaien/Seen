@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/miHome"
+        android:id="@+id/homeFragment"
         android:title="@string/home"
         android:icon="@drawable/ic_home"/>
 
     <item
-        android:id="@+id/miCommunity"
+        android:id="@+id/communityFragment"
         android:title="@string/community"
         android:icon="@drawable/ic_community"/>
 
@@ -17,12 +17,12 @@
         android:title=""/>
 
     <item
-        android:id="@+id/miReports"
+        android:id="@+id/reportFragment"
         android:title="@string/report"
         android:icon="@drawable/ic_reports"/>
 
     <item
-        android:id="@+id/miMore"
+        android:id="@+id/moreFragment"
         android:title="@string/more"
         android:icon="@drawable/ic_more"/>
 

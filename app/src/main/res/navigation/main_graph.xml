@@ -32,5 +32,34 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.seen.ui.home.fragment.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_reminderFragment"
+            app:destination="@id/reminderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/communityFragment"
+        android:name="com.example.seen.ui.community.fragment.CommunityFragment"
+        android:label="fragment_community"
+        tools:layout="@layout/fragment_community" />
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.example.seen.ui.more.fragment.MoreFragment"
+        android:label="fragment_more"
+        tools:layout="@layout/fragment_more" />
+    <fragment
+        android:id="@+id/reminderFragment"
+        android:name="com.example.seen.ui.home.fragment.ReminderFragment"
+        android:label="fragment_reminder"
+        tools:layout="@layout/fragment_reminder" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.example.seen.ui.report.fragment.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/addLogsFragment"
+        android:name="com.example.seen.ui.home.fragment.AddLogsFragment"
+        android:label="fragment_add_logs"
+        tools:layout="@layout/fragment_add_logs" />
 </navigation>

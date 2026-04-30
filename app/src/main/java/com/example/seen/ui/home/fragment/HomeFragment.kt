@@ -99,7 +99,6 @@ class HomeFragment : Fragment() {
             binding.ivCalendar.apply {
                 background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
                 setColorFilter(requireContext().getColor(R.color.primary))
-                isEnabled = false
             }
             showDatePicker()
         }
@@ -161,7 +160,6 @@ class HomeFragment : Fragment() {
         binding.ivCalendar.apply {
             background = null
             setColorFilter(requireContext().getColor(R.color.text_grey))
-            isEnabled = true
         }
     }
 
