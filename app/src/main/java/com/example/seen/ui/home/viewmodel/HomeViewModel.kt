@@ -3,6 +3,8 @@ package com.example.seen.ui.home.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
@@ -18,6 +20,29 @@ class HomeViewModel(
     private val userRepository: UserRepository,
     private val logRepository: LogRepository
 ) : AndroidViewModel(app) {
+
+    private val selectedDate = MutableLiveData(System.currentTimeMillis())
+
+    val logs: LiveData<List<FullLog>> = selectedDate.switchMap { date ->
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = date
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        val start = calendar.timeInMillis
+        val end = start + 24 * 60 * 60 * 1000 - 1
+
+        android.util.Log.d("HomeViewModel", "Start: $start, End: $end")
+
+        logRepository.getLogsByDate(start, end)
+    }
+
+    fun selectDate(date: Long) {
+        selectedDate.value = date
+    }
 
     //Temp Function Remove ya seif
     fun upsertUser() = viewModelScope.launch {
@@ -43,22 +68,22 @@ class HomeViewModel(
     fun getUser() =
         userRepository.getUser()
 
-    fun getLogByDate(date : Long) : LiveData<List<FullLog>> {
-
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = date
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val startOfDay = calendar.timeInMillis
-
-        val endOfDay = startOfDay + 24 * 60 * 60 * 1000 - 1   // +23:59:59.999
-
-        return logRepository.getLogsByDate(startOfDay, endOfDay)
-
-    }
+//    fun getLogByDate(date : Long) : LiveData<List<FullLog>> {
+//
+//        val calendar = Calendar.getInstance().apply {
+//            timeInMillis = date
+//            set(Calendar.HOUR_OF_DAY, 0)
+//            set(Calendar.MINUTE, 0)
+//            set(Calendar.SECOND, 0)
+//            set(Calendar.MILLISECOND, 0)
+//        }
+//        val startOfDay = calendar.timeInMillis
+//
+//        val endOfDay = startOfDay + 24 * 60 * 60 * 1000 - 1   // +23:59:59.999
+//
+//        return logRepository.getLogsByDate(startOfDay, endOfDay)
+//
+//    }
 
 
 

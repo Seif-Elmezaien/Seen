@@ -3,6 +3,7 @@ package com.example.seen.ui.home.fragment
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,10 @@ class HomeFragment : Fragment() {
         setUserInfo()
         setUpLineChart()
 
+        viewModel.logs.observe(viewLifecycleOwner) { logs ->
+            // update chart here
+        }
+
         binding.cdAlert.setOnClickListener {
 
         }
@@ -67,31 +72,32 @@ class HomeFragment : Fragment() {
         binding.tvToday.setOnClickListener {
             resetDateSelector()
             binding.tvToday.apply {
-                background = requireContext().getDrawable(R.drawable.bg_tab_active)
+                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
                 setTextColor(requireContext().getColor(R.color.primary))
                 isEnabled = false
             }
 
             val todayDate = System.currentTimeMillis()
-            getUserLogs(todayDate)
+            viewModel.selectDate(todayDate)
         }
 
         binding.tvYesterday.setOnClickListener {
             resetDateSelector()
             binding.tvYesterday.apply {
-                background = requireContext().getDrawable(R.drawable.bg_tab_active)
+                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
                 setTextColor(requireContext().getColor(R.color.primary))
                 isEnabled = false
             }
 
             val yesterdayDate = System.currentTimeMillis() - 24 * 60 * 60 * 1000
-            getUserLogs(yesterdayDate)
+            Log.d("HomeFragment", "Yesterday date: $yesterdayDate")
+            viewModel.selectDate(yesterdayDate)
         }
 
         binding.ivCalendar.setOnClickListener {
             resetDateSelector()
             binding.ivCalendar.apply {
-                background = requireContext().getDrawable(R.drawable.bg_tab_active)
+                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
                 setColorFilter(requireContext().getColor(R.color.primary))
                 isEnabled = false
             }
@@ -166,16 +172,10 @@ class HomeFragment : Fragment() {
             .build()
 
         picker.addOnPositiveButtonClickListener { selectedDateMillis ->
-            getUserLogs(selectedDateMillis)
+            viewModel.selectDate(selectedDateMillis)
         }
 
         picker.show(parentFragmentManager, "DATE_PICKER")
-    }
-
-    private fun getUserLogs(date : Long = System.currentTimeMillis()){
-        viewModel.getLogByDate(date).observe(viewLifecycleOwner) { logs ->
-
-        }
     }
 
     private fun setUpLineChart() {
