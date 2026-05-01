@@ -77,23 +77,6 @@ class HomeViewModel(
     fun getUser() =
         userRepository.getUser()
 
-//    fun getLogByDate(date : Long) : LiveData<List<FullLog>> {
-//
-//        val calendar = Calendar.getInstance().apply {
-//            timeInMillis = date
-//            set(Calendar.HOUR_OF_DAY, 0)
-//            set(Calendar.MINUTE, 0)
-//            set(Calendar.SECOND, 0)
-//            set(Calendar.MILLISECOND, 0)
-//        }
-//        val startOfDay = calendar.timeInMillis
-//
-//        val endOfDay = startOfDay + 24 * 60 * 60 * 1000 - 1   // +23:59:59.999
-//
-//        return logRepository.getLogsByDate(startOfDay, endOfDay)
-//
-//    }
-
 
 
     private fun getStringFromR(id: Int) =

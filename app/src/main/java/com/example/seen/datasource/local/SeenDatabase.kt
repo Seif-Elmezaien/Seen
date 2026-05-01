@@ -21,7 +21,7 @@ import com.example.seen.datasource.local.dao.UserDao
         RecordMeal::class,
         RecordMedication::class
     ],
-    version = 1
+    version = 2
 )
 abstract class SeenDatabase : RoomDatabase() {
     abstract val userDao: UserDao
@@ -43,6 +43,7 @@ abstract class SeenDatabase : RoomDatabase() {
                 context.applicationContext,
                 SeenDatabase::class.java,
                 "seen.db"
-            ).build()
+            )
+            .build()
     }
 }

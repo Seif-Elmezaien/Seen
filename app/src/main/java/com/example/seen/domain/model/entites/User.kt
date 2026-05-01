@@ -26,4 +26,5 @@ data class User(
     var target_glucose_range: String? = null,
     var min_glucose: Double? = null,
     var emergency_contact: String? = null,
+    val profile_img: String? = null,
 )

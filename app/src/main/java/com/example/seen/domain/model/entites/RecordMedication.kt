@@ -19,12 +19,7 @@ data class RecordMedication(
     val medication_id: Int,
     val log_id: Int,
     val medication_name: String,
-    val dosage: String,
-    val unit: String,
+    val medication_time: Long,
     val frequency: String,
-    val route: String,       // "oral", "injection", etc.
-    val start_date: Long,
-    val end_date: Long? = null,
-    val reminder_time: Long? = null,
     val notes: String? = null,
 )
