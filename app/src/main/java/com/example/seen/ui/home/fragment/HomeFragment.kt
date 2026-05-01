@@ -1,6 +1,5 @@
 package com.example.seen.ui.home.fragment
 
-import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.seen.R
 import com.example.seen.databinding.FragmentHomeBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
-import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.ui.home.adapter.HomeAdapter
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
 import com.github.mikephil.charting.components.XAxis
@@ -26,17 +27,17 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.NumberFormat
-import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 
 class HomeFragment : Fragment() {
     var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
+    lateinit var homeAdapter: HomeAdapter
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var userLogs: List<FullLog>
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,9 +53,19 @@ class HomeFragment : Fragment() {
         initializeViewModel()
         setUserInfo()
         setUpLineChart()
+        setRecyclerView()
+
+
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
-            // update chart here
+                homeAdapter.differ.submitList(logs)
+        }
+
+        viewModel.selectedDate.observe(viewLifecycleOwner) { timestamp ->
+            val sdf = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+            val formatted = sdf.format(Date(timestamp))
+
+            binding.tvChosenDate.text = formatted
         }
 
         binding.cdAlert.setOnClickListener {
@@ -66,7 +77,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.cdReminder.setOnClickListener {
-
+            findNavController().navigate(R.id.action_homeFragment_to_reminderFragment)
         }
 
         binding.tvToday.setOnClickListener {
@@ -90,22 +101,15 @@ class HomeFragment : Fragment() {
             }
 
             val yesterdayDate = System.currentTimeMillis() - 24 * 60 * 60 * 1000
-            Log.d("HomeFragment", "Yesterday date: $yesterdayDate")
             viewModel.selectDate(yesterdayDate)
         }
 
         binding.ivCalendar.setOnClickListener {
-            resetDateSelector()
-            binding.ivCalendar.apply {
-                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
-                setColorFilter(requireContext().getColor(R.color.primary))
-            }
             showDatePicker()
         }
     }
 
     private fun initializeViewModel(){
-
         // Application context to avoid leaks
         val db = SeenDatabase(requireContext().applicationContext)
         val userRepository = UserRepository(db)
@@ -144,22 +148,30 @@ class HomeFragment : Fragment() {
         }
 
     private fun resetDateSelector(){
-
-        // reset all buttons
-        val views = listOf(
+        // reset all buttons and texts
+        val textViews = listOf(
             binding.tvToday,
             binding.tvYesterday,
         )
 
-        views.forEach {
+        textViews.forEach {
             it.background = null
             it.setTextColor(requireContext().getColor(R.color.text_grey))
             it.isEnabled = true
         }
-
         binding.ivCalendar.apply {
             background = null
             setColorFilter(requireContext().getColor(R.color.text_grey))
+        }
+    }
+
+    private fun setRecyclerView(){
+        homeAdapter = HomeAdapter()
+
+        binding.rvHome.apply {
+            isNestedScrollingEnabled = false
+            adapter = homeAdapter
+            layoutManager = LinearLayoutManager(activity)
         }
     }
 
@@ -170,6 +182,12 @@ class HomeFragment : Fragment() {
             .build()
 
         picker.addOnPositiveButtonClickListener { selectedDateMillis ->
+
+            binding.ivCalendar.apply {
+                resetDateSelector()
+                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
+                setColorFilter(requireContext().getColor(R.color.primary))
+            }
             viewModel.selectDate(selectedDateMillis)
         }
 

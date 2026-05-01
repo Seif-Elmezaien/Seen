@@ -10,6 +10,7 @@ import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Log
+import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.User
 import com.example.seen.util.SeenApplication
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class HomeViewModel(
     private val logRepository: LogRepository
 ) : AndroidViewModel(app) {
 
-    private val selectedDate = MutableLiveData(System.currentTimeMillis())
+    val selectedDate = MutableLiveData(System.currentTimeMillis())
 
     val logs: LiveData<List<FullLog>> = selectedDate.switchMap { date ->
         val calendar = Calendar.getInstance().apply {
@@ -62,6 +63,14 @@ class HomeViewModel(
                 height = 180.0,
             )
         )
+    }
+
+    fun insertLog(log: Log) = viewModelScope.launch {
+        logRepository.insertLog(log)
+    }
+
+    fun insertRecordGlucose(recordGlucose: RecordGlucose) = viewModelScope.launch {
+        logRepository.insertRecordGlucose(recordGlucose)
     }
 
 
