@@ -1,15 +1,23 @@
 package com.example.seen.ui.home.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seen.R
 import com.example.seen.databinding.ItemHomeLogsBinding
 import com.example.seen.domain.model.entites.FullLog
+import java.text.SimpleDateFormat
+import java.util.Date
 
-class HomeAdapter: RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+class HomeAdapter(
+    val context: Context
+): RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     inner class HomeViewHolder(val binding: ItemHomeLogsBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -52,8 +60,35 @@ class HomeAdapter: RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
         val logItem = differ.currentList[position]
 
         holder.binding.apply {
-            tvLogTitle.text = logItem.glucose?.notes ?: ""
+            tvLogTitle.text = logItem.log.log_title
+            tvLogDescription.text = logItem.log.log_description
+            tvLogReadingTime.text = fromLongToHour(logItem.log.created_at)
+
+            if(logItem.glucose == null){
+                ivGlucose.visibility = View.GONE
+
+                tvLogReadingValue.background = ContextCompat.getDrawable(context,R.drawable.bg_blood_not_exist_reading)
+                tvLogReadingValue.setTextColor(context.getColor(R.color.description))
+                tvLogReadingValue.text = context.getString(R.string.no_blood_reading)
+            }
+            else{
+
+            }
+
+            if (logItem.meal == null) {
+                ivMeal.visibility = View.GONE
+            }
+            if (logItem.medication == null) {
+                ivMedication.visibility = View.GONE
+            }
         }
+    }
+
+    private fun fromLongToHour(timestamp: Long) =
+        SimpleDateFormat("h:mm a").format(Date(timestamp))
+
+    private fun setLogReadingBackground(value: Int, binding: ItemHomeLogsBinding) {
+
     }
 
     override fun getItemCount(): Int {

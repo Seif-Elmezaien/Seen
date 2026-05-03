@@ -166,7 +166,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setRecyclerView(){
-        homeAdapter = HomeAdapter()
+        homeAdapter = HomeAdapter(requireContext())
 
         binding.rvHome.apply {
             isNestedScrollingEnabled = false

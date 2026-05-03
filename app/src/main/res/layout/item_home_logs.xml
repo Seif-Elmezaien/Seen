@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cvItemHomeLogs"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:layout_margin="30dp"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginStart="30dp"
+    app:cardBackgroundColor="@color/background"
+    app:cardElevation="10dp"
     app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:elevation="4dp"
-        android:background="#0DFFFFFF"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:background="#0DFFFFFF">
 
         <View
             android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="13dp"
+            android:rotation="180"
             android:background="@drawable/item_home_log_bg"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvLogTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvLogTitle"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/cairo_bold"
-            android:text="عندما استيقظت"
+            android:text="انهردا الصبح"
             android:textColor="@color/title"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,14 +55,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvLogReadingType"
-            android:layout_width="200dp"
+            android:id="@+id/tvLogDescription"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="10dp"
             android:layout_marginTop="5dp"
-            android:fontFamily="@font/cairo_medium"
-            android:text="قياس سكر صائم"
-            android:textColor="@color/title"
+            android:fontFamily="@font/cairo"
+            android:text="هذا نص تجريبي يُستخدم في تصميم واجهات المستخدم لعرض شكل المحتوى ."
+            android:textColor="@color/description"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLogTitle" />
@@ -65,20 +71,64 @@
         <TextView
             android:id="@+id/tvLogReadingValue"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:background="@drawable/bg_sugar_mid_reading"
+            android:background="@drawable/bg_blood_not_exist_reading"
             android:fontFamily="@font/cairo_medium"
             android:gravity="center"
-            android:text="120 mg/ml"
-            android:textColor="@color/mid_sugar_reading"
+            android:paddingHorizontal="10dp"
+            android:text="@string/no_blood_reading"
+            android:textColor="@color/description"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogDescription" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogDescription">
+
+            <ImageView
+                android:id="@+id/ivGlucose"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_glucose"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivMeal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivMeal"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_meal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivMedication"
+                app:layout_constraintStart_toEndOf="@id/ivGlucose"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivMedication"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_medicine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivMeal"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+
+
+
+</com.google.android.material.card.MaterialCardView>
+
