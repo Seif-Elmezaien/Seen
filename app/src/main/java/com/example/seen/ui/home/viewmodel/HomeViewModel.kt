@@ -53,7 +53,7 @@ class HomeViewModel(
         userRepository.upsertUser(
             User(
                 id = 1,
-                first_name = "My Zozo",
+                first_name = "Seif",
                 last_name = "Elmizayen",
                 email = "saif.n.elmyzaien@gmail.com",
                 diabetes_type = "Type2",

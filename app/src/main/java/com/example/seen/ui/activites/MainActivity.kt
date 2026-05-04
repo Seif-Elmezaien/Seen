@@ -48,6 +48,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fabAddLogs.setOnClickListener {
+            binding.bottomNavigationView.menu.setGroupCheckable(0, true, false)
+            for (i in 0 until binding.bottomNavigationView.menu.size()) {
+                binding.bottomNavigationView.menu.getItem(i).isChecked = false
+            }
+            binding.bottomNavigationView.menu.setGroupCheckable(0, true, true)
+
             navController.navigate(R.id.addLogsFragment)
         }
 

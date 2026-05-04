@@ -17,10 +17,6 @@ import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.entites.FullLog
-import com.example.seen.domain.model.entites.RecordGlucose
-import com.example.seen.domain.model.entites.RecordMeal
-import com.example.seen.domain.model.entites.RecordMedication
-import com.example.seen.domain.model.entites.User
 import com.example.seen.ui.home.adapter.HomeAdapter
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
@@ -64,8 +60,6 @@ class HomeFragment : Fragment() {
         setRecyclerView()
 
         viewModel.upsertUser()
-        viewModel.generateMockData()
-
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
 
