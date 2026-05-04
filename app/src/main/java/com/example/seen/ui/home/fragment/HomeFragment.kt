@@ -33,16 +33,18 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.random.Random
 
 
 class HomeFragment : Fragment() {
-    var _binding: FragmentHomeBinding? = null
-    val binding get() = _binding!!
-    lateinit var homeAdapter: HomeAdapter
 
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var homeAdapter: HomeAdapter
     private lateinit var viewModel: HomeViewModel
-    var selectedDate = System.currentTimeMillis()
+    private var selectedDate = System.currentTimeMillis()
+    private val sdf = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,73 +58,11 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeViewModel()
-        setUserInfo()
-        setRecyclerView()
 
-
-
-        viewModel.logs.observe(viewLifecycleOwner) { logs ->
-
-            if (logs.isEmpty()) {
-                binding.rvHome.visibility = View.GONE
-                binding.llNoLogs.visibility = View.VISIBLE
-            }
-            else{
-                binding.rvHome.visibility = View.VISIBLE
-                binding.llNoLogs.visibility = View.GONE
-
-                homeAdapter.differ.submitList(logs)
-                setUpLineChart(logs)
-            }
-
-        }
-
-        viewModel.selectedDate.observe(viewLifecycleOwner) { timestamp ->
-            val sdf = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-            val formatted = sdf.format(Date(timestamp))
-
-            binding.tvChosenDate.text = formatted
-        }
-
-        binding.cdAlert.setOnClickListener {
-
-        }
-
-        binding.cdChatbot.setOnClickListener {
-
-        }
-
-        binding.cdReminder.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_reminderFragment)
-        }
-
-        binding.tvToday.setOnClickListener {
-            resetDateSelector()
-            binding.tvToday.apply {
-                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
-                setTextColor(requireContext().getColor(R.color.primary))
-                isEnabled = false
-            }
-
-            val todayDate = System.currentTimeMillis()
-            viewModel.selectDate(todayDate)
-        }
-
-        binding.tvYesterday.setOnClickListener {
-            resetDateSelector()
-            binding.tvYesterday.apply {
-                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
-                setTextColor(requireContext().getColor(R.color.primary))
-                isEnabled = false
-            }
-
-            val yesterdayDate = System.currentTimeMillis() - 24 * 60 * 60 * 1000
-            viewModel.selectDate(yesterdayDate)
-        }
-
-        binding.ivCalendar.setOnClickListener {
-            showDatePicker()
-        }
+        setupRecyclerView()
+        setupUI()
+        setupListeners()
+        observeData()
     }
 
     private fun initializeViewModel(){
@@ -143,6 +83,26 @@ class HomeFragment : Fragment() {
             .get(HomeViewModel::class.java)
     }
 
+
+    private fun setupRecyclerView() {
+        homeAdapter = HomeAdapter(requireContext())
+
+        binding.rvHome.apply {
+            isNestedScrollingEnabled = false
+            adapter = homeAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun setupUI() {
+        binding.chart.apply {
+            setNoDataText(getString(R.string.no_data_available))
+            setNoDataTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        }
+
+        setUserInfo()
+    }
+
     private fun setUserInfo(){
         viewModel.getUser().observe(viewLifecycleOwner) { user ->
             if (user != null) {
@@ -154,7 +114,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUserDiabetesType(userDiabetesType: String) =
-         when(userDiabetesType){
+        when(userDiabetesType){
             "Type1" -> R.string.type_1
             "Type2" -> R.string.type_2
             "LADA"  -> R.string.type_lada
@@ -162,6 +122,84 @@ class HomeFragment : Fragment() {
             "Gestational" -> R.string.type_gestational
             else -> R.string.type_1
         }
+
+    private fun observeData() {
+
+        viewModel.logs.observe(viewLifecycleOwner) { logs ->
+            handleLogsState(logs)
+        }
+
+        viewModel.selectedDate.observe(viewLifecycleOwner) { timestamp ->
+            selectedDate = timestamp
+            updateSelectedDateText(timestamp)
+        }
+    }
+
+    private fun handleLogsState(logs: List<FullLog>) {
+
+        val glucoseData = logs.mapNotNull { it.glucose }
+        val isEmptyLogs = logs.isEmpty()
+        val isEmptyGlucose = glucoseData.isEmpty()
+
+        binding.rvHome.visibility = if (isEmptyLogs) View.GONE else View.VISIBLE
+        binding.llNoLogs.visibility = if (isEmptyLogs) View.VISIBLE else View.GONE
+
+        if (!isEmptyLogs){
+            homeAdapter.differ.submitList(logs)
+        }
+
+        if (isEmptyGlucose) {
+            binding.chart.clear()
+            binding.chart.invalidate()
+            binding.tvLegend.visibility = View.GONE
+        }
+        else{
+            binding.tvLegend.visibility = View.VISIBLE
+            setUpLineChart(logs)
+        }
+    }
+
+    private fun updateSelectedDateText(timestamp: Long) {
+        binding.tvChosenDate.text = sdf.format(Date(timestamp))
+    }
+
+    private fun setupListeners() {
+
+        binding.cdReminder.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_reminderFragment)
+        }
+
+        binding.tvToday.setOnClickListener {
+            selectDate(System.currentTimeMillis(), binding.tvToday)
+        }
+
+        binding.tvYesterday.setOnClickListener {
+            val yesterday = System.currentTimeMillis() - 24 * 60 * 60 * 1000
+            selectDate(yesterday, binding.tvYesterday)
+        }
+
+        binding.ivCalendar.setOnClickListener {
+            showDatePicker()
+        }
+    }
+
+    private fun selectDate(date: Long, selectedView: View) {
+        resetDateSelector()
+
+        when (selectedView) {
+            is android.widget.TextView -> {
+                selectedView.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
+                selectedView.setTextColor(requireContext().getColor(R.color.primary))
+                selectedView.isEnabled = false
+            }
+            else -> {
+                binding.ivCalendar.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
+                binding.ivCalendar.setColorFilter(requireContext().getColor(R.color.primary))
+            }
+        }
+
+        viewModel.selectDate(date)
+    }
 
     private fun resetDateSelector(){
         // reset all buttons and texts
@@ -181,18 +219,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerView(){
-        homeAdapter = HomeAdapter(requireContext())
-
-        binding.rvHome.apply {
-            isNestedScrollingEnabled = false
-            adapter = homeAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
-    }
-
     private fun showDatePicker() {
-        // Constraint: max date is today
+
         val constraints = CalendarConstraints.Builder()
             .setValidator(DateValidatorPointBackward.now())
             .build()
@@ -203,15 +231,9 @@ class HomeFragment : Fragment() {
             .setCalendarConstraints(constraints)
             .build()
 
-        picker.addOnPositiveButtonClickListener { selectedDateMillis ->
-            resetDateSelector()
-            binding.ivCalendar.apply {
-                background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
-                setColorFilter(requireContext().getColor(R.color.primary))
-            }
-            viewModel.selectDate(selectedDateMillis)
-            selectedDate = selectedDateMillis
-            picker.dismissNow() // close the picker
+        picker.addOnPositiveButtonClickListener { date ->
+            selectedDate = date
+            selectDate(date, binding.ivCalendar)
         }
 
         picker.show(parentFragmentManager, "DATE_PICKER")
@@ -221,12 +243,10 @@ class HomeFragment : Fragment() {
 
         val chart = binding.chart
         val englishFormat = NumberFormat.getInstance(Locale.ENGLISH)
-
-        val colorText = ContextCompat.getColor(requireContext(), R.color.white)
-
         val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_legend_dot)
-
         val areaBackground = ContextCompat.getDrawable(requireContext(), R.drawable.bg_area_gradient)
+        val colorWhite = ContextCompat.getColor(requireContext(), R.color.white)
+        val transparentWhite = Color.parseColor("#1AFFFFFF")
 
         val glucoseData = data
             .sortedBy { it.log.created_at }
@@ -236,28 +256,26 @@ class HomeFragment : Fragment() {
                 }
             }
 
-        val entries = mutableListOf<Entry>()
 
-        entries.addAll(glucoseData.mapIndexed { index, g ->
+        val entries = glucoseData.mapIndexed { index, g ->
             Entry(index.toFloat() + 1, g.second, drawable)
-        })
+        }
 
         val dataSet = LineDataSet(entries, "Blood Glucose Level").apply {
-            color = Color.parseColor("#FFFFFF") //Line color
+            color = colorWhite              //Line color
             lineWidth = 2.5f
-            setDrawFilled(true)
+            setDrawFilled(true)             // Enable area fill under the line.
             fillDrawable = areaBackground
-            setDrawIcons(true)
-            setDrawCircles(false)
-            setDrawValues(false) // Hide value labels on points
-//            mode = LineDataSet.Mode.CUBIC_BEZIER // Smooth curve
+            setDrawIcons(true)              // Allows drawing icons
+            setDrawCircles(false)           // Clean line (no dots)
+            setDrawValues(false)            // Hide value labels on points
+//          mode = LineDataSet.Mode.CUBIC_BEZIER // Smooth curve
         }
 
         chart.data = LineData(dataSet)
 
         // --- X Axis ---
         val xLabels = mutableListOf<String>()
-
         xLabels.add("")
 
         xLabels.addAll(glucoseData.map {
@@ -266,32 +284,32 @@ class HomeFragment : Fragment() {
         })
 
         chart.xAxis.apply {
-            valueFormatter = IndexAxisValueFormatter(xLabels)
-            position = XAxis.XAxisPosition.BOTTOM
-            granularity = 1f
-            axisMinimum = 0f   // or 3f, 4f, etc.
-            spaceMin = 5f
-            spaceMax = 1f
-            setDrawGridLines(true)
-            axisLineColor = Color.parseColor("#FFFFFF")
-            axisLineWidth = 1f
-            gridColor = Color.parseColor("#1AFFFFFF")
-            textColor = colorText
-            textSize = 6f
+            valueFormatter = IndexAxisValueFormatter(xLabels)   // maps each X value (0,1,2...) to a label from xLabels list
+            position = XAxis.XAxisPosition.BOTTOM                       // places the X-axis at the bottom of the chart
+            granularity = 1f                                            // ensures labels appear at every 1 unit (no skipping)
+            axisMinimum = 0f                                            // sets the minimum X value (start of the axis)
+            spaceMin = 1f                                               // adds extra empty space before the first entry
+            spaceMax = 1f                                               // adds extra empty space after the last entry
+            setDrawGridLines(true)                                      // enables vertical grid lines across the chart
+            axisLineColor = colorWhite                                  // sets the color of the X-axis line
+            axisLineWidth = 1f                                          // sets thickness of the X-axis line
+            gridColor = transparentWhite                                // sets color of grid lines (light transparent white)
+            textColor = colorWhite                                      // sets color of X-axis labels (time text)
+            textSize = 6f                                               // sets size of X-axis label text (small font)
         }
 
         // --- Y Axis (Left) ---
         chart.axisLeft.apply {
             axisMinimum = 0f
-            axisMaximum = 400f
+            axisMaximum = 500f
             granularity = 30f
             spaceMin = 1f
             spaceMax = 1f
-            axisLineColor = Color.parseColor("#FFFFFF")
-            axisLineWidth = 1f
             setDrawGridLines(true)
-            gridColor = Color.parseColor("#1AFFFFFF")
-            textColor = colorText
+            axisLineColor = colorWhite
+            axisLineWidth = 1f
+            gridColor = transparentWhite
+            textColor = colorWhite
             textSize = 8f
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
@@ -309,10 +327,10 @@ class HomeFragment : Fragment() {
             legend.isEnabled = false        // Use custom legend in XML
             setTouchEnabled(true)
             isDragEnabled = true
-            setScaleEnabled(false)
-            setPinchZoom(false)
+            setScaleEnabled(true)
+            setPinchZoom(true)
             setBackgroundColor(Color.TRANSPARENT)
-            animateX(1000) // Animate on load
+            animateX(400) // Animate on load
         }
 
         chart.invalidate() // Refresh

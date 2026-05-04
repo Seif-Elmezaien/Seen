@@ -132,6 +132,9 @@
     <string name="no_logs">There are no Logs</string>
     <string name="start_logs_now">Get started and log now</string>
 
+    <string name="no_data_available">No data available</string>
+
+
 
     <!-- community fragment -->
     <string name="category_type1_lada">Type 1 / LADA</string>

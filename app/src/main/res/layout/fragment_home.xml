@@ -41,7 +41,7 @@
                     android:layout_marginTop="45dp"
                     android:fontFamily="@font/cairo_bold"
                     android:gravity="start"
-                    android:text="@string/hello_username"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@+id/guideline_v50_inside"
@@ -55,7 +55,7 @@
                     android:layout_marginStart="55dp"
                     android:fontFamily="@font/cairo_medium"
                     android:gravity="start"
-                    android:text="@string/type_2"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -118,6 +118,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
+                            android:id="@+id/tvLegend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -443,7 +444,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/cairo_semibold"
                 android:gravity="start"
-                android:text="@string/log_date"
+                android:text=""
                 android:textColor="@color/text_grey"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"

@@ -137,6 +137,8 @@
     <string name="no_logs">لا يوجد سجلات</string>
     <string name="start_logs_now">ابدأ و سجل الآن</string>
 
+    <string name="no_data_available">لا توجد بيانات متاحة</string>
+
 
     <!-- community fragment -->
     <string name="category_type1_lada">النوع الاول / السكري المناعي</string>
