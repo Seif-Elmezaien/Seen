@@ -137,25 +137,15 @@ class HomeFragment : Fragment() {
 
     private fun handleLogsState(logs: List<FullLog>) {
 
-        val glucoseData = logs.mapNotNull { it.glucose }
         val isEmptyLogs = logs.isEmpty()
-        val isEmptyGlucose = glucoseData.isEmpty()
 
         binding.rvHome.visibility = if (isEmptyLogs) View.GONE else View.VISIBLE
         binding.llNoLogs.visibility = if (isEmptyLogs) View.VISIBLE else View.GONE
 
+        setUpLineChart(logs)
+
         if (!isEmptyLogs){
             homeAdapter.differ.submitList(logs)
-        }
-
-        if (isEmptyGlucose) {
-            binding.chart.clear()
-            binding.chart.invalidate()
-            binding.tvLegend.visibility = View.GONE
-        }
-        else{
-            binding.tvLegend.visibility = View.VISIBLE
-            setUpLineChart(logs)
         }
     }
 
