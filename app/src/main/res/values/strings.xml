@@ -130,6 +130,15 @@
     <string name="log_date">December 5,2025</string>
     <string name="no_blood_reading">No measurement</string>
 
+    <!-- community fragment -->
+    <string name="category_type1_lada">Type 1 / LADA</string>
+    <string name="category_type2">Type 2</string>
+    <string name="category_mody">Mody</string>
+    <string name="category_gestational">Gestational</string>
+    <string name="category_general">General</string>
+    <string name="category_advise">Advise</string>
+    <string name="post_time">1 sec ago</string>
+
 
     
 

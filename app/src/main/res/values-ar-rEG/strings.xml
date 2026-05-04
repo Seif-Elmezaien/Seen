@@ -135,6 +135,15 @@
     <string name="log_date">ديسمبر 5, 2025</string>
     <string name="no_blood_reading">لا يوجد قياس</string>
 
+    <!-- community fragment -->
+    <string name="category_type1_lada">النوع الاول / السكري المناعي</string>
+    <string name="category_type2">النوع التاني</string>
+    <string name="category_mody">سكري احدي الجين</string>
+    <string name="category_gestational">السكري الحملي</string>
+    <string name="category_general">عام</string>
+    <string name="category_advise">نصائح</string>
+    <string name="post_time">منذ 1 ثانية</string>
+
 
 
 
