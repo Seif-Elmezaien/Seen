@@ -16,6 +16,11 @@ import com.example.seen.databinding.FragmentHomeBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.domain.model.entites.RecordGlucose
+import com.example.seen.domain.model.entites.RecordMeal
+import com.example.seen.domain.model.entites.RecordMedication
+import com.example.seen.domain.model.entites.User
 import com.example.seen.ui.home.adapter.HomeAdapter
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
@@ -25,11 +30,14 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.random.Random
 
 
 class HomeFragment : Fragment() {
@@ -38,6 +46,7 @@ class HomeFragment : Fragment() {
     lateinit var homeAdapter: HomeAdapter
 
     private lateinit var viewModel: HomeViewModel
+    var selectedDate = System.currentTimeMillis()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,13 +61,17 @@ class HomeFragment : Fragment() {
 
         initializeViewModel()
         setUserInfo()
-        setUpLineChart()
         setRecyclerView()
 
+        viewModel.upsertUser()
+        viewModel.generateMockData()
 
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
-                homeAdapter.differ.submitList(logs)
+
+            homeAdapter.differ.submitList(logs)
+            setUpLineChart(logs)
+
         }
 
         viewModel.selectedDate.observe(viewLifecycleOwner) { timestamp ->
@@ -176,42 +189,55 @@ class HomeFragment : Fragment() {
     }
 
     private fun showDatePicker() {
+        // Constraint: max date is today
+        val constraints = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointBackward.now())
+            .build()
+
         val picker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setSelection(selectedDate)
+            .setCalendarConstraints(constraints)
             .build()
 
         picker.addOnPositiveButtonClickListener { selectedDateMillis ->
-
+            resetDateSelector()
             binding.ivCalendar.apply {
-                resetDateSelector()
-                background = ContextCompat.getDrawable(requireContext(),R.drawable.bg_tab_active)
+                background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
                 setColorFilter(requireContext().getColor(R.color.primary))
             }
             viewModel.selectDate(selectedDateMillis)
+            selectedDate = selectedDateMillis
+            picker.dismissNow() // close the picker
         }
 
         picker.show(parentFragmentManager, "DATE_PICKER")
     }
 
-    private fun setUpLineChart() {
+    private fun setUpLineChart(data: List<FullLog>) {
 
         val chart = binding.chart
         val englishFormat = NumberFormat.getInstance(Locale.ENGLISH)
 
-        val colorPrimary = ContextCompat.getColor(requireContext(), R.color.primary)
         val colorText = ContextCompat.getColor(requireContext(), R.color.white)
 
         val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_legend_dot)
 
         val areaBackground = ContextCompat.getDrawable(requireContext(), R.drawable.bg_area_gradient)
 
-        val entries = listOf(
-            Entry(1f, 88f, drawable),   // 8:00
-            Entry(2f, 93f, drawable),   // 14:00
-            Entry(3f, 85f, drawable),   // 18:00
-            Entry(4f, 80f, drawable)    // 23:00
-        )
+        val glucoseData = data
+            .sortedBy { it.log.created_at }
+            .mapNotNull { fullLog ->
+                fullLog.glucose?.let {
+                    fullLog.log.created_at to it.glucose_level
+                }
+            }
+
+        val entries = mutableListOf<Entry>()
+
+        entries.addAll(glucoseData.mapIndexed { index, g ->
+            Entry(index.toFloat() + 1, g.second, drawable)
+        })
 
         val dataSet = LineDataSet(entries, "Blood Glucose Level").apply {
             color = Color.parseColor("#FFFFFF") //Line color
@@ -227,26 +253,34 @@ class HomeFragment : Fragment() {
         chart.data = LineData(dataSet)
 
         // --- X Axis ---
-        val xLabels = listOf("","8:00", "14:00", "18:00", "23:00")
+        val xLabels = mutableListOf<String>()
+
+        xLabels.add("")
+
+        xLabels.addAll(glucoseData.map {
+            val sdf = SimpleDateFormat("h:mm a", Locale.ENGLISH)
+            sdf.format(Date(it.first))
+        })
+
         chart.xAxis.apply {
             valueFormatter = IndexAxisValueFormatter(xLabels)
             position = XAxis.XAxisPosition.BOTTOM
             granularity = 1f
             axisMinimum = 0f   // or 3f, 4f, etc.
-            spaceMin = 1f
+            spaceMin = 5f
             spaceMax = 1f
             setDrawGridLines(true)
             axisLineColor = Color.parseColor("#FFFFFF")
             axisLineWidth = 1f
             gridColor = Color.parseColor("#1AFFFFFF")
             textColor = colorText
-            textSize = 8f
+            textSize = 6f
         }
 
         // --- Y Axis (Left) ---
         chart.axisLeft.apply {
             axisMinimum = 0f
-            axisMaximum = 120f
+            axisMaximum = 400f
             granularity = 30f
             spaceMin = 1f
             spaceMax = 1f

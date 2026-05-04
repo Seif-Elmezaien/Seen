@@ -44,7 +44,7 @@ abstract class SeenDatabase : RoomDatabase() {
                 SeenDatabase::class.java,
                 "seen.db"
             )
-
+            .fallbackToDestructiveMigration(false)
             .build()
     }
 }

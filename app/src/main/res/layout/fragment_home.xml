@@ -6,38 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingBottom="75dp"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!-- ==================== Guideline ==================== -->
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_h50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_v50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clHeader"
                 android:layout_width="match_parent"
@@ -109,7 +77,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cdHomeGraph"
                     android:layout_width="0dp"
-                    android:layout_height="300dp"
+                    android:layout_height="240dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="30dp"
@@ -128,19 +96,6 @@
                         android:background="@drawable/bg_graph_bg"
                         android:orientation="vertical">
 
-
-                        <TextView
-                            android:id="@+id/tvChartTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginLeft="40dp"
-                            android:layout_marginTop="30dp"
-                            android:fontFamily="@font/cairo_semibold"
-                            android:text="@string/blood_sugar_level_graph"
-                            android:textColor="@color/white"
-                            android:textSize="10sp" />
-
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -149,7 +104,8 @@
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/chart"
                                 android:layout_width="0dp"
-                                android:layout_height="190dp"
+                                android:layout_height="170dp"
+                                android:layout_marginTop="20dp"
                                 android:layout_marginStart="35dp"
                                 android:layout_marginEnd="35dp"
                                 android:layout_gravity="center"
@@ -158,17 +114,6 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <TextView
-                                android:id="@+id/tvXTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="2dp"
-                                android:fontFamily="@font/cairo_semibold"
-                                android:text="@string/time"
-                                android:textColor="@color/white"
-                                android:textSize="10sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintLeft_toRightOf="@+id/chart" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,7 +121,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginTop="25dp"
+                            android:layout_marginTop="15dp"
                             android:drawableStart="@drawable/ic_legend_dot"
                             android:drawablePadding="5dp"
                             android:fontFamily="@font/cairo_semibold"
@@ -191,6 +136,37 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clHeader"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- ==================== Guideline ==================== -->
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_h50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_v50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cdAlert"
                 android:layout_width="0dp"
@@ -202,7 +178,7 @@
                 app:cardElevation="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_v50"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clHeader">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clAlert"
@@ -256,8 +232,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="23dp"
                         android:layout_marginBottom="15dp"
-                        android:src="@drawable/ic_arrow_white"
                         android:rotation="180"
+                        android:src="@drawable/ic_arrow_white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -269,20 +245,20 @@
                 android:id="@+id/cdChatbot"
                 android:layout_width="0dp"
                 android:layout_height="88dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
-                android:layout_marginStart="5dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/guideline_v50"
-                app:layout_constraintTop_toBottomOf="@+id/clHeader">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clChatbot"
-                    android:background="@drawable/bg_home_card_gradient"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/bg_home_card_gradient"
                     android:padding="2dp">
 
                     <TextView
@@ -329,8 +305,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="15dp"
-                        android:src="@drawable/ic_arrow_white"
                         android:rotation="180"
+                        android:src="@drawable/ic_arrow_white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -385,14 +361,14 @@
 
                     <TextView
                         android:id="@+id/tvReminderBody"
-                        android:layout_width="244dp"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/cairo_medium"
                         android:text="@string/reminder_body"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -403,8 +379,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="20dp"
-                        android:src="@drawable/ic_arrow_white"
                         android:rotation="180"
+                        android:src="@drawable/ic_arrow_white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -417,8 +393,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cdReminder">
@@ -452,9 +428,9 @@
                     android:id="@+id/ivCalendar"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
-                    android:padding = "10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp"
                     android:src="@drawable/ic_calendar_home" />
 
             </LinearLayout>
@@ -477,14 +453,16 @@
                 android:id="@+id/rvHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingTop="10dp"
+                android:paddingBottom="128dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvChosenDate" />
 
 
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

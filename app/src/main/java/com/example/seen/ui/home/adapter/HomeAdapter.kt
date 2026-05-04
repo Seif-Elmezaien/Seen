@@ -64,31 +64,47 @@ class HomeAdapter(
             tvLogDescription.text = logItem.log.log_description
             tvLogReadingTime.text = fromLongToHour(logItem.log.created_at)
 
-            if(logItem.glucose == null){
+            val glucoseValue = logItem.glucose?.glucose_level
+
+            // Handle text
+            tvLogReadingValue.text = glucoseValue?.let { "${it.toInt()} mg/dl" }
+                ?: context.getString(R.string.no_blood_reading)
+
+            // Handle glucose UI
+            if (glucoseValue == null) {
                 ivGlucose.visibility = View.GONE
 
-                tvLogReadingValue.background = ContextCompat.getDrawable(context,R.drawable.bg_blood_not_exist_reading)
-                tvLogReadingValue.setTextColor(context.getColor(R.color.description))
-                tvLogReadingValue.text = context.getString(R.string.no_blood_reading)
-            }
-            else{
+                tvLogReadingValue.background =
+                    ContextCompat.getDrawable(context, R.drawable.bg_blood_not_exist_reading)
 
+                tvLogReadingValue.setTextColor(
+                    ContextCompat.getColor(context, R.color.description)
+                )
+            } else {
+                val (bgRes, colorRes) = getSugarStyle(glucoseValue)
+
+                tvLogReadingValue.background =
+                    ContextCompat.getDrawable(context, bgRes)
+
+                tvLogReadingValue.setTextColor(
+                    ContextCompat.getColor(context, colorRes)
+                )
             }
 
-            if (logItem.meal == null) {
-                ivMeal.visibility = View.GONE
-            }
-            if (logItem.medication == null) {
-                ivMedication.visibility = View.GONE
-            }
+            // Handle other icons
+            ivMeal.visibility = if (logItem.meal == null) View.GONE else View.VISIBLE
+            ivMedicine.visibility = if (logItem.medication == null) View.GONE else View.VISIBLE
         }
     }
 
     private fun fromLongToHour(timestamp: Long) =
         SimpleDateFormat("h:mm a").format(Date(timestamp))
 
-    private fun setLogReadingBackground(value: Int, binding: ItemHomeLogsBinding) {
-
+    private fun getSugarStyle(value: Float): Pair<Int, Int> = when {
+        value < 70 -> R.drawable.bg_blood_bad_reading to R.color.bad_sugar_reading
+        value <= 140 -> R.drawable.bg_blood_good_reading to R.color.good_sugar_reading
+        value <= 180 -> R.drawable.bg_blood_mid_reading to R.color.mid_sugar_reading
+        else -> R.drawable.bg_blood_bad_reading to R.color.bad_sugar_reading
     }
 
     override fun getItemCount(): Int {

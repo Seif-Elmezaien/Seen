@@ -5,9 +5,9 @@
     android:id="@+id/cvItemHomeLogs"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
     android:layout_marginEnd="30dp"
     android:layout_marginStart="30dp"
+    android:layout_marginBottom="20dp"
     app:cardBackgroundColor="@color/background"
     app:cardElevation="10dp"
     app:cardCornerRadius="16dp">
@@ -33,8 +33,8 @@
             android:id="@+id/tvLogTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="9dp"
             android:fontFamily="@font/cairo_bold"
             android:text="انهردا الصبح"
             android:textColor="@color/title"
@@ -46,7 +46,8 @@
             android:id="@+id/tvLogReadingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="22dp"
             android:fontFamily="@font/cairo"
             android:text="8:00 صباحا"
             android:textColor="@color/title"
@@ -58,7 +59,7 @@
             android:id="@+id/tvLogDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="15dp"
+            android:paddingStart="17dp"
             android:paddingEnd="10dp"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/cairo"
@@ -72,7 +73,9 @@
             android:id="@+id/tvLogReadingValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="6dp"
             android:background="@drawable/bg_blood_not_exist_reading"
             android:fontFamily="@font/cairo_medium"
             android:gravity="center"
@@ -84,45 +87,48 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLogDescription" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/layoutLogIcons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="6dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLogDescription">
 
             <ImageView
                 android:id="@+id/ivGlucose"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_log_icon"
+                android:padding="4dp"
                 android:src="@drawable/ic_glucose"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ivMeal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:elevation="1dp" />
 
             <ImageView
                 android:id="@+id/ivMeal"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_log_icon"
+                android:padding="4dp"
+                android:layout_marginStart="-5dp"
                 android:src="@drawable/ic_meal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ivMedication"
-                app:layout_constraintStart_toEndOf="@id/ivGlucose"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:elevation="2dp" />
 
             <ImageView
-                android:id="@+id/ivMedication"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:id="@+id/ivMedicine"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_log_icon"
+                android:padding="4dp"
+                android:layout_marginStart="-5dp"
                 android:src="@drawable/ic_medicine"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivMeal"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:elevation="3dp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
