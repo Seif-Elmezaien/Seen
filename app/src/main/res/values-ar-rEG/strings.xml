@@ -134,6 +134,9 @@
     <string name="reminder_body">حدّد الوقت المناسب لتلقي تنبيهات منتظمة تساعدك على متابعة بياناتك الصحية بدقة.</string>
     <string name="log_date">ديسمبر 5, 2025</string>
     <string name="no_blood_reading">لا يوجد قياس</string>
+    <string name="no_logs">لا يوجد سجلات</string>
+    <string name="start_logs_now">ابدأ و سجل الآن</string>
+
 
     <!-- community fragment -->
     <string name="category_type1_lada">النوع الاول / السكري المناعي</string>

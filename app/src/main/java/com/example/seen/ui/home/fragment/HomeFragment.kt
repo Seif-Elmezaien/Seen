@@ -59,12 +59,21 @@ class HomeFragment : Fragment() {
         setUserInfo()
         setRecyclerView()
 
-        viewModel.upsertUser()
+
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
 
-            homeAdapter.differ.submitList(logs)
-            setUpLineChart(logs)
+            if (logs.isEmpty()) {
+                binding.rvHome.visibility = View.GONE
+                binding.llNoLogs.visibility = View.VISIBLE
+            }
+            else{
+                binding.rvHome.visibility = View.VISIBLE
+                binding.llNoLogs.visibility = View.GONE
+
+                homeAdapter.differ.submitList(logs)
+                setUpLineChart(logs)
+            }
 
         }
 

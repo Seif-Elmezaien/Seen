@@ -104,10 +104,10 @@
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/chart"
                                 android:layout_width="0dp"
-                                android:layout_height="170dp"
+                                android:layout_height="180dp"
                                 android:layout_marginTop="20dp"
-                                android:layout_marginStart="35dp"
-                                android:layout_marginEnd="35dp"
+                                android:layout_marginStart="30dp"
+                                android:layout_marginEnd="30dp"
                                 android:layout_gravity="center"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -451,6 +451,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHome"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
@@ -461,6 +462,43 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvChosenDate" />
+
+            <LinearLayout
+                android:id="@+id/llNoLogs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingBottom="128dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvChosenDate">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_no_logs"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/no_logs"
+                    android:textColor="@color/title"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/start_logs_now"
+                    android:textColor="@color/description"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -129,6 +129,9 @@
     <string name="reminder_body">Set a suitable time to receive regular alerts that help you accurately track your health data.</string>
     <string name="log_date">December 5,2025</string>
     <string name="no_blood_reading">No measurement</string>
+    <string name="no_logs">There are no Logs</string>
+    <string name="start_logs_now">Get started and log now</string>
+
 
     <!-- community fragment -->
     <string name="category_type1_lada">Type 1 / LADA</string>

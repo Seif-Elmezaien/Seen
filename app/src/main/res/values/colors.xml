@@ -22,9 +22,6 @@
     <color name="text_main">#23262F</color>
     <color name="text_grey">#8E9295</color>
 
-    <color name="profile_stroke">#3B82F6</color>
-    <color name="post_likes">#DC2626</color>
-
     <!-- Dark shades -->
     <color name="dark_1">#2B3695</color>
     <color name="dark_2">#1F1A5F</color>
@@ -33,6 +30,10 @@
     <color name="black">#FF000000</color>
     <color name="grey">#A6A6A6</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="profile_stroke">#3B82F6</color>
+    <color name="post_likes">#DC2626</color>
 
     <color name="Type1_lada_red">#EF4444</color>
     <color name="type2">#6976EB</color>
