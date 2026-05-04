@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginStart="30dp"
+    app:cardBackgroundColor="@color/background"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:padding="16dp"
+        android:background="@color/white"
+        >
+
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/avatar_border"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/ivPostImage"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/iv_post1"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toBottomOf="@id/frameLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUserPostName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/cairo_bold"
+            android:text="منتصر إسماعيل"
+            android:textColor="@color/title"
+            android:textSize="14sp"
+            android:layout_marginStart="14dp"
+            app:layout_constraintStart_toEndOf="@+id/frameLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPostTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/post_time"
+            android:textColor="@color/description"
+            app:layout_constraintStart_toStartOf="@+id/tvUserPostName"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserPostName" />
+
+        <TextView
+            android:id="@+id/tvToday"
+            android:layout_width="83dp"
+            android:layout_height="27dp"
+            android:background="@drawable/bg_diabetes_type1"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:text="@string/category_type1_lada"
+            android:textColor="@color/Type1_lada_red"
+            android:textSize="10sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvPostTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="يوم صعب مع ارتفاع السكر"
+            android:textColor="@color/card_title"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivPostImage"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/tvPostContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/cairo"
+            android:text="النهارده السكر كان عالي أكتر من المعتاد، وحسيت بتعب وصداع.حاولت أظبط أكلي وأشرب مية وأمشي شوية، وإن شاء الله الأرقام تتحسن.
+المهم إني مكمل ومش مستسلم."
+            android:textColor="@color/card_title"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPostTitle" />
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="#80D9D9D9"
+            app:layout_constraintTop_toBottomOf="@+id/tvPostContent"
+            tools:layout_editor_absoluteX="16dp" />
+
+
+        <ImageView
+            android:id="@+id/ivLike"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/heart_selector"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <TextView
+            android:id="@+id/tv_likes_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="120"
+            android:textColor="@color/post_likes"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivLike"
+            app:layout_constraintTop_toTopOf="@+id/ivLike" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_post_comments"
+            app:layout_constraintStart_toEndOf="@+id/tv_likes_count"
+            app:layout_constraintTop_toTopOf="@+id/tv_likes_count" />
+
+        <TextView
+            android:id="@+id/tv_comments_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80"
+            android:textColor="@color/description"
+            android:textStyle="normal"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
