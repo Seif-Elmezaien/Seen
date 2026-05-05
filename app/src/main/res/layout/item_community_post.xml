@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:elevation="10dp"
         android:padding="16dp"
-        android:background="@color/white"
+        android:background="@drawable/bg_post_cardview"
         >
 
 
