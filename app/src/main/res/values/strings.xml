@@ -135,7 +135,6 @@
     <string name="no_data_available">No data available</string>
 
 
-
     <!-- community fragment -->
     <string name="category_type1_lada">Type 1 / LADA</string>
     <string name="category_type2">Type 2</string>
@@ -146,9 +145,8 @@
     <string name="post_time">1 sec ago</string>
     <string name="Share_your_experience">Share your experience and connect with others</string>
     <string name="share_something_with_community">Share something with the community...</string>
-
-
-    
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
