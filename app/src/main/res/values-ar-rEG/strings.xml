@@ -132,12 +132,53 @@
     <string name="chatbot_body">تحدث معنا</string>
     <string name="reminder_title">اضبط التذكير الخاص بك</string>
     <string name="reminder_body">حدّد الوقت المناسب لتلقي تنبيهات منتظمة تساعدك على متابعة بياناتك الصحية بدقة.</string>
-    <string name="log_date">ديسمبر 5, 2025</string>
     <string name="no_blood_reading">لا يوجد قياس</string>
     <string name="no_logs">لا يوجد سجلات</string>
     <string name="start_logs_now">ابدأ و سجل الآن</string>
 
     <string name="no_data_available">لا توجد بيانات متاحة</string>
+
+    <!-- AddReminders fragment -->
+    <string name="add_reminder_title">إضافة تذكير</string>
+
+    <!-- AddLogs fragment -->
+    <string name="logs">السجلات</string>
+    <string name="log_title">عنوان السجل</string>
+    <string name="log_title_hint">عنوان السجل</string>
+    <string name="log_date">تاريخ السجل</string>
+    <string name="log_time">الميعاد</string>
+    <string name="log_description">وصف السجل</string>
+    <string name="log_description_hint">اكتب وصف للسجل</string>
+    <string name="button_glucose_title">قياس سكر</string>
+    <string name="button_medication_title">دواء</string>
+    <string name="button_meal_title">أكل</string>
+    <string name="glucose_log_measurement_type_title">نوع القياس</string>
+    <string name="glucose_log_measurement_type_random">عشوائي</string>
+    <string name="glucose_log_measurement_type_after_meal">بعد الأكل</string>
+    <string name="glucose_log_measurement_type_before_meal">قبل الأكل</string>
+    <string name="glucose_log_measurement_type_fasting">صائم</string>
+    <string name="glucose_log_sugar_measurement_value_title">قيمة قياس السكر</string>
+    <string name="glucose_log_sugar_measurement_value_hint">قيمة قياس السكر (mg/dl)</string>
+    <string name="glucose_log_a1c_title">قيمة السكر التراكمي A1C</string>
+    <string name="glucose_log_a1c_hint">قيمة A1C</string>
+    <string name="notes_title">ملاحظات</string>
+    <string name="notes_hint">اكتب ملاحظاتك...</string>
+    <string name="medication_title">الدواء (اختر واحد أو أكثر)</string>
+    <string name="meal_type">نوع الوجبة</string>
+    <string name="meal_breakfast">إفطار</string>
+    <string name="meal_lunch">غداء</string>
+    <string name="meal_dinner">عشاء</string>
+    <string name="meal_snack">وجبة خفيفة</string>
+    <string name="meal_description">وصف الوجبة</string>
+    <string name="meal_description_hint">اكتب عدد المرات</string>
+    <string name="carbs_estimation">تقدير كمية الكاربوهيدرات</string>
+    <string name="carbs_estimation_hint">اكتب عدد المرات</string>
+    <string name="calories_estimation">تقدير كمية السعرات الحرارية</string>
+    <string name="calories_estimation_hint">اكتب عدد المرات</string>
+
+    <string name="add_new_log">إضافة السجل</string>
+
+
 
 
     <!-- community fragment -->

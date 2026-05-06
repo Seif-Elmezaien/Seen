@@ -83,7 +83,6 @@ class HomeFragment : Fragment() {
             .get(HomeViewModel::class.java)
     }
 
-
     private fun setupRecyclerView() {
         homeAdapter = HomeAdapter(requireContext())
 
@@ -331,5 +330,4 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

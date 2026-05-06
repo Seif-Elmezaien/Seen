@@ -4,24 +4,847 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".ui.home.fragment.AddLogsFragment">
 
-
-    <TextView
-        android:id="@+id/tvWelcomeMsg"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/cairo"
-        android:gravity="center"
-        android:text="add_logs"
-        android:textColor="@color/title"
-        android:textSize="20sp"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_v50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".5" />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_v33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_v66"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".66" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_home"
+                android:paddingBottom="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivAddLogs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginBottom="24dp"
+                    android:src="@drawable/ic_add_logs_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvAddLogs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="start"
+                    android:text="@string/logs"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivAddLogs" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_add_logs_body" />
+
+                    <ImageView
+                        android:id="@+id/ivBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="32dp"
+                        android:rotation="180"
+                        android:src="@drawable/ic_go_back_add_logs" />
+
+                </FrameLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/cairo_bold"
+                android:text="@string/log_title"
+                android:textColor="@color/title"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clHeader" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLogTitle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/bg_et_add_logs"
+                android:elevation="8dp"
+                android:fontFamily="@font/cairo"
+                android:hint="@string/log_title_hint"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:nextFocusForward="@id/etLogDescription"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textColor="@color/title"
+                android:textColorHint="@color/description"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+            <TextView
+                android:id="@+id/tvLogDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/cairo_bold"
+                android:text="@string/log_description"
+                android:textColor="@color/title"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etLogTitle" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLogDescription"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/bg_et_add_logs"
+                android:elevation="8dp"
+                android:fontFamily="@font/cairo"
+                android:hint="@string/log_description_hint"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:nextFocusForward="@id/etLogTime"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textColor="@color/title"
+                android:textColorHint="@color/description"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLogDescription" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/cairo_bold"
+                android:text="@string/log_time"
+                android:textColor="@color/title"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etLogDescription" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/cairo_bold"
+                android:text="@string/log_date"
+                android:textColor="@color/title"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/guideline_v50"
+                app:layout_constraintTop_toBottomOf="@+id/etLogDescription" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLogDate"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/bg_et_add_logs"
+                android:drawableStart="@drawable/ic_calender"
+                android:drawablePadding="15dp"
+                android:elevation="8dp"
+                android:fontFamily="@font/cairo"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="05/13/2026"
+                android:textColor="@color/title"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline_v50"
+                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etLogTime"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_et_add_logs"
+                android:drawableStart="@drawable/ic_time"
+                android:drawablePadding="15dp"
+                android:elevation="8dp"
+                android:fontFamily="@font/cairo"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:nextFocusForward="@id/etLogDate"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="12:00 ص"
+                android:textColor="@color/title"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_v50"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGlucose"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="45dp"
+                android:background="@drawable/bg_add_log_button_active"
+                android:elevation="6dp"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="16dp"
+                android:text="@string/button_glucose_title"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_glucose_mid_size"
+                app:iconGravity="textTop"
+                app:iconPadding="14dp"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_v33"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLogDate" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMedication"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_add_log_button_inactive"
+                android:elevation="6dp"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="16dp"
+                android:text="@string/button_medication_title"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_medicine_mid_size"
+                app:iconGravity="textTop"
+                app:iconPadding="14dp"
+                app:iconTint="@color/primary"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_v66"
+                app:layout_constraintStart_toEndOf="@+id/guideline_v33"
+                app:layout_constraintTop_toBottomOf="@id/etLogDate" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMeal"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/bg_add_log_button_inactive"
+                android:elevation="6dp"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="16dp"
+                android:text="@string/button_meal_title"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_meal_mid_size"
+                app:iconGravity="textTop"
+                app:iconPadding="14dp"
+                app:iconTint="@color/primary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline_v66"
+                app:layout_constraintTop_toBottomOf="@id/etLogDate" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/clGlucose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnGlucose">
+
+                <TextView
+                    android:id="@+id/tvMeasurementType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/glucose_log_measurement_type_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvGlucoseRandom"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/glucose_log_measurement_type_random"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMeasurementType" />
+
+                <TextView
+                    android:id="@+id/tvGlucoseBeforeMeal"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/glucose_log_measurement_type_before_meal"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/tvGlucoseRandom"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMeasurementType" />
+
+                <TextView
+                    android:id="@+id/tvGlucoseAfterMeal"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/glucose_log_measurement_type_after_meal"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/tvGlucoseBeforeMeal"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMeasurementType" />
+
+                <TextView
+                    android:id="@+id/tvGlucoseFasting"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/glucose_log_measurement_type_fasting"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/tvGlucoseAfterMeal"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMeasurementType" />
+
+
+                <TextView
+                    android:id="@+id/tvGlucoseLogValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/glucose_log_sugar_measurement_value_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGlucoseFasting" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etGlucoseLogValue"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/glucose_log_sugar_measurement_value_hint"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/etA1c"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvGlucoseLogValue" />
+
+                <TextView
+                    android:id="@+id/tvA1c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/glucose_log_a1c_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etGlucoseLogValue" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etA1c"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/glucose_log_a1c_hint"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/etGlucoseNotes"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvA1c" />
+
+                <TextView
+                    android:id="@+id/tvGlucoseNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/notes_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etA1c" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etGlucoseNotes"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_notes_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/notes_hint"
+                    android:imeOptions="actionDone"
+                    android:padding="10dp"
+                    android:gravity="start"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvGlucoseNotes" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="visible"
+                android:id="@+id/clMedication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnGlucose">
+
+
+                <TextView
+                    android:id="@+id/tvMedicationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/medication_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMedicationTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/button_medication_title"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/etMedicationNotes"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMedicationTitle" />
+
+                <TextView
+                    android:id="@+id/tvMedicationNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/notes_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etMedicationTitle" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMedicationNotes"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_notes_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/notes_hint"
+                    android:imeOptions="actionDone"
+                    android:padding="10dp"
+                    android:gravity="start"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMedicationNotes" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/clMeal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnGlucose">
+
+                <TextView
+                    android:id="@+id/tvMealType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/meal_type"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvBreakfast"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/meal_breakfast"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMealType" />
+
+                <TextView
+                    android:id="@+id/tvLunch"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/meal_lunch"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/tvBreakfast"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMealType" />
+
+                <TextView
+                    android:id="@+id/tvDinner"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/meal_dinner"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/tvLunch"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMealType" />
+
+                <TextView
+                    android:id="@+id/tvSnack"
+                    android:layout_width="80dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_add_log_button_inactive"
+                    android:fontFamily="@font/cairo_bold"
+                    android:gravity="center"
+                    android:text="@string/meal_snack"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/tvDinner"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMealType" />
+
+
+                <TextView
+                    android:id="@+id/tvMealDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/meal_description"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvBreakfast" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMealDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/meal_description_hint"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/etCarbs"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMealDescription" />
+
+                <TextView
+                    android:id="@+id/tvCarbs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/carbs_estimation"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etMealDescription" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCarbs"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/carbs_estimation_hint"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/etCalories"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCarbs" />
+
+                <TextView
+                    android:id="@+id/tvCalories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/calories_estimation"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCarbs" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCalories"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/calories_estimation_hint"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/etMealNotes"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCalories" />
+
+                <TextView
+                    android:id="@+id/tvMealNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/notes_title"
+                    android:textColor="@color/title"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCalories" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMealNotes"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@drawable/bg_et_notes_add_logs"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/cairo"
+                    android:hint="@string/notes_hint"
+                    android:imeOptions="actionDone"
+                    android:padding="10dp"
+                    android:gravity="start"
+                    android:textColor="@color/title"
+                    android:textColorHint="@color/description"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMealNotes" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/btnAddNewLog"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:layout_marginBottom="128dp"-->
+<!--                android:layout_marginStart="25dp"-->
+<!--                android:layout_marginEnd="25dp"-->
+<!--                app:cornerRadius="8dp"-->
+<!--                android:fontFamily="@font/cairo_bold"-->
+<!--                android:textSize="14sp"-->
+<!--                android:text="@string/add_new_log"-->
+<!--                app:icon="@drawable/ic_add"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="10dp"-->
+<!--                app:iconSize="18dp"-->
+<!--                android:elevation="4dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/clGlucose"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"/>-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

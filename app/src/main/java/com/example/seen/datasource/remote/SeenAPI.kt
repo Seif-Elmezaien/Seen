@@ -7,7 +7,9 @@ import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface SeenAPI {
 
@@ -28,5 +30,14 @@ interface SeenAPI {
     suspend fun signup(
         @Body user: SignupRequest
     ) : Response<LoginAndSignupResponse>
+
+    // GetPost
+    @POST("api/posts")
+    suspend fun getCommunityPost(
+        @Query("page")
+        page: Int,
+        @Query("category")
+        category: String,
+    )
 
 }

@@ -127,12 +127,51 @@
     <string name="chatbot_body">Talk to us</string>
     <string name="reminder_title">Set your reminder</string>
     <string name="reminder_body">Set a suitable time to receive regular alerts that help you accurately track your health data.</string>
-    <string name="log_date">December 5,2025</string>
     <string name="no_blood_reading">No measurement</string>
     <string name="no_logs">There are no Logs</string>
     <string name="start_logs_now">Get started and log now</string>
 
     <string name="no_data_available">No data available</string>
+
+    <!-- AddReminders fragment -->
+    <string name="add_reminder_title">Add Reminder</string>
+
+    <!-- AddLogs fragment -->
+    <string name="logs">Logs</string>
+    <string name="log_title">Title</string>
+    <string name="log_title_hint">Log title</string>
+    <string name="log_date">Log date</string>
+    <string name="log_time">Time</string>
+    <string name="log_description">Log description</string>
+    <string name="log_description_hint">Type a description for the log</string>
+    <string name="button_glucose_title">Glucose</string>
+    <string name="button_medication_title">Medication</string>
+    <string name="button_meal_title">Meal</string>
+    <string name="glucose_log_measurement_type_title">Measurement type</string>
+    <string name="glucose_log_measurement_type_random">Random</string>
+    <string name="glucose_log_measurement_type_after_meal">After meal</string>
+    <string name="glucose_log_measurement_type_before_meal">Before meal</string>
+    <string name="glucose_log_measurement_type_fasting">Fasting</string>
+    <string name="glucose_log_sugar_measurement_value_title">Sugar measurement value</string>
+    <string name="glucose_log_sugar_measurement_value_hint">Blood sugar measurement value (mg/dl)</string>
+    <string name="glucose_log_a1c_title">A1C value</string>
+    <string name="glucose_log_a1c_hint">A1C</string>
+    <string name="notes_title">Notes</string>
+    <string name="notes_hint">Write your Notes...</string>
+    <string name="medication_title">Medication (choose one or more)</string>
+    <string name="meal_type">Meal Type</string>
+    <string name="meal_breakfast">Breakfast</string>
+    <string name="meal_lunch">Lunch</string>
+    <string name="meal_dinner">Dinner</string>
+    <string name="meal_snack">Snack</string>
+    <string name="meal_description">Meal Description</string>
+    <string name="meal_description_hint">Enter number of times</string>
+    <string name="carbs_estimation">Carbohydrates Estimation</string>
+    <string name="carbs_estimation_hint">Enter number of times</string>
+    <string name="calories_estimation">Calories Estimation</string>
+    <string name="calories_estimation_hint">Enter number of times</string>
+
+    <string name="add_new_log">Add Log</string>
 
 
     <!-- community fragment -->
@@ -145,8 +184,7 @@
     <string name="post_time">1 sec ago</string>
     <string name="Share_your_experience">Share your experience and connect with others</string>
     <string name="share_something_with_community">Share something with the community...</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>

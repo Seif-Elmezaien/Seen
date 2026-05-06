@@ -9,7 +9,7 @@
     <item
         android:id="@+id/communityFragment"
         android:title="@string/community"
-        android:icon="@drawable/ic_community"/>
+        android:icon="@drawable/ic_community_menu"/>
 
     <item
         android:id="@+id/placeholder"

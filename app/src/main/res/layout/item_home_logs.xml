@@ -105,7 +105,7 @@
                 android:layout_height="20dp"
                 android:background="@drawable/bg_log_icon"
                 android:padding="4dp"
-                android:src="@drawable/ic_glucose"
+                android:src="@drawable/ic_glucose_small_size"
                 android:elevation="1dp" />
 
             <ImageView
@@ -115,7 +115,7 @@
                 android:background="@drawable/bg_log_icon"
                 android:padding="4dp"
                 android:layout_marginStart="-5dp"
-                android:src="@drawable/ic_meal"
+                android:src="@drawable/ic_meal_size_small"
                 android:elevation="2dp" />
 
             <ImageView
@@ -125,7 +125,7 @@
                 android:background="@drawable/bg_log_icon"
                 android:padding="4dp"
                 android:layout_marginStart="-5dp"
-                android:src="@drawable/ic_medicine"
+                android:src="@drawable/ic_medicine_size_small"
                 android:elevation="3dp" />
 
         </LinearLayout>
