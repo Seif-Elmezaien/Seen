@@ -11,6 +11,8 @@
     <color name="card_title">#3B3D53</color>
     <color name="links">#6976EB</color>
     <color name="text_gery2">#B7B7B7</color>
+    
+    <color name="description_30">#40808080</color>
 
     <color name="alert_streak">#F65629</color>
     <color name="badge">#FD8F01</color>
