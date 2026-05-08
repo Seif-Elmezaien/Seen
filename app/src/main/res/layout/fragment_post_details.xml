@@ -8,14 +8,25 @@
     android:background="@color/background"
     tools:context=".ui.community.fragment.PostDetailsFragment">
 
-    <ImageView
-        android:id="@+id/backArrowComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="32dp"
-        android:src="@drawable/ic_back_arrow_community"
+    <FrameLayout
+        android:id="@+id/arrowBg"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bg_post_cardview"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="10dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_back_arrow" />
+    </FrameLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
@@ -27,12 +38,14 @@
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backArrowComment">
+        app:layout_constraintTop_toBottomOf="@id/arrowBg">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:background="@drawable/bg_post_cardview"
+            >
 
             <FrameLayout
                 android:id="@+id/frameLayout"

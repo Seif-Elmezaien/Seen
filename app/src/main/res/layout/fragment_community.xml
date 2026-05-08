@@ -7,136 +7,68 @@
     android:background="@color/background"
     tools:context=".ui.community.fragment.CommunityFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clheaderCommunity"
+        android:id="@+id/header_cl"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_post_cardview"
+        app:layout_constraintBottom_toTopOf="@id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:padding="16dp"
-        android:background="@drawable/bg_home"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
         >
 
         <ImageView
-            android:id="@+id/ivCommunity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_community"
+            android:id="@+id/logoIv"
+            android:layout_width="72dp"
+            android:layout_height="42dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/logo"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
-        <TextView
-            android:id="@+id/tvCoomunity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:fontFamily="@font/cairo_bold"
-            android:gravity="start"
-            android:text="@string/community"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivCommunity"
-            app:layout_constraintStart_toEndOf="@+id/ivCommunity"
-            app:layout_constraintTop_toTopOf="@+id/ivCommunity" />
-
-        <ImageView
-            android:id="@+id/ivChats"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chats"
-            app:layout_constraintBottom_toBottomOf="@+id/tvCoomunity"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvCoomunity"/>
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_home_card_gradient"
-            android:elevation="10dp"
-            app:cardCornerRadius="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="32dp"
+            android:id="@+id/icLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/logoIv"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvCoomunity">
+            app:layout_constraintTop_toTopOf="@id/logoIv">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_home_card_gradient"
-                android:padding="16dp">
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_chats" />
 
-                <TextView
-                    android:id="@+id/tv_communty_cardview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/cairo"
-                    android:text="@string/Share_your_experience"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/ic_search_glasses" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:elevation="10dp"
-                    app:cardCornerRadius="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_communty_cardview">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp">
-
-                        <TextView
-                            android:id="@+id/tv_communty_addPost"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="8dp"
-                            android:layout_marginStart="16dp"
-                            android:fontFamily="@font/cairo"
-                            android:text="@string/share_something_with_community"
-                            android:textColor="#6976EB"
-                            android:textSize="12sp"
-                            android:textStyle="normal"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/ivAddPost"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:src="@drawable/ic_add_log_button"
-                            app:layout_constraintBottom_toBottomOf="@+id/tv_communty_addPost"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tv_communty_addPost" />
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
-
-
-
-
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_box_add" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#80D9D9D9"
+        app:layout_constraintTop_toBottomOf="@id/header_cl"
+        app:layout_constraintBottom_toTopOf="@+id/categoriesScrollView"
+        tools:layout_editor_absoluteX="16dp" />
 
     <HorizontalScrollView
         android:id="@+id/categoriesScrollView"
@@ -149,7 +81,7 @@
         android:paddingBottom="12dp"
         android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clheaderCommunity">
+        app:layout_constraintTop_toBottomOf="@+id/view">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupCategories"
@@ -205,5 +137,14 @@
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_community_post"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoriesScrollView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

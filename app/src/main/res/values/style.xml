@@ -25,10 +25,10 @@
 
     <style name="CategoryChip" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/chip_text_selector</item>   <!-- change this -->
-        <item name="chipBackgroundColor">@color/chip_bg_selector</item>   <!-- change this -->
-
+        <item name="android:textColor">@color/chip_text_selector</item>
+        <item name="chipBackgroundColor">@color/chip_bg_selector</item>
         <item name="chipCornerRadius">8dp</item>
+        <item name="chipIconVisible">true</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
         <item name="chipMinHeight">36dp</item>
