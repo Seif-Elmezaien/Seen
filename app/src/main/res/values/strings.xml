@@ -135,6 +135,10 @@
 
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">Add Reminder</string>
+    <string name="title">Title</string>
+    <string name="appointment">appointment</string>
+    <string name="create_reminder">Create Reminder</string>
+
 
     <!-- AddLogs fragment -->
     <string name="logs">Logs</string>
@@ -170,8 +174,13 @@
     <string name="carbs_estimation_hint">Enter number of times</string>
     <string name="calories_estimation">Calories Estimation</string>
     <string name="calories_estimation_hint">Enter number of times</string>
-
     <string name="add_new_log">Add Log</string>
+
+    <!-- add_medication_bottom_sheet -->
+    <string name="add_medicine_title">Add Medicine</string>
+    <string name="medicine_label">Medicine</string>
+    <string name="medicine_name_hint">Enter medicine name</string>
+    <string name="btn_add_medicine">Add Medicine</string>
 
 
     <!-- community fragment -->

@@ -140,6 +140,9 @@
 
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">إضافة تذكير</string>
+    <string name="title">عنوان</string>
+    <string name="appointment">الميعاد</string>
+    <string name="create_reminder">انشاء تذكير</string>
 
     <!-- AddLogs fragment -->
     <string name="logs">السجلات</string>
@@ -175,8 +178,13 @@
     <string name="carbs_estimation_hint">اكتب عدد المرات</string>
     <string name="calories_estimation">تقدير كمية السعرات الحرارية</string>
     <string name="calories_estimation_hint">اكتب عدد المرات</string>
-
     <string name="add_new_log">إضافة السجل</string>
+
+    <!-- add_medication_bottom_sheet -->
+    <string name="add_medicine_title">إضافة دواء</string>
+    <string name="medicine_label">الدواء</string>
+    <string name="medicine_name_hint">اكتب اسم الدواء</string>
+    <string name="btn_add_medicine">إضافة الدواء</string>
 
 
 

@@ -213,6 +213,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/bg_et_add_logs"
+                android:focusable="false"
                 android:drawableStart="@drawable/ic_calender"
                 android:drawablePadding="15dp"
                 android:elevation="8dp"
@@ -236,6 +237,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/bg_et_add_logs"
+                android:focusable="false"
                 android:drawableStart="@drawable/ic_time"
                 android:drawablePadding="15dp"
                 android:elevation="8dp"
@@ -320,7 +322,7 @@
                 app:layout_constraintTop_toBottomOf="@id/etLogDate" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/clGlucose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -511,11 +513,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:visibility="visible"
                 android:id="@+id/clMedication"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="45dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btnGlucose">
@@ -533,41 +535,78 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedicationTitle"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilSelectMedication"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    app:boxBackgroundMode="outline"
+                    app:endIconDrawable="@drawable/ic_arrow_down"
+                    app:endIconMode="dropdown_menu"
+                    app:endIconTint="@color/text_gery2"
+                    app:layout_constraintEnd_toStartOf="@id/btnAddMedication"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMedicationTitle">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/etSelectMedication"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_et_add_logs"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/cairo"
+                        android:hint="@string/medicine_label"
+                        android:inputType="none"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textColor="@color/title"
+                        android:textColorHint="@color/description"
+                        android:textSize="12sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Add new medication button -->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnAddMedication"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginEnd="25dp"
-                    android:background="@drawable/bg_et_add_logs"
-                    android:elevation="8dp"
-                    android:fontFamily="@font/cairo"
-                    android:hint="@string/button_medication_title"
-                    android:imeOptions="actionNext"
-                    android:nextFocusForward="@id/etMedicationNotes"
-                    android:maxLines="1"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:textColor="@color/title"
-                    android:textColorHint="@color/description"
-                    android:textSize="12sp"
+                    android:backgroundTint="@color/primary"
+                    android:src="@drawable/ic_add"
+                    app:fabSize="mini"
+                    app:layout_constraintBottom_toBottomOf="@id/tilSelectMedication"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tilSelectMedication"
+                    app:maxImageSize="20dp"
+                    app:tint="@null" />
+
+                <!-- Chips for selected medications -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupMedications"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="25dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvMedicationTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/tilSelectMedication"
+                    app:singleLine="false" />
 
                 <TextView
                     android:id="@+id/tvMedicationNotes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="@font/cairo_bold"
                     android:text="@string/notes_title"
                     android:textColor="@color/title"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etMedicationTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/chipGroupMedications" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMedicationNotes"
@@ -579,10 +618,10 @@
                     android:background="@drawable/bg_et_notes_add_logs"
                     android:elevation="8dp"
                     android:fontFamily="@font/cairo"
+                    android:gravity="start"
                     android:hint="@string/notes_hint"
                     android:imeOptions="actionDone"
                     android:padding="10dp"
-                    android:gravity="start"
                     android:textColor="@color/title"
                     android:textColorHint="@color/description"
                     android:textSize="12sp"
@@ -821,28 +860,35 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/btnAddNewLog"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_marginTop="30dp"-->
-<!--                android:layout_marginBottom="128dp"-->
-<!--                android:layout_marginStart="25dp"-->
-<!--                android:layout_marginEnd="25dp"-->
-<!--                app:cornerRadius="8dp"-->
-<!--                android:fontFamily="@font/cairo_bold"-->
-<!--                android:textSize="14sp"-->
-<!--                android:text="@string/add_new_log"-->
-<!--                app:icon="@drawable/ic_add"-->
-<!--                app:iconGravity="textStart"-->
-<!--                app:iconPadding="10dp"-->
-<!--                app:iconSize="18dp"-->
-<!--                android:elevation="4dp"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/clGlucose"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"/>-->
+            <!-- Add this barrier after clMeal, before the closing ConstraintLayout -->
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierSections"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="clGlucose,clMedication,clMeal" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddNewLog"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="128dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:elevation="4dp"
+                android:fontFamily="@font/cairo_bold"
+                android:text="@string/add_new_log"
+                android:textSize="14sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_add"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:iconSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/barrierSections" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

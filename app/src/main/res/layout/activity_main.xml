@@ -20,7 +20,8 @@
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:backgroundTint="@color/background"
         app:fabCradleMargin="15dp"
         app:fabCradleVerticalOffset="10dp"

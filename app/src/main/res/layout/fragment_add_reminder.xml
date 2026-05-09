@@ -8,7 +8,6 @@
     tools:context=".ui.home.fragment.AddReminderFragment">
 
 
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_v50"
             android:layout_width="wrap_content"
@@ -162,67 +161,32 @@
                 app:layout_constraintTop_toBottomOf="@id/clHeader" />
 
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etGlucoseReminderNotes"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/bg_et_add_logs"
-            android:elevation="8dp"
-            android:fontFamily="@font/cairo"
-            android:hint="@string/notes_title"
-            android:imeOptions="actionNext"
-            android:nextFocusForward="@id/etReminderTime"
-            android:maxLines="1"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:textColor="@color/title"
-            android:textColorHint="@color/description"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnGlucose" />
-
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etReminderTime"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/bg_et_add_logs"
-            android:drawableEnd="@drawable/ic_time"
-            android:drawablePadding="15dp"
-            android:elevation="8dp"
-            android:fontFamily="@font/cairo"
-            android:imeOptions="actionNext"
-            android:maxLines="1"
-            android:nextFocusForward="@id/etMedicationName"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:hint="@string/time"
-            android:textColor="@color/title"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etGlucoseReminderNotes" />
-
+    <TextView
+        android:id="@+id/tvReminderTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="@string/title"
+        android:textColor="@color/title"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGlucose" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etMedicationName"
+        android:id="@+id/etReminderTitle"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="25dp"
         android:background="@drawable/bg_et_add_logs"
         android:elevation="8dp"
         android:fontFamily="@font/cairo"
-        android:hint="@string/button_medication_title"
-        android:imeOptions="actionDone"
+        android:hint="@string/notes_title"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@id/etA1c"
         android:maxLines="1"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -231,32 +195,137 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etReminderTime" />
+        app:layout_constraintTop_toBottomOf="@id/tvReminderTitle" />
 
+    <TextView
+        android:id="@+id/tvReminderTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="25dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="@string/appointment"
+        android:textColor="@color/title"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etReminderTitle" />
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etReminderTime"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/bg_et_add_logs"
+        android:elevation="8dp"
+        android:fontFamily="@font/cairo"
+        android:hint="@string/time"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@id/etGlucoseNotes"
+        android:maxLines="1"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/title"
+        android:textColorHint="@color/description"
+        android:textSize="12sp"
+        android:drawableEnd="@drawable/ic_time"
+        android:drawablePadding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvReminderTime" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMedication"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etReminderTime">
+
+        <TextView
+            android:id="@+id/tvMedicationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="@string/medication_title"
+            android:textColor="@color/title"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSelectMedication"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="20dp"
+            app:boxBackgroundMode="outline"
+            app:endIconDrawable="@drawable/ic_arrow_down"
+            app:endIconMode="dropdown_menu"
+            app:endIconTint="@color/text_gery2"
+            app:layout_constraintEnd_toStartOf="@id/btnAddMedication"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMedicationTitle">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/etSelectMedication"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_et_add_logs"
+                android:clickable="true"
+                android:focusable="false"
+                android:fontFamily="@font/cairo"
+                android:hint="@string/medicine_label"
+                android:inputType="none"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textColor="@color/title"
+                android:textColorHint="@color/description"
+                android:textSize="12sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Add new medication button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddMedication"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="25dp"
+            android:backgroundTint="@color/primary"
+            android:src="@drawable/ic_add"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/tilSelectMedication"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tilSelectMedication"
+            app:maxImageSize="20dp"
+            app:tint="@null" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddReminder"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="128dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="25dp"
-                app:cornerRadius="8dp"
-                android:fontFamily="@font/cairo_bold"
-                android:textSize="14sp"
-                android:text="@string/add_new_log"
-                app:icon="@drawable/ic_add"
-                app:iconGravity="textStart"
-                app:iconPadding="10dp"
-                app:iconSize="18dp"
-                android:elevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+        android:id="@+id/btnAddReminder"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="128dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        app:cornerRadius="8dp"
+        android:fontFamily="@font/cairo_bold"
+        android:textSize="14sp"
+        android:text="@string/create_reminder"
+        app:icon="@drawable/ic_add_reminder_small"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconSize="18dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
