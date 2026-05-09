@@ -138,6 +138,14 @@
 
     <string name="no_data_available">لا توجد بيانات متاحة</string>
 
+    <!-- Reminder Fragment -->
+    <string name="title_reminders">التذكيرات</string>
+    <string name="daily_health_reminder">تذكيرك الصحي اليومي</string>
+    <string name="health_reminder_description">لا تنسَ متابعة صحتك! احرص على قياس مستوى السكر بانتظام، وتناول وجباتك في مواعيدها، والالتزام بأدويتك للحفاظ على توازن يومك وصحتك.</string>
+    <string name="no_reminders_title">لا يوجد تذكيرات</string>
+    <string name="no_reminders_subtitle">ابدأ و اضبط تذكيراتك</string>
+    <string name="btn_create_reminder">إنشاء تذكير</string>
+
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">إضافة تذكير</string>
     <string name="title">عنوان</string>

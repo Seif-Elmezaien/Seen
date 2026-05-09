@@ -133,6 +133,14 @@
 
     <string name="no_data_available">No data available</string>
 
+    <!-- Reminder Fragment -->
+    <string name="title_reminders">Reminders</string>
+    <string name="daily_health_reminder">Daily Health Reminder</string>
+    <string name="health_reminder_description">Do not forget to monitor your blood sugar level regularly, take your meals on time, and follow your health instructions to maintain your daily balance and health.</string>
+    <string name="no_reminders_title">No reminders yet</string>
+    <string name="no_reminders_subtitle">Start and set your reminders</string>
+    <string name="btn_create_reminder">Create Reminder</string>
+
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">Add Reminder</string>
     <string name="title">Title</string>

@@ -92,16 +92,6 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_add_logs_body" />
 
-                    <ImageView
-                        android:id="@+id/ivBack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="32dp"
-                        android:rotation="180"
-                        android:src="@drawable/ic_go_back_add_logs" />
-
                 </FrameLayout>
 
 
@@ -880,12 +870,13 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="@string/add_new_log"
                 android:textSize="14sp"
+                android:textColor="@color/white"
                 app:cornerRadius="8dp"
                 app:icon="@drawable/ic_add"
                 app:iconGravity="textStart"
                 app:iconPadding="10dp"
                 app:iconSize="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:iconTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/barrierSections" />

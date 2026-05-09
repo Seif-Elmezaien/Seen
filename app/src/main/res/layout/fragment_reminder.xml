@@ -12,64 +12,228 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_home"
-        android:paddingBottom="5dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivAddLogs"
+            android:id="@+id/ivReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/ic_add_reminder_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_reminder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvAddLogs"
+            android:id="@+id/tvReminder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="24dp"
             android:fontFamily="@font/cairo_bold"
             android:gravity="start"
-            android:text="@string/add_reminder_title"
+            android:text="@string/title_reminders"
             android:textColor="@color/white"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivAddLogs" />
+            app:layout_constraintStart_toEndOf="@+id/ivReminder"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/ivBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="40dp"
+            android:rotation="180"
+            android:src="@drawable/ic_go_back_add_logs"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_add_reminder_body" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cdReminder"
+            android:layout_width="0dp"
+            android:layout_height="210dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvReminder">
 
-            <ImageView
-                android:id="@+id/ivBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
-                android:rotation="180"
-                android:src="@drawable/ic_go_back_add_logs" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clReminderHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_home_card_gradient"
+                android:padding="2dp">
 
-        </FrameLayout>
+                <TextView
+                    android:id="@+id/tvReminderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:drawableStart="@drawable/ic_reminder"
+                    android:drawablePadding="15dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:text="@string/daily_health_reminder"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                    android:id="@+id/ivReminderBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_reminder_large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvReminderBody"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/cairo_medium"
+                    android:text="@string/health_reminder_description"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvReminderTitle" />
+
+                <LinearLayout
+                    android:id="@+id/layoutLogIcons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvReminderBody">
+
+                    <ImageView
+                        android:id="@+id/ivGlucose"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_log_icon"
+                        android:elevation="1dp"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_glucose_small_size" />
+
+                    <ImageView
+                        android:id="@+id/ivMeal"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="-5dp"
+                        android:background="@drawable/bg_log_icon"
+                        android:elevation="2dp"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_meal_size_small" />
+
+                    <ImageView
+                        android:id="@+id/ivMedicine"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="-5dp"
+                        android:background="@drawable/bg_log_icon"
+                        android:elevation="3dp"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_medicine_size_small" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReminder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:paddingTop="50dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddReminder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clHeader" />
+
+    <LinearLayout
+        android:id="@+id/llNoLogs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="50dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clHeader">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_no_reminders" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="@string/no_reminders_title"
+            android:textColor="@color/title"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/cairo_bold"
+            android:text="@string/no_reminders_subtitle"
+            android:textColor="@color/description"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddReminder"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="128dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        app:cornerRadius="8dp"
+        android:fontFamily="@font/cairo_bold"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:text="@string/create_reminder"
+        app:icon="@drawable/ic_add_reminder_small"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconSize="18dp"
+        app:iconTint="@color/white"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 
 
