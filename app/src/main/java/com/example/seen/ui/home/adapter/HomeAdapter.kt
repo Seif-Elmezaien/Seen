@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
 import com.example.seen.databinding.ItemHomeLogsBinding
 import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
+import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -81,7 +83,7 @@ class HomeAdapter(
                     ContextCompat.getColor(context, R.color.description)
                 )
             } else {
-                val (bgRes, colorRes) = getSugarStyle(glucoseValue)
+                val (bgRes, colorRes) = getSugarStyle(glucoseValue.toInt())
 
                 tvLogReadingValue.background =
                     ContextCompat.getDrawable(context, bgRes)
@@ -100,10 +102,8 @@ class HomeAdapter(
     private fun fromLongToHour(timestamp: Long) =
         SimpleDateFormat("h:mm a").format(Date(timestamp))
 
-    private fun getSugarStyle(value: Float): Pair<Int, Int> = when {
-        value < 70 -> R.drawable.bg_blood_bad_reading to R.color.bad_sugar_reading
-        value <= 140 -> R.drawable.bg_blood_good_reading to R.color.good_sugar_reading
-        value <= 180 -> R.drawable.bg_blood_mid_reading to R.color.mid_sugar_reading
+    private fun getSugarStyle(value: Int): Pair<Int, Int> = when {
+        value in LOW_GLUCOSE_VALUE..HIGH_GLUCOSE_VALUE -> R.drawable.bg_blood_good_reading to R.color.good_sugar_reading
         else -> R.drawable.bg_blood_bad_reading to R.color.bad_sugar_reading
     }
 

@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_home"
-        android:paddingTop="32dp"
         android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,10 +19,10 @@
 
         <ImageView
             android:id="@+id/ivReminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="41dp"
             android:src="@drawable/ic_reminder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,6 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="37dp"
             android:fontFamily="@font/cairo_bold"
             android:gravity="start"
             android:text="@string/title_reminders"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="45dp"
             android:layout_marginEnd="40dp"
             android:rotation="180"
             android:src="@drawable/ic_go_back_add_logs"
@@ -56,9 +56,9 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cdReminder"
             android:layout_width="0dp"
-            android:layout_height="210dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="5dp"
@@ -70,8 +70,8 @@
                 android:id="@+id/clReminderHeader"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_home_card_gradient"
-                android:padding="2dp">
+                android:paddingBottom="16dp"
+                android:background="@drawable/bg_home_card_gradient">
 
                 <TextView
                     android:id="@+id/tvReminderTitle"

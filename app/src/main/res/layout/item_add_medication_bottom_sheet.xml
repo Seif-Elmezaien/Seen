@@ -79,6 +79,7 @@
         android:text="@string/btn_add_medicine"
         android:textColor="@color/white"
         app:icon="@drawable/ic_add"
+        app:iconTint="@color/white"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
         android:textSize="14sp"
