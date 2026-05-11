@@ -152,6 +152,7 @@
     <string name="add_reminder_title">إضافة تذكير</string>
     <string name="title">عنوان</string>
     <string name="appointment">الميعاد</string>
+    <string name="medicine_title">اسم الدواء</string>
     <string name="create_reminder">انشاء تذكير</string>
 
     <!-- AddLogs fragment -->

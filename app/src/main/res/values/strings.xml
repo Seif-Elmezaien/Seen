@@ -146,8 +146,10 @@
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">Add Reminder</string>
     <string name="title">Title</string>
+    <string name="medicine_title">Medicine name</string>
     <string name="appointment">appointment</string>
     <string name="create_reminder">Create Reminder</string>
+
 
 
     <!-- AddLogs fragment -->
@@ -172,7 +174,7 @@
     <string name="glucose_log_a1c_hint">A1C</string>
     <string name="notes_title">Notes</string>
     <string name="notes_hint">Write your Notes...</string>
-    <string name="medication_title">Medication (choose one or more)</string>
+    <string name="medication_title">Medicine (choose one or more)</string>
     <string name="meal_type">Meal Type</string>
     <string name="meal_breakfast">Breakfast</string>
     <string name="meal_lunch">Lunch</string>

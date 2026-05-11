@@ -68,11 +68,6 @@ class AddLogsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            viewModel.deleteAllMedicine()
-        }
-
-
         initializeViewModel()
         setupUi()
         setupListeners()

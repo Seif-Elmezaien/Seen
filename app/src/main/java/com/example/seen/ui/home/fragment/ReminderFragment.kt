@@ -47,11 +47,7 @@ class ReminderFragment : Fragment() {
         initializeViewModel()
         setupRecyclerView()
         observeData()
-
-        binding.btnAddReminder.setOnClickListener {
-            findNavController().navigate(R.id.action_reminderFragment_to_addReminderFragment)
-        }
-
+        setupListeners()
     }
 
     private fun initializeViewModel(){
@@ -94,6 +90,12 @@ class ReminderFragment : Fragment() {
 
         if (!isEmptyLogs){
             reminderAdapter.differ.submitList(reminders)
+        }
+    }
+
+    private fun setupListeners() {
+        binding.btnAddReminder.setOnClickListener {
+            findNavController().navigate(R.id.action_reminderFragment_to_addReminderFragment)
         }
     }
 
