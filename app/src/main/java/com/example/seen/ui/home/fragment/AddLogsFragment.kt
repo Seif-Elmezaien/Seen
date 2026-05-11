@@ -1,13 +1,13 @@
 package com.example.seen.ui.home.fragment
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
@@ -19,7 +19,11 @@ import com.example.seen.R
 import com.example.seen.databinding.FragmentAddLogsBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.Medicine
+import com.example.seen.domain.model.entites.RecordGlucose
+import com.example.seen.domain.model.entites.RecordMeal
+import com.example.seen.domain.model.entites.RecordMedication
 import com.example.seen.domain.model.entites.SelectedMedication
 import com.example.seen.ui.home.viewmodel.AddLogsViewModel
 import com.example.seen.ui.home.viewmodel.AddLogsViewModelProviderFactory
@@ -129,8 +133,7 @@ class AddLogsFragment : Fragment() {
         setupMedicationDropdown()
         binding.btnAddMedication.setOnClickListener { setUpBottomSheet() }
 
-        binding.btnAddNewLog.setOnClickListener {
-        }
+        binding.btnAddNewLog.setOnClickListener { handleInput() }
     }
 
     private fun showTimePicker() {
@@ -215,6 +218,8 @@ class AddLogsFragment : Fragment() {
 
         buttons.forEach { (button, englishValue) ->
             button.setOnClickListener {
+                binding.tvMeasurementType.error = null
+
                 if (button.tag == "active") {
                     setTypeButtonInactive(button)
                     selectedMeasurementType = null
@@ -237,6 +242,8 @@ class AddLogsFragment : Fragment() {
 
         buttons.forEach { (button, englishValue) ->
             button.setOnClickListener {
+                binding.tvMealType.error = null
+
                 if (button.tag == "active") {
                     setTypeButtonInactive(button)
                     selectedMealType = null
@@ -284,10 +291,8 @@ class AddLogsFragment : Fragment() {
                 etMedication.error = getString(R.string.please_fill_medication_name)
                 etMedication.requestFocus()
             } else {
-                lifecycleScope.launch {
-                    viewModel.insertMedicine(Medicine(0, name))
-                    bottomSheetDialog.dismiss()
-                }
+                viewModel.insertMedicine(Medicine(0, name))
+                bottomSheetDialog.dismiss()
             }
         }
     }
@@ -313,6 +318,8 @@ class AddLogsFragment : Fragment() {
         }
 
         medicineDropdown.setOnClickListener {
+            binding.tvMedicationTitle.error = null
+
             if (medicineDropdown.tag == null){
                 medicineDropdown.showDropDown()
                 medicineDropdown.tag = "active"
@@ -357,8 +364,7 @@ class AddLogsFragment : Fragment() {
             closeIconSize = 24f
             closeIconEndPadding = 16f
 
-            // match your shape: #4D6976EB fill + 1dp primary stroke + 38dp corners
-            chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#4D6976EB"))
+            chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary_30))
             chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary))
             chipStrokeWidth = resources.displayMetrics.density * 1 // 1dp to px
             shapeAppearanceModel = shapeAppearanceModel.toBuilder()
@@ -372,6 +378,125 @@ class AddLogsFragment : Fragment() {
         }
     }
 
+    private fun handleInput(){
+        val title = binding.etLogTitle.text.toString().trim()
+        val description = binding.etLogDescription.text.toString().trim()
+
+        val bloodGlucoseValue = binding.etGlucoseLogValue.text.toString().toIntOrNull()
+        val a1cValue = binding.etA1c.text.toString().toFloatOrNull()
+        val glucoseNote = binding.etGlucoseNotes.text.toString().trim()
+
+        val hasBloodGlucoseValue = bloodGlucoseValue != null
+        val hasMeasurementType = selectedMeasurementType != null
+        val hasGlucoseNullableFilled = (a1cValue != null) || (glucoseNote.isNotEmpty())
+
+        val medicationNote = binding.etMedicationNotes.text.toString().trim()
+
+        val hasMedicationName = medicineList.isNotEmpty()
+        val hasMedicationNullableFilled = medicationNote.isNotEmpty()
+
+        val mealDescription = binding.etMealDescription.text.toString().trim()
+        val mealCarbs = binding.etCarbs.text.toString().toIntOrNull()
+        val mealCalories = binding.etCalories.text.toString().toIntOrNull()
+        val mealNotes = binding.etMealNotes.text.toString().trim()
+
+        val hasMealType = selectedMealType != null
+        val hasMealDescription = mealDescription.isNotEmpty()
+        val hasMealNullableFilled = (mealCarbs != null) || (mealCalories != null) || mealNotes.isNotEmpty()
+
+        val hasGlucoseFilled = hasBloodGlucoseValue || hasMeasurementType
+        val hasMedicationFilled = hasMedicationName
+        val hasMealFilled = hasMealType || hasMealDescription
+        val hasAnyNotNullableField = hasGlucoseFilled || hasMedicationFilled || hasMealFilled
+
+        if (title.isEmpty()) {
+            binding.etLogTitle.error = getString(R.string.please_fill_log_title)
+            binding.etLogTitle.requestFocus()
+            return
+        }
+
+        if (description.isEmpty()) {
+            binding.etLogDescription.error = getString(R.string.please_fill_log_description)
+            binding.etLogDescription.requestFocus()
+            return
+        }
+
+        if ((hasGlucoseNullableFilled || hasBloodGlucoseValue) && !hasMeasurementType){
+            binding.tvMeasurementType.error = getString(R.string.please_fill_log_description)
+            switchLogType(LogType.GLUCOSE)
+            return
+        }
+
+        if ((hasGlucoseNullableFilled || hasMeasurementType) && !hasBloodGlucoseValue){
+            binding.etGlucoseLogValue.error = getString(R.string.please_fill_log_description)
+            binding.etGlucoseLogValue.requestFocus()
+            switchLogType(LogType.GLUCOSE)
+            return
+        }
+
+        if (hasMedicationNullableFilled && !hasMedicationName){
+            binding.tvMedicationTitle.error = getString(R.string.please_fill_log_description)
+            switchLogType(LogType.MEDICATION)
+            return
+        }
+
+        if ((hasMealNullableFilled || hasMealDescription) && !hasMealType){
+            binding.tvMealType.error = getString(R.string.please_fill_log_description)
+            switchLogType(LogType.MEAL)
+            return
+        }
+
+        if ((hasMealNullableFilled || hasMealType) && !hasMealDescription){
+            binding.etMealDescription.error = getString(R.string.please_fill_log_description)
+            binding.etMealDescription.requestFocus()
+            switchLogType(LogType.MEAL)
+            return
+        }
+
+        if (!hasAnyNotNullableField){
+            Toast.makeText(requireContext(), R.string.please_fill_log_description, Toast.LENGTH_SHORT).show()
+            return
+        }
+        else {
+            viewModel.viewModelScope.launch {
+                val log = Log(0, title, description, selectedCalendar.timeInMillis)
+                val logId = viewModel.insertLog(log).toInt()
+
+                if (hasGlucoseFilled) {
+                    val glucoseRecord = RecordGlucose(
+                        0,
+                        logId,
+                        selectedMeasurementType!!,
+                        bloodGlucoseValue!!,
+                        a1cValue,
+                        glucoseNote
+                    )
+
+                    viewModel.insertRecordGlucose(glucoseRecord)
+                }
+
+                if (hasMedicationFilled) {
+                    val medicationRecord = RecordMedication(0, logId, medicineList, medicationNote)
+                    viewModel.insertRecordMedication(medicationRecord)
+                }
+
+                if (hasMealFilled) {
+                    val mealRecord = RecordMeal(
+                        0,
+                        logId,
+                        selectedMealType!!,
+                        mealDescription,
+                        mealCarbs,
+                        mealCalories,
+                        mealNotes
+                    )
+
+                    viewModel.insertRecordMeal(mealRecord)
+                }
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

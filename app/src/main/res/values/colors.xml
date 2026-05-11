@@ -13,6 +13,8 @@
     <color name="text_gery2">#B7B7B7</color>
     
     <color name="description_30">#40808080</color>
+    <color name="primary_30">#4D6976EB</color>
+    <color name="primary_20">#406976EB</color>
 
     <color name="alert_streak">#F65629</color>
     <color name="badge">#FD8F01</color>
@@ -44,7 +46,5 @@
     <color name="gestational_purple">#A855F7</color>
     <color name="general_yellow">#EAB308</color>
     <color name="advise_gray">#9CA3AF</color>
-    <color name="button">#406976EB</color>
-
 
 </resources>

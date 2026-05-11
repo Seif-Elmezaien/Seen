@@ -188,6 +188,8 @@
     <string name="calories_estimation_hint">Enter number of times</string>
     <string name="add_new_log">Add Log</string>
 
+    <string name="please_fill_log_title">Please fill log title</string>
+    <string name="please_fill_log_description">Please fill log description</string>
     <string name="please_fill_medication_name">Please enter a medicine name</string>
 
 

@@ -62,7 +62,7 @@ class AddReminderFragment : Fragment() {
 
     private fun setupListeners() {
 
-        binding.ivBack.setOnClickListener { findNavController().navigate(R.id.action_addReminderFragment_to_reminderFragment)}
+        binding.ivBack.setOnClickListener { requireActivity().supportFragmentManager.popBackStack() }
 
         binding.btnGlucose.setOnClickListener { switchLogType(LogType.GLUCOSE) }
 

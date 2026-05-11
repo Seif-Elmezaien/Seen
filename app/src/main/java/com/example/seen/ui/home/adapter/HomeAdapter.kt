@@ -69,7 +69,7 @@ class HomeAdapter(
             val glucoseValue = logItem.glucose?.glucose_level
 
             // Handle text
-            tvLogReadingValue.text = glucoseValue?.let { "${it.toInt()} mg/dl" }
+            tvLogReadingValue.text = glucoseValue?.let { "${it} mg/dl" }
                 ?: context.getString(R.string.no_blood_reading)
 
             // Handle glucose UI

@@ -27,7 +27,7 @@ import com.example.seen.domain.model.entites.Reminder
         Medicine::class,
         Reminder::class  // add this
     ],
-    version = 7
+    version = 1
 )
 @TypeConverters(Converters :: class)
 abstract class SeenDatabase : RoomDatabase() {

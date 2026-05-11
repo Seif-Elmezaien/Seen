@@ -191,6 +191,8 @@
     <string name="calories_estimation_hint">اكتب عدد المرات</string>
     <string name="add_new_log">إضافة السجل</string>
 
+    <string name="please_fill_log_title">الرجاء ادخال اسم السجل</string>
+    <string name="please_fill_log_description">الرجاء ادخال وصف السجل</string>
     <string name="please_fill_medication_name">الرجاء إدخال اسم الدواء</string>
 
 

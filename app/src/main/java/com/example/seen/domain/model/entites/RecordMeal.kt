@@ -20,7 +20,7 @@ data class RecordMeal(
     val log_id: Int,
     val meal_type: String, // "Breakfast", "Lunch", "Dinner", "Random"
     val meal_description: String,
-    val total_carb: Float? = null,
-    val total_calories: Float? = null,
+    val total_carb: Int? = null,
+    val total_calories: Int? = null,
     val notes: String? = null,
 )
