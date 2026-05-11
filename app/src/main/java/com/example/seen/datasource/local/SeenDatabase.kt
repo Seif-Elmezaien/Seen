@@ -11,8 +11,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.seen.datasource.local.dao.LogDao
+import com.example.seen.datasource.local.dao.ReminderDao
 import com.example.seen.datasource.local.dao.UserDao
 import com.example.seen.domain.model.entites.Medicine
+import com.example.seen.domain.model.entites.Reminder
 
 
 @Database(
@@ -22,14 +24,17 @@ import com.example.seen.domain.model.entites.Medicine
         RecordGlucose::class,
         RecordMeal::class,
         RecordMedication::class,
-        Medicine::class
+        Medicine::class,
+        Reminder::class  // add this
     ],
-    version = 6
+    version = 7
 )
 @TypeConverters(Converters :: class)
 abstract class SeenDatabase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val logDao: LogDao
+    abstract val reminderDao: ReminderDao
+
 
 
 

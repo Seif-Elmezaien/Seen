@@ -145,8 +145,8 @@
     <string name="no_reminders_title">لا يوجد تذكيرات</string>
     <string name="no_reminders_subtitle">ابدأ و اضبط تذكيراتك</string>
     <string name="btn_create_reminder">إنشاء تذكير</string>
+    <string name="schedule_in">جدول في:</string>
 
-    <string name="please_fill_medication_name">الرجاء إدخال اسم الدواء</string>
 
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">إضافة تذكير</string>
@@ -189,6 +189,9 @@
     <string name="calories_estimation">تقدير كمية السعرات الحرارية</string>
     <string name="calories_estimation_hint">اكتب عدد المرات</string>
     <string name="add_new_log">إضافة السجل</string>
+
+    <string name="please_fill_medication_name">الرجاء إدخال اسم الدواء</string>
+
 
     <!-- add_medication_bottom_sheet -->
     <string name="add_medicine_title">إضافة دواء</string>

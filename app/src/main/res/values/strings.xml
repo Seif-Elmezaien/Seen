@@ -140,8 +140,7 @@
     <string name="no_reminders_title">No reminders yet</string>
     <string name="no_reminders_subtitle">Start and set your reminders</string>
     <string name="btn_create_reminder">Create Reminder</string>
-
-    <string name="please_fill_medication_name">Please enter a medicine name</string>
+    <string name="schedule_in">Schedule in:</string>
 
 
     <!-- AddReminders fragment -->
@@ -186,6 +185,9 @@
     <string name="calories_estimation">Calories Estimation</string>
     <string name="calories_estimation_hint">Enter number of times</string>
     <string name="add_new_log">Add Log</string>
+
+    <string name="please_fill_medication_name">Please enter a medicine name</string>
+
 
     <!-- add_medication_bottom_sheet -->
     <string name="add_medicine_title">Add Medicine</string>
