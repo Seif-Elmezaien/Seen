@@ -150,6 +150,10 @@
     <string name="appointment">appointment</string>
     <string name="create_reminder">Create Reminder</string>
 
+    <!-- Reminder Broadcast -->
+    <string name="seen_reminder">Seen Reminder</string>
+    <string name="medicine_name_notification">Medicine:</string>
+
 
 
     <!-- AddLogs fragment -->

@@ -20,7 +20,7 @@ import com.example.seen.domain.model.entites.Reminder
 interface ReminderDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReminder(reminder: Reminder)
+    suspend fun insertReminder(reminder: Reminder) : Long
 
     @Delete
     suspend fun deleteReminder(reminder: Reminder)

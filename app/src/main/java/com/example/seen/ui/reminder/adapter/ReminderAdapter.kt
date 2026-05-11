@@ -1,21 +1,14 @@
-package com.example.seen.ui.home.adapter
+package com.example.seen.ui.reminder.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
-import com.example.seen.databinding.ItemHomeLogsBinding
 import com.example.seen.databinding.ItemReminderBinding
-import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Reminder
-import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
-import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -30,14 +23,16 @@ class ReminderAdapter(
 
         override fun areItemsTheSame(
             oldItem: Reminder,
-            newItem: Reminder)
+            newItem: Reminder
+        )
                 : Boolean {
             return oldItem.reminder_id == newItem.reminder_id
         }
 
         override fun areContentsTheSame(
             oldItem: Reminder,
-            newItem: Reminder)
+            newItem: Reminder
+        )
         : Boolean {
             return oldItem == newItem
         }
@@ -71,7 +66,9 @@ class ReminderAdapter(
             }
 
             ivReminderType.setImageResource(setReminderTypeImage(reminderItem.message_type))
-            tvReminderTime.text = context.getString(R.string.schedule_in) + SimpleDateFormat("hh:mm a").format(Date(reminderItem.time))
+            tvReminderTime.text = context.getString(R.string.schedule_in) + " " + SimpleDateFormat("hh:mm a").format(
+                Date(reminderItem.time)
+            )
 
         }
     }

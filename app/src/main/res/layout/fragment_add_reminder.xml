@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.home.fragment.AddReminderFragment">
+    tools:context=".ui.reminder.fragment.AddReminderFragment">
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -185,8 +185,8 @@
         android:elevation="8dp"
         android:fontFamily="@font/cairo"
         android:hint="@string/notes_title"
-        android:imeOptions="actionNext"
-        android:nextFocusForward="@id/etA1c"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         android:maxLines="1"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -197,19 +197,81 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvReminderTitle" />
 
+
+
     <TextView
-        android:id="@+id/tvReminderTime"
+        android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/cairo_bold"
-        android:text="@string/appointment"
+        android:text="@string/log_time"
         android:textColor="@color/title"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrierSections" />
+        app:layout_constraintTop_toBottomOf="@+id/etReminderTitle" />
 
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="@string/log_date"
+        android:textColor="@color/title"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/guideline_v50"
+        app:layout_constraintTop_toBottomOf="@+id/etReminderTitle" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etReminderDate"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/bg_et_add_logs"
+        android:focusable="false"
+        android:drawableStart="@drawable/ic_calender"
+        android:drawablePadding="15dp"
+        android:elevation="8dp"
+        android:fontFamily="@font/cairo"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/title"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline_v50"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etReminderTime"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_et_add_logs"
+        android:focusable="false"
+        android:drawableStart="@drawable/ic_time"
+        android:drawablePadding="15dp"
+        android:elevation="8dp"
+        android:fontFamily="@font/cairo"
+        android:imeOptions="actionNext"
+        android:maxLines="1"
+        android:nextFocusForward="@id/etLogDate"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text=""
+        android:textColor="@color/title"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_v50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clMedication"
@@ -218,7 +280,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGlucose">
+        app:layout_constraintTop_toBottomOf="@+id/etReminderTime">
 
         <TextView
             android:id="@+id/tvMedicationTitle"
@@ -280,6 +342,19 @@
             app:maxImageSize="20dp"
             app:tint="@null" />
 
+        <!-- Chips for selected medications -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupMedications"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilSelectMedication"
+            app:singleLine="false" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -305,39 +380,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-
-    <!-- Add this barrier after clMeal, before the closing ConstraintLayout -->
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierSections"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="clMedication,etReminderTitle" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etReminderTime"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="25dp"
-        android:background="@drawable/bg_et_add_logs"
-        android:elevation="8dp"
-        android:fontFamily="@font/cairo"
-        android:hint="@string/time"
-        android:imeOptions="actionNext"
-        android:nextFocusForward="@id/etGlucoseNotes"
-        android:maxLines="1"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textColor="@color/title"
-        android:textColorHint="@color/description"
-        android:textSize="12sp"
-        android:drawableEnd="@drawable/ic_time"
-        android:drawablePadding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvReminderTime" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

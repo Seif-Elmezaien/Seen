@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.datasource.repository.MedicineRepository
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class AddLogsViewModel(
     app: Application,
-    private val logRepository: LogRepository
+    private val logRepository: LogRepository,
+    private val medicineRepository: MedicineRepository
 ) : AndroidViewModel(app) {
 
     suspend fun insertLog(log: Log) =
@@ -29,10 +31,10 @@ class AddLogsViewModel(
         logRepository.insertRecordMeal(recordMeal)
 
     fun getAllMedicines() =
-        logRepository.getAllMedicines()
+        medicineRepository.getAllMedicines()
 
     fun insertMedicine(medicine: Medicine) = viewModelScope.launch {
-        logRepository.insertMedicine(medicine)
+        medicineRepository.insertMedicine(medicine)
     }
 
 }

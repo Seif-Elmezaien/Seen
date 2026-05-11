@@ -20,6 +20,7 @@ import com.example.seen.R
 import com.example.seen.databinding.FragmentAddLogsBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.datasource.repository.MedicineRepository
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
@@ -82,11 +83,14 @@ class AddLogsFragment : Fragment() {
         // Application context to avoid leaks
         val db = SeenDatabase(requireContext().applicationContext)
         val logRepository = LogRepository(db)
+        val medicineRepository = MedicineRepository(db)
+
 
         // create factory
         val factory = AddLogsViewModelProviderFactory(
             requireActivity().application,
-            logRepository
+            logRepository,
+            medicineRepository
         )
 
         // initialize ViewModel

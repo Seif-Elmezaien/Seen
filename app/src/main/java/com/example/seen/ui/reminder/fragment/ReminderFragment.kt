@@ -1,4 +1,4 @@
-package com.example.seen.ui.home.fragment
+package com.example.seen.ui.reminder.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,25 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.seen.R
 import com.example.seen.databinding.FragmentReminderBinding
 import com.example.seen.datasource.local.SeenDatabase
-import com.example.seen.datasource.local.SeenDatabase.Companion.invoke
-import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.datasource.repository.MedicineRepository
 import com.example.seen.datasource.repository.ReminderRepository
-import com.example.seen.datasource.repository.UserRepository
-import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Reminder
-import com.example.seen.ui.home.adapter.HomeAdapter
-import com.example.seen.ui.home.adapter.ReminderAdapter
-import com.example.seen.ui.home.viewmodel.HomeViewModel
-import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
-import com.example.seen.ui.home.viewmodel.ReminderViewModel
-import com.example.seen.ui.home.viewmodel.ReminderViewModelProviderFactory
-import kotlinx.coroutines.launch
+import com.example.seen.ui.reminder.viewmodel.ReminderViewModel
+import com.example.seen.ui.reminder.viewmodel.ReminderViewModelProviderFactory
+import com.example.seen.ui.reminder.adapter.ReminderAdapter
 
 class ReminderFragment : Fragment() {
     var _binding: FragmentReminderBinding? = null
@@ -52,13 +44,15 @@ class ReminderFragment : Fragment() {
 
     private fun initializeViewModel(){
         // Application context to avoid leaks
-        val db = SeenDatabase(requireContext().applicationContext)
+        val db = SeenDatabase.Companion(requireContext().applicationContext)
         val reminderRepository = ReminderRepository(db)
+        val medicineRepository = MedicineRepository(db)
 
         // create factory
         val factory = ReminderViewModelProviderFactory(
             requireActivity().application,
             reminderRepository,
+            medicineRepository
         )
 
         // initialize ViewModel

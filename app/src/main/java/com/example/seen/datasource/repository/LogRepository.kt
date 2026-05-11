@@ -59,17 +59,4 @@ class LogRepository(
     fun getLogsByDate(startOfDay: Long, endOfDay: Long) =
         db.logDao.getLogByDate(startOfDay, endOfDay)
 
-    // Medicines
-    suspend fun insertMedicine(medicine: Medicine) =
-        db.logDao.insertMedicine(medicine)
-
-    fun getAllMedicines() =
-        db.logDao.getAllMedicines()
-
-    suspend fun deleteMedicine(medicine: Medicine) =
-        db.logDao.deleteMedicine(medicine)
-
-    suspend fun deleteAllMedicine() =
-        db.logDao.deleteAllMedicine()
-
 }

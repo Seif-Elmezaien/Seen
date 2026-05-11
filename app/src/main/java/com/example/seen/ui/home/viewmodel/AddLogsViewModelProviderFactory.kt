@@ -5,14 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.seen.datasource.repository.AuthRepository
 import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.datasource.repository.MedicineRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 
 class AddLogsViewModelProviderFactory(
     val app: Application,
-    val logRepository: LogRepository
+    val logRepository: LogRepository,
+    val medicineRepository: MedicineRepository
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AddLogsViewModel(app, logRepository) as T
+        return AddLogsViewModel(app, logRepository, medicineRepository) as T
     }
 }

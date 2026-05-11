@@ -11,7 +11,7 @@ import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 class HomeViewModelProviderFactory(
     val app: Application,
     val userRepository: UserRepository,
-    val logRepository: LogRepository
+    val logRepository: LogRepository,
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return HomeViewModel(app, userRepository, logRepository) as T
