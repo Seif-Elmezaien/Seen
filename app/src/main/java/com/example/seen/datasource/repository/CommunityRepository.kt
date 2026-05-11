@@ -1,7 +1,7 @@
 package com.example.seen.datasource.repository
 
 import com.example.seen.datasource.remote.RetrofitInstance
-import com.example.seen.domain.model.community.PostListResponse
+import com.example.seen.domain.model.community.response.PostListResponse
 import retrofit2.Response
 
 class CommunityRepository {

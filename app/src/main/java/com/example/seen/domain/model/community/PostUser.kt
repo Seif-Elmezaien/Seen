@@ -6,6 +6,6 @@ data class PostUser(
     val last_name: String,
     val full_name: String,
     val diabetes_type: String,
-    val profile_pic: String,
+    val profile_picture: String,
     val created_at: String
 )

@@ -5,7 +5,7 @@ import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
-import com.example.seen.domain.model.community.PostListResponse
+import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.PostResponse
 import retrofit2.Response
 import retrofit2.http.Body
