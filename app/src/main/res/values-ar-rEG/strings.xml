@@ -146,6 +146,8 @@
     <string name="no_reminders_subtitle">ابدأ و اضبط تذكيراتك</string>
     <string name="btn_create_reminder">إنشاء تذكير</string>
 
+    <string name="please_fill_medication_name">الرجاء إدخال اسم الدواء</string>
+
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">إضافة تذكير</string>
     <string name="title">عنوان</string>

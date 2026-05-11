@@ -238,16 +238,16 @@ class HomeFragment : Fragment() {
         val transparentWhite = Color.parseColor("#1AFFFFFF")
 
         val glucoseData = data
-            .sortedBy { it.log.created_at }
+            .sortedBy { it.log.logged_at }
             .mapNotNull { fullLog ->
                 fullLog.glucose?.let {
-                    fullLog.log.created_at to it.glucose_level
+                    fullLog.log.logged_at to it.glucose_level
                 }
             }
 
 
-        val entries = glucoseData.mapIndexed { index, g ->
-            Entry(index.toFloat() + 1, g.second, drawable)
+        val entries = glucoseData.mapIndexed { index, glucose ->
+            Entry(index.toFloat() + 1, glucose.second.toFloat(), drawable)
         }
 
         val dataSet = LineDataSet(entries, "Blood Glucose Level").apply {

@@ -9,6 +9,6 @@ data class Log(
     val log_id : Int,
     val log_title: String,
     val log_description: String,
-    val created_at: Long = System.currentTimeMillis(), // store as timestamp
+    val logged_at: Long = System.currentTimeMillis(), // store as timestamp
     val updated_at: Long = System.currentTimeMillis()
 )

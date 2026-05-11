@@ -10,6 +10,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Log
+import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
@@ -18,8 +19,11 @@ import com.example.seen.domain.model.entites.RecordMedication
 interface LogDao {
 
     //Logs
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertLog(log: Log) : Long
+
+    @Update
+    suspend fun updateLog(log: Log)
 
     @Delete
     suspend fun deleteLog(log: Log)
@@ -56,11 +60,23 @@ interface LogDao {
 
     //get All Logs
     @Transaction()
-    @Query("SELECT * FROM logs ORDER BY created_at DESC")
+    @Query("SELECT * FROM logs ORDER BY logged_at DESC")
     fun getAllLogs() : LiveData<List<FullLog>>
 
     @Transaction()
-    @Query("SELECT * FROM logs WHERE created_at BETWEEN :startOfDay AND :endOfDate ORDER BY created_at DESC")
+    @Query("SELECT * FROM logs WHERE logged_at BETWEEN :startOfDay AND :endOfDate ORDER BY logged_at DESC")
     fun getLogByDate(startOfDay: Long, endOfDate: Long) : LiveData<List<FullLog>>
 
+    // insert Medicine
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMedicine(medicine: Medicine) : Long
+
+    @Query("SELECT * FROM medicine ORDER BY medicine_name ASC")
+    fun getAllMedicines() : LiveData<List<Medicine>>
+
+    @Delete
+    suspend fun deleteMedicine(medicine: Medicine)
+
+    @Query("DELETE FROM medicine")
+    suspend fun deleteAllMedicine()
 }

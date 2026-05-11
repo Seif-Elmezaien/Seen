@@ -2,6 +2,7 @@ package com.example.seen.datasource.repository
 
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.domain.model.entites.Log
+import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
@@ -13,6 +14,9 @@ class LogRepository(
     // Logs
     suspend fun insertLog(log: Log) =
         db.logDao.insertLog(log)
+
+    suspend fun updateLog(log: Log) =
+        db.logDao.updateLog(log)
 
     suspend fun deleteLog(log: Log) =
         db.logDao.deleteLog(log)
@@ -54,4 +58,18 @@ class LogRepository(
 
     fun getLogsByDate(startOfDay: Long, endOfDay: Long) =
         db.logDao.getLogByDate(startOfDay, endOfDay)
+
+    // Medicines
+    suspend fun insertMedicine(medicine: Medicine) =
+        db.logDao.insertMedicine(medicine)
+
+    fun getAllMedicines() =
+        db.logDao.getAllMedicines()
+
+    suspend fun deleteMedicine(medicine: Medicine) =
+        db.logDao.deleteMedicine(medicine)
+
+    suspend fun deleteAllMedicine() =
+        db.logDao.deleteAllMedicine()
+
 }

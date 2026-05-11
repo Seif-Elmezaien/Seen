@@ -18,10 +18,9 @@ data class RecordMeal(
     @PrimaryKey(autoGenerate = true)
     val meal_id: Int,
     val log_id: Int,
-    val meal_name: String,
-    val meal_time: Long,
+    val meal_type: String, // "Breakfast", "Lunch", "Dinner", "Random"
+    val meal_description: String,
     val total_carb: Float? = null,
     val total_calories: Float? = null,
-    val meal_type: String, // "Breakfast", "Lunch", "Dinner", "Random"
     val notes: String? = null,
 )

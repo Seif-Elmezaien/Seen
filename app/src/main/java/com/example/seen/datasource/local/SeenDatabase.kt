@@ -9,8 +9,10 @@ import com.example.seen.domain.model.entites.RecordMedication
 import com.example.seen.domain.model.entites.User
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.seen.datasource.local.dao.LogDao
 import com.example.seen.datasource.local.dao.UserDao
+import com.example.seen.domain.model.entites.Medicine
 
 
 @Database(
@@ -19,10 +21,12 @@ import com.example.seen.datasource.local.dao.UserDao
         Log::class,
         RecordGlucose::class,
         RecordMeal::class,
-        RecordMedication::class
+        RecordMedication::class,
+        Medicine::class
     ],
-    version = 2
+    version = 6
 )
+@TypeConverters(Converters :: class)
 abstract class SeenDatabase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val logDao: LogDao

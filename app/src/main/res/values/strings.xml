@@ -141,6 +141,9 @@
     <string name="no_reminders_subtitle">Start and set your reminders</string>
     <string name="btn_create_reminder">Create Reminder</string>
 
+    <string name="please_fill_medication_name">Please enter a medicine name</string>
+
+
     <!-- AddReminders fragment -->
     <string name="add_reminder_title">Add Reminder</string>
     <string name="title">Title</string>

@@ -64,7 +64,7 @@ class HomeAdapter(
         holder.binding.apply {
             tvLogTitle.text = logItem.log.log_title
             tvLogDescription.text = logItem.log.log_description
-            tvLogReadingTime.text = fromLongToHour(logItem.log.created_at)
+            tvLogReadingTime.text = fromLongToHour(logItem.log.logged_at)
 
             val glucoseValue = logItem.glucose?.glucose_level
 

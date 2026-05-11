@@ -19,9 +19,8 @@ data class RecordGlucose(
     @PrimaryKey(autoGenerate = true)
     val reading_id: Int,
     val log_id: Int,
-    val glucose_level: Float,
-    val reading_time: Long,
     val reading_type: String, // "Fasting", "Before Meal", "After Meal", "Random".
-    val notes: String? = null,
+    val glucose_level: Int,
     val a1c_estimation: Float? = null,
+    val notes: String? = null
 )

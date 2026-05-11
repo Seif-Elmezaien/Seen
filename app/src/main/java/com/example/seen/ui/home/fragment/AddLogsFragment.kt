@@ -1,26 +1,41 @@
 package com.example.seen.ui.home.fragment
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.example.seen.R
 import com.example.seen.databinding.FragmentAddLogsBinding
+import com.example.seen.datasource.local.SeenDatabase
+import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.domain.model.entites.Medicine
+import com.example.seen.domain.model.entites.SelectedMedication
+import com.example.seen.ui.home.viewmodel.AddLogsViewModel
+import com.example.seen.ui.home.viewmodel.AddLogsViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -29,6 +44,7 @@ class AddLogsFragment : Fragment() {
     private var _binding: FragmentAddLogsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var viewModel : AddLogsViewModel
     private val selectedCalendar = Calendar.getInstance()
     private val sdfDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     private val sdfTime = SimpleDateFormat("h:mm a", Locale.getDefault())
@@ -37,6 +53,8 @@ class AddLogsFragment : Fragment() {
     private var activeLogType = LogType.GLUCOSE
     private var selectedMeasurementType: String? = null
     private var selectedMealType: String? = null
+
+    private val medicineList = mutableListOf<SelectedMedication>()
 
 
     override fun onCreateView(
@@ -50,8 +68,30 @@ class AddLogsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        lifecycleScope.launch {
+            viewModel.deleteAllMedicine()
+        }
+
+
+        initializeViewModel()
         setupUi()
         setupListeners()
+    }
+
+    private fun initializeViewModel(){
+        // Application context to avoid leaks
+        val db = SeenDatabase(requireContext().applicationContext)
+        val logRepository = LogRepository(db)
+
+        // create factory
+        val factory = AddLogsViewModelProviderFactory(
+            requireActivity().application,
+            logRepository
+        )
+
+        // initialize ViewModel
+        viewModel = ViewModelProvider(this, factory)
+            .get(AddLogsViewModel::class.java)
     }
 
     private fun setupUi() {
@@ -82,16 +122,16 @@ class AddLogsFragment : Fragment() {
         setupGlucoseTypeSelection()
         setupMealTypeSelection()
 
-        binding.btnAddMedication.setOnClickListener {
-
-        }
-
         binding.etGlucoseLogValue.addTextChangedListener{ editable ->
             val value = editable?.toString()?.toIntOrNull()
 
-            binding.etGlucoseLogValue.background = ContextCompat.getDrawable(requireContext(), getSugarStyle(value))
+            binding.etGlucoseLogValue.background = ContextCompat.getDrawable(
+                requireContext(),
+                getSugarStyle(value)
+            )
         }
 
+        setupMedicationDropdown()
         binding.btnAddMedication.setOnClickListener { setUpBottomSheet() }
 
         binding.btnAddNewLog.setOnClickListener {
@@ -108,8 +148,18 @@ class AddLogsFragment : Fragment() {
             .build()
 
         picker.addOnPositiveButtonClickListener {
-            selectedCalendar.set(Calendar.HOUR_OF_DAY, picker.hour)
-            selectedCalendar.set(Calendar.MINUTE, picker.minute)
+            val now = Calendar.getInstance()
+            val isToday = selectedCalendar.get(Calendar.DATE) == now.get(Calendar.DATE)
+
+            if (isToday && (picker.hour > now.get(Calendar.HOUR_OF_DAY) ||
+                        (picker.hour == now.get(Calendar.HOUR_OF_DAY) && picker.minute > now.get(Calendar.MINUTE)))) {
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY))
+                selectedCalendar.set(Calendar.MINUTE, now.get(Calendar.MINUTE))
+            } else {
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, picker.hour)
+                selectedCalendar.set(Calendar.MINUTE, picker.minute)
+            }
+
             updateTimeText()
         }
 
@@ -118,7 +168,7 @@ class AddLogsFragment : Fragment() {
 
     private fun showDatePicker() {
         val constraints = CalendarConstraints.Builder()
-            .setValidator(DateValidatorPointForward.now())
+            .setValidator(DateValidatorPointBackward.now())
             .build()
 
         val picker = MaterialDatePicker.Builder.datePicker()
@@ -161,35 +211,45 @@ class AddLogsFragment : Fragment() {
     }
 
     private fun setupGlucoseTypeSelection() {
-        val buttons = listOf(
-            binding.tvGlucoseRandom,
-            binding.tvGlucoseBeforeMeal,
-            binding.tvGlucoseAfterMeal,
-            binding.tvGlucoseFasting
+        val buttons = mapOf(
+            binding.tvGlucoseRandom to "Random",
+            binding.tvGlucoseBeforeMeal to "Before Meal",
+            binding.tvGlucoseAfterMeal to "After Meal",
+            binding.tvGlucoseFasting to "Fasting"
         )
 
-        buttons.forEach { button ->
+        buttons.forEach { (button, englishValue) ->
             button.setOnClickListener {
-                buttons.forEach { setTypeButtonInactive(it) }
-                setTypeButtonActive(button)
-                selectedMeasurementType = button.text.toString()
+                if (button.tag == "active") {
+                    setTypeButtonInactive(button)
+                    selectedMeasurementType = null
+                } else {
+                    buttons.keys.forEach { setTypeButtonInactive(it) }
+                    setTypeButtonActive(button)
+                    selectedMeasurementType = englishValue
+                }
             }
         }
     }
 
     private fun setupMealTypeSelection() {
-        val buttons = listOf(
-            binding.tvBreakfast,
-            binding.tvLunch,
-            binding.tvDinner,
-            binding.tvSnack
+        val buttons = mapOf(
+            binding.tvBreakfast to "Breakfast",
+            binding.tvLunch to "Lunch",
+            binding.tvDinner to "Dinner",
+            binding.tvSnack to "Snack"
         )
 
-        buttons.forEach { button ->
+        buttons.forEach { (button, englishValue) ->
             button.setOnClickListener {
-                buttons.forEach { setTypeButtonInactive(it) }
-                setTypeButtonActive(button)
-                selectedMealType = button.text.toString()
+                if (button.tag == "active") {
+                    setTypeButtonInactive(button)
+                    selectedMealType = null
+                } else {
+                    buttons.keys.forEach { setTypeButtonInactive(it) }
+                    setTypeButtonActive(button)
+                    selectedMealType = englishValue
+                }
             }
         }
     }
@@ -197,11 +257,13 @@ class AddLogsFragment : Fragment() {
     private fun setTypeButtonActive(button: TextView) {
         button.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_add_log_button_active)
         button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        button.tag = "active"
     }
 
     private fun setTypeButtonInactive(button: TextView) {
         button.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_add_log_button_inactive)
         button.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary))
+        button.tag = null
     }
 
     private fun getSugarStyle(value: Int?): Int = when {
@@ -217,14 +279,101 @@ class AddLogsFragment : Fragment() {
 
         bottomSheetDialog.show()
 
-        // access views directly
         val etMedication = view.findViewById<TextInputEditText>(R.id.etNewMedicationName)
         val btnConfirm = view.findViewById<MaterialButton>(R.id.btnSaveNewMedication)
 
         btnConfirm.setOnClickListener {
-            val name = etMedication.text?.toString()
-            // do something with it
-            bottomSheetDialog.dismiss()
+            val name = etMedication.text?.trim().toString()
+
+            if (name.isEmpty()) {
+                etMedication.error = getString(R.string.please_fill_medication_name)
+                etMedication.requestFocus()
+            } else {
+                lifecycleScope.launch {
+                    viewModel.insertMedicine(Medicine(0, name))
+                    bottomSheetDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun setupMedicationDropdown() {
+        val medicineDropdown = binding.etMedicineDropdown
+        val chipGroup = binding.chipGroupMedications
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            mutableListOf<String>())
+
+        medicineDropdown.setAdapter(adapter)
+
+        viewModel.getAllMedicines().observe(viewLifecycleOwner) { medicines ->
+            val names = medicines.map { it.medicine_name }
+            adapter.clear()
+            adapter.addAll(names)
+            adapter.notifyDataSetChanged()
+            medicineDropdown.setText("", false) // reset without triggering filter
+            medicineDropdown.setAdapter(adapter) // re-attach to reset internal filter state
+        }
+
+        medicineDropdown.setOnClickListener {
+            if (medicineDropdown.tag == null){
+                medicineDropdown.showDropDown()
+                medicineDropdown.tag = "active"
+            } else {
+                medicineDropdown.dismissDropDown()
+                medicineDropdown.tag = null
+            }
+        }
+
+        medicineDropdown.setOnItemClickListener { parent, _, position, _ ->
+            val selectedMedicine = parent.getItemAtPosition(position).toString()
+
+            // prevent duplicates
+            val isDuplicate = (0 until chipGroup.childCount).any { i ->
+                (chipGroup.getChildAt(i) as Chip).text == selectedMedicine
+            }
+
+            if (!isDuplicate) {
+                medicineList.add(SelectedMedication(selectedMedicine))
+                val chip = createChipStyle(selectedMedicine, chipGroup)
+                chipGroup.addView(chip)
+            }
+
+            medicineDropdown.setText("", false) // reset without triggering filter
+            medicineDropdown.clearFocus()
+            medicineDropdown.tag = null
+        }
+    }
+
+    private fun createChipStyle(selectedMedicine: String, chipGroup: ChipGroup) : Chip {
+        return Chip(requireContext()).apply {
+            text = selectedMedicine
+            isCloseIconVisible = true
+            isClickable = false
+            isCheckable = false
+
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.cairo_medium)
+            textSize = 14f
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.primary))
+            closeIconTint = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary))
+            closeIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_x)
+            closeIconSize = 24f
+            closeIconEndPadding = 16f
+
+            // match your shape: #4D6976EB fill + 1dp primary stroke + 38dp corners
+            chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#4D6976EB"))
+            chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary))
+            chipStrokeWidth = resources.displayMetrics.density * 1 // 1dp to px
+            shapeAppearanceModel = shapeAppearanceModel.toBuilder()
+                .setAllCornerSizes(resources.displayMetrics.density * 38) // 38dp to px
+                .build()
+
+            setOnCloseIconClickListener {
+                chipGroup.removeView(this)
+                medicineList.removeIf { it.medication_name == selectedMedicine }
+            }
         }
     }
 

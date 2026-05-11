@@ -18,8 +18,6 @@ data class RecordMedication(
     @PrimaryKey(autoGenerate = true)
     val medication_id: Int,
     val log_id: Int,
-    val medication_name: String,
-    val medication_time: Long,
-    val frequency: String,
+    val medications: List<SelectedMedication>,
     val notes: String? = null,
 )
