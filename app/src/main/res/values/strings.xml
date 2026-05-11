@@ -188,7 +188,13 @@
     <string name="calories_estimation_hint">Enter number of times</string>
     <string name="add_new_log">Add Log</string>
 
+    <string name="please_fill_at_least_one_section">Please fill at least one section</string>
     <string name="please_fill_log_title">Please fill log title</string>
+    <string name="please_select_measurement_type">Please select measurement type</string>
+    <string name="please_fill_glucose_value">Please fill glucose value</string>
+    <string name="please_select_medication">Please select medication</string>
+    <string name="please_select_meal_type">Please select meal type</string>
+    <string name="please_fill_meal_description">Please fill meal description</string>
     <string name="please_fill_log_description">Please fill log description</string>
     <string name="please_fill_medication_name">Please enter a medicine name</string>
 
@@ -210,8 +216,6 @@
     <string name="post_time">1 sec ago</string>
     <string name="Share_your_experience">Share your experience and connect with others</string>
     <string name="share_something_with_community">Share something with the community...</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
     <string name="posts">Posts</string>
     <string name="accounts">Accounts</string>

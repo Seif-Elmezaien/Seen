@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import com.example.seen.R
 import com.example.seen.databinding.FragmentAddLogsBinding
 import com.example.seen.datasource.local.SeenDatabase
@@ -64,7 +65,7 @@ class AddLogsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddLogsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -147,7 +148,9 @@ class AddLogsFragment : Fragment() {
 
         picker.addOnPositiveButtonClickListener {
             val now = Calendar.getInstance()
-            val isToday = selectedCalendar.get(Calendar.DATE) == now.get(Calendar.DATE)
+            val isToday =
+                selectedCalendar.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                selectedCalendar.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR)
 
             if (isToday && (picker.hour > now.get(Calendar.HOUR_OF_DAY) ||
                         (picker.hour == now.get(Calendar.HOUR_OF_DAY) && picker.minute > now.get(Calendar.MINUTE)))) {
@@ -378,124 +381,166 @@ class AddLogsFragment : Fragment() {
         }
     }
 
-    private fun handleInput(){
+    private fun handleInput() {
+        if (!validateCommonFields()) return
+        if (!validateGlucoseSection()) return
+        if (!validateMedicationSection()) return
+        if (!validateMealSection()) return
+
+        val hasAnySectionFilled = hasGlucoseFilled() || hasMedicationFilled() || hasMealFilled()
+
+        if (!hasAnySectionFilled) {
+            Toast.makeText(requireContext(), R.string.please_fill_at_least_one_section, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        saveLog()
+    }
+
+// ─── Validation ───────────────────────────────────────────────────
+
+    private fun validateCommonFields(): Boolean {
         val title = binding.etLogTitle.text.toString().trim()
         val description = binding.etLogDescription.text.toString().trim()
-
-        val bloodGlucoseValue = binding.etGlucoseLogValue.text.toString().toIntOrNull()
-        val a1cValue = binding.etA1c.text.toString().toFloatOrNull()
-        val glucoseNote = binding.etGlucoseNotes.text.toString().trim()
-
-        val hasBloodGlucoseValue = bloodGlucoseValue != null
-        val hasMeasurementType = selectedMeasurementType != null
-        val hasGlucoseNullableFilled = (a1cValue != null) || (glucoseNote.isNotEmpty())
-
-        val medicationNote = binding.etMedicationNotes.text.toString().trim()
-
-        val hasMedicationName = medicineList.isNotEmpty()
-        val hasMedicationNullableFilled = medicationNote.isNotEmpty()
-
-        val mealDescription = binding.etMealDescription.text.toString().trim()
-        val mealCarbs = binding.etCarbs.text.toString().toIntOrNull()
-        val mealCalories = binding.etCalories.text.toString().toIntOrNull()
-        val mealNotes = binding.etMealNotes.text.toString().trim()
-
-        val hasMealType = selectedMealType != null
-        val hasMealDescription = mealDescription.isNotEmpty()
-        val hasMealNullableFilled = (mealCarbs != null) || (mealCalories != null) || mealNotes.isNotEmpty()
-
-        val hasGlucoseFilled = hasBloodGlucoseValue || hasMeasurementType
-        val hasMedicationFilled = hasMedicationName
-        val hasMealFilled = hasMealType || hasMealDescription
-        val hasAnyNotNullableField = hasGlucoseFilled || hasMedicationFilled || hasMealFilled
 
         if (title.isEmpty()) {
             binding.etLogTitle.error = getString(R.string.please_fill_log_title)
             binding.etLogTitle.requestFocus()
-            return
+            return false
         }
 
         if (description.isEmpty()) {
             binding.etLogDescription.error = getString(R.string.please_fill_log_description)
             binding.etLogDescription.requestFocus()
-            return
+            return false
         }
 
-        if ((hasGlucoseNullableFilled || hasBloodGlucoseValue) && !hasMeasurementType){
-            binding.tvMeasurementType.error = getString(R.string.please_fill_log_description)
+        return true
+    }
+
+    private fun validateGlucoseSection(): Boolean {
+        val hasValue = binding.etGlucoseLogValue.text.toString().toIntOrNull() != null
+        val hasType = selectedMeasurementType != null
+        val hasNullable = binding.etA1c.text.toString().toFloatOrNull() != null
+                || binding.etGlucoseNotes.text.toString().trim().isNotEmpty()
+
+        if ((hasNullable || hasValue) && !hasType) {
+            binding.tvMeasurementType.error = getString(R.string.please_select_measurement_type)
             switchLogType(LogType.GLUCOSE)
-            return
+            return false
         }
 
-        if ((hasGlucoseNullableFilled || hasMeasurementType) && !hasBloodGlucoseValue){
-            binding.etGlucoseLogValue.error = getString(R.string.please_fill_log_description)
+        if ((hasNullable || hasType) && !hasValue) {
+            binding.etGlucoseLogValue.error = getString(R.string.please_fill_glucose_value)
             binding.etGlucoseLogValue.requestFocus()
             switchLogType(LogType.GLUCOSE)
-            return
+            return false
         }
 
-        if (hasMedicationNullableFilled && !hasMedicationName){
-            binding.tvMedicationTitle.error = getString(R.string.please_fill_log_description)
+        return true
+    }
+
+    private fun validateMedicationSection(): Boolean {
+        val hasNullable = binding.etMedicationNotes.text.toString().trim().isNotEmpty()
+
+        if (hasNullable && medicineList.isEmpty()) {
+            binding.tvMedicationTitle.error = getString(R.string.please_select_medication)
             switchLogType(LogType.MEDICATION)
-            return
+            return false
         }
 
-        if ((hasMealNullableFilled || hasMealDescription) && !hasMealType){
-            binding.tvMealType.error = getString(R.string.please_fill_log_description)
+        return true
+    }
+
+    private fun validateMealSection(): Boolean {
+        val hasDescription = binding.etMealDescription.text.toString().trim().isNotEmpty()
+        val hasType = selectedMealType != null
+        val hasNullable = binding.etCarbs.text.toString().toIntOrNull() != null
+                || binding.etCalories.text.toString().toIntOrNull() != null
+                || binding.etMealNotes.text.toString().trim().isNotEmpty()
+
+        if ((hasNullable || hasDescription) && !hasType) {
+            binding.tvMealType.error = getString(R.string.please_select_meal_type)
             switchLogType(LogType.MEAL)
-            return
+            return false
         }
 
-        if ((hasMealNullableFilled || hasMealType) && !hasMealDescription){
-            binding.etMealDescription.error = getString(R.string.please_fill_log_description)
+        if ((hasNullable || hasType) && !hasDescription) {
+            binding.etMealDescription.error = getString(R.string.please_fill_meal_description)
             binding.etMealDescription.requestFocus()
             switchLogType(LogType.MEAL)
-            return
+            return false
         }
 
-        if (!hasAnyNotNullableField){
-            Toast.makeText(requireContext(), R.string.please_fill_log_description, Toast.LENGTH_SHORT).show()
-            return
+        return true
+    }
+
+// ─── State checks ─────────────────────────────────────────────────
+
+    private fun hasGlucoseFilled() =
+        binding.etGlucoseLogValue.text.toString().toIntOrNull() != null || selectedMeasurementType != null
+
+    private fun hasMedicationFilled() = medicineList.isNotEmpty()
+
+    private fun hasMealFilled() =
+        selectedMealType != null || binding.etMealDescription.text.toString().trim().isNotEmpty()
+
+// ─── Save ─────────────────────────────────────────────────────────
+
+    private fun saveLog() {
+        lifecycleScope.launch {
+            val log = Log(
+                log_id = 0,
+                log_title = binding.etLogTitle.text.toString().trim(),
+                log_description = binding.etLogDescription.text.toString().trim(),
+                logged_at = selectedCalendar.timeInMillis
+            )
+            val logId = viewModel.insertLog(log).toInt()
+
+            if (hasGlucoseFilled()) insertGlucoseRecord(logId)
+            if (hasMedicationFilled()) insertMedicationRecord(logId)
+            if (hasMealFilled()) insertMealRecord(logId)
+
+            findNavController().popBackStack()
         }
-        else {
-            viewModel.viewModelScope.launch {
-                val log = Log(0, title, description, selectedCalendar.timeInMillis)
-                val logId = viewModel.insertLog(log).toInt()
+    }
 
-                if (hasGlucoseFilled) {
-                    val glucoseRecord = RecordGlucose(
-                        0,
-                        logId,
-                        selectedMeasurementType!!,
-                        bloodGlucoseValue!!,
-                        a1cValue,
-                        glucoseNote
-                    )
+    private suspend fun insertGlucoseRecord(logId: Int) {
+        viewModel.insertRecordGlucose(
+            RecordGlucose(
+                reading_id = 0,
+                log_id = logId,
+                reading_type = selectedMeasurementType!!,
+                glucose_level = binding.etGlucoseLogValue.text.toString().toInt(),
+                a1c_estimation = binding.etA1c.text.toString().toFloatOrNull(),
+                notes = binding.etGlucoseNotes.text.toString().trim()
+            )
+        )
+    }
 
-                    viewModel.insertRecordGlucose(glucoseRecord)
-                }
+    private suspend fun insertMedicationRecord(logId: Int) {
+        viewModel.insertRecordMedication(
+            RecordMedication(
+                medication_id = 0,
+                log_id = logId,
+                medications = medicineList,
+                notes = binding.etMedicationNotes.text.toString().trim()
+            )
+        )
+    }
 
-                if (hasMedicationFilled) {
-                    val medicationRecord = RecordMedication(0, logId, medicineList, medicationNote)
-                    viewModel.insertRecordMedication(medicationRecord)
-                }
-
-                if (hasMealFilled) {
-                    val mealRecord = RecordMeal(
-                        0,
-                        logId,
-                        selectedMealType!!,
-                        mealDescription,
-                        mealCarbs,
-                        mealCalories,
-                        mealNotes
-                    )
-
-                    viewModel.insertRecordMeal(mealRecord)
-                }
-                requireActivity().supportFragmentManager.popBackStack()
-            }
-        }
+    private suspend fun insertMealRecord(logId: Int) {
+        viewModel.insertRecordMeal(
+            RecordMeal(
+                meal_id = 0,
+                log_id = logId,
+                meal_type = selectedMealType!!,
+                meal_description = binding.etMealDescription.text.toString().trim(),
+                total_carb = binding.etCarbs.text.toString().toIntOrNull(),
+                total_calories = binding.etCalories.text.toString().toIntOrNull(),
+                notes = binding.etMealNotes.text.toString().trim()
+            )
+        )
     }
 
     override fun onDestroyView() {
