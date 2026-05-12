@@ -26,7 +26,9 @@ class MainActivity : AppCompatActivity() {
     private val fullScreenDestinations = setOf(
         R.id.addLogsFragment,
         R.id.addReminderFragment,
-        R.id.reminderFragment
+        R.id.reminderFragment,
+        R.id.homeEntryFragment,
+        R.id.onboardingContainerFragment
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if(checkToken() == null){
+        if(checkToken() != null){
             goToAuthActivity()
             return
         }

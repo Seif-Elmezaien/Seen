@@ -5,9 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.domain.model.entites.Log
+import com.example.seen.domain.model.entites.RecordGlucose
+import com.example.seen.domain.model.entites.RecordMeal
+import com.example.seen.domain.model.entites.RecordMedication
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class HomeViewModel(
@@ -40,4 +46,23 @@ class HomeViewModel(
     fun getUser() =
         userRepository.getUser()
 
+    fun deleteLog(log: Log) = viewModelScope.launch {
+        logRepository.deleteLog(log)
+    }
+
+    fun insertLog(log: Log) = viewModelScope.launch {
+        logRepository.insertLog(log)
+    }
+
+    fun insertRecordGlucose(recordGlucose: RecordGlucose) = viewModelScope.launch {
+        logRepository.insertRecordGlucose(recordGlucose)
+    }
+
+    fun insertRecordMedication(recordMedication: RecordMedication) = viewModelScope.launch {
+        logRepository.insertRecordMedication(recordMedication)
+    }
+
+    fun insertRecordMeal(recordMeal: RecordMeal) = viewModelScope.launch {
+        logRepository.insertRecordMeal(recordMeal)
+    }
 }

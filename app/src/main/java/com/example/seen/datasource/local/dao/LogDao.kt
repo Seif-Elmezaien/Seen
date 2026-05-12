@@ -19,7 +19,7 @@ import com.example.seen.domain.model.entites.RecordMedication
 interface LogDao {
 
     //Logs
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLog(log: Log) : Long
 
     @Update

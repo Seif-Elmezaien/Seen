@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
 import com.example.seen.databinding.FragmentHomeBinding
 import com.example.seen.datasource.local.SeenDatabase
@@ -29,10 +32,12 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.collections.get
 
 
 class HomeFragment : Fragment() {
@@ -49,7 +54,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -63,6 +68,7 @@ class HomeFragment : Fragment() {
         setupUI()
         setupListeners()
         observeData()
+        deleteOnSwipe()
     }
 
     private fun initializeViewModel(){
@@ -324,6 +330,50 @@ class HomeFragment : Fragment() {
 
         chart.invalidate() // Refresh
 
+    }
+
+    private fun deleteOnSwipe(){
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                val fullLog = homeAdapter.differ.currentList[position]
+                viewModel.deleteLog(fullLog.log)
+                Snackbar.make(binding.root, "deleted", Snackbar.LENGTH_LONG).apply {
+                    setAction("Undo"){
+                        insertLog(fullLog)
+                    }
+                    addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(snackbar: Snackbar?, event: Int) {
+                            // deletion is already done, nothing extra needed
+                        }
+                    })
+                    show()
+                }
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(binding.rvHome)
+        }
+    }
+
+    private fun insertLog(fullLog : FullLog) {
+        viewModel.insertLog(fullLog.log)
+        fullLog.glucose?.let { viewModel.insertRecordGlucose(it) }
+        fullLog.medication?.let { viewModel.insertRecordMedication(it) }
+        fullLog.meal?.let { viewModel.insertRecordMeal(it) }
     }
 
     override fun onDestroyView() {

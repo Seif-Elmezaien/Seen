@@ -2,7 +2,6 @@ package com.example.seen.datasource.repository
 
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.domain.model.entites.Log
-import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
