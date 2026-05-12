@@ -8,5 +8,7 @@ class Constants {
 
         const val LOW_GLUCOSE_VALUE = 70
         const val HIGH_GLUCOSE_VALUE = 180
+
+        const val QUERY_PAGE_SIZE = 20
     }
 }

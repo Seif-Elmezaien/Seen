@@ -1,5 +1,7 @@
 package com.example.seen.domain.model.community
 
+import java.io.Serializable
+
 data class Data(
     val id: Int,
     val user: PostUser,
@@ -11,4 +13,4 @@ data class Data(
     val likes_count: Int,
     val created_at: String,
     val updated_at: String,
-)
+) : Serializable

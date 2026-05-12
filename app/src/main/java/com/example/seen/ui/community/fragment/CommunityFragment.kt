@@ -5,24 +5,41 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.seen.R
 import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.local.SeenDatabase.Companion.invoke
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
+import com.example.seen.util.Constants.Companion.QUERY_PAGE_SIZE
+import com.example.seen.util.Resource
 
 
 class CommunityFragment : Fragment() {
+
+    private lateinit var postAdapter: PostAdapter
+
     var _binding: FragmentCommunityBinding? = null
     val binding get() = _binding!!
 
     private lateinit var viewModel: CommunityViewModel
+
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +52,32 @@ class CommunityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViewModel()
+        setupRecyclerView()
+        setPostAdapter()
 
+        viewModel.communityPosts.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let { postResponse ->
+                        postAdapter.differ.submitList(postResponse.data)
+                        isLastPage = postResponse.data.size < QUERY_PAGE_SIZE
+                        if (isLastPage) {
+                            binding.rvPosts.setPadding(0, 0, 0, 0)
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let { message ->
+                        Toast.makeText(activity, "Error: $message", Toast.LENGTH_LONG).show()
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
     }
 
     private fun initializeViewModel(){
@@ -60,5 +102,67 @@ class CommunityFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun setPostAdapter(){
+        postAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("post", it)
+            }
+            findNavController().navigate(
+                R.id.action_communityFragment_to_postDetailsFragment,
+                bundle
+            )
+        }
+    }
+
+    private fun hideProgressBar() {
+        binding.paginationProgressBar.visibility = View.INVISIBLE
+        isLoading = false
+    }
+
+    private fun showProgressBar() {
+        binding.paginationProgressBar.visibility = View.VISIBLE
+        isLoading = true
+    }
+
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
+                    isTotalMoreThanVisible && isScrolling
+            if (shouldPaginate) {
+                viewModel.getCommunityPosts(1, "all")
+                isScrolling = false
+            }
+        }
+    }
+
+
+    private fun setupRecyclerView() {
+        postAdapter = PostAdapter()  // ✅ create a new instance
+        binding.rvPosts.apply {
+            adapter = postAdapter
+            layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(this@CommunityFragment.scrollListener)
+        }
+    }
+
 
 }

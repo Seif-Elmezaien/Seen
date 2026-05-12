@@ -97,9 +97,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvUserPostName" />
 
             <TextView
-                android:id="@+id/tvToday"
-                android:layout_width="83dp"
-                android:layout_height="27dp"
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_diabetes_type1"
                 android:fontFamily="@font/cairo_bold"
@@ -162,7 +163,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view" />
 
             <TextView
-                android:id="@+id/tv_likes_count"
+                android:id="@+id/tv_likes_count_dt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -179,11 +180,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/ic_post_comments"
-                app:layout_constraintStart_toEndOf="@+id/tv_likes_count"
-                app:layout_constraintTop_toTopOf="@+id/tv_likes_count" />
+                app:layout_constraintStart_toEndOf="@+id/tv_likes_count_dt"
+                app:layout_constraintTop_toTopOf="@+id/tv_likes_count_dt" />
 
             <TextView
-                android:id="@+id/tv_comments_count"
+                android:id="@+id/tv_comments_count_dt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

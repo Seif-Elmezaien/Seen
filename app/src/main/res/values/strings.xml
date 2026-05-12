@@ -223,6 +223,7 @@
     <string name="search">Search</string>
     <string name="posts">Posts</string>
     <string name="accounts">Accounts</string>
+    <string name="add_post">Add Post</string>
 
 
 </resources>

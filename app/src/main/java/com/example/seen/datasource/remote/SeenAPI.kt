@@ -44,12 +44,13 @@ interface SeenAPI {
      * Community
      */
     // Get Posts
-    @POST("api/posts")
+    @GET("api/posts")
     suspend fun getCommunityPosts(
         @Query("page")
         page: Int = 1,
         @Query("category")
         category: String,
     ) : Response<PostListResponse>
+
 
 }
