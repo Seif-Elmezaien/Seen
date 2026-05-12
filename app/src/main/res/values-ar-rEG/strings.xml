@@ -155,6 +155,10 @@
     <string name="medicine_title">اسم الدواء</string>
     <string name="create_reminder">انشاء تذكير</string>
 
+    <!-- Reminder Broadcast -->
+    <string name="seen_reminder">تذكير سين</string>
+    <string name="medicine_name_notification">الدواء: </string>
+
     <!-- AddLogs fragment -->
     <string name="logs">السجلات</string>
     <string name="log_title">عنوان السجل</string>

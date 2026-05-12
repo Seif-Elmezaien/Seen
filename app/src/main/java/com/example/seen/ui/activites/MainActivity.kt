@@ -14,12 +14,20 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.seen.R
 import com.example.seen.databinding.ActivityMainBinding
 import com.example.seen.ui.activites.AuthActivity
+import com.example.seen.util.Constants.Companion.NAV_ANIM_DURATION
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
+
+    // Fragments that should hide the bottom bar
+    private val fullScreenDestinations = setOf(
+        R.id.addLogsFragment,
+        R.id.addReminderFragment,
+        R.id.reminderFragment
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +36,15 @@ class MainActivity : AppCompatActivity() {
 
         if(checkToken() == null){
             goToAuthActivity()
+            return
         }
 
         setUpSystemSettings()
         setUpBottomMenuNavController()
 
         binding.fabAddLogs.setOnClickListener {
-            onClickFabLogic()
+//            onClickFabLogic()
+            navController.navigate(R.id.addLogsFragment)
         }
     }
 
@@ -65,32 +75,31 @@ class MainActivity : AppCompatActivity() {
         // bottomNavBar background error
         binding.bottomNavigationView.background = null
 
+
+
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
                     as NavHostFragment
 
         navController = navHostFragment.navController
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.homeFragment -> {
-                    binding.bottomAppBar.visibility = View.VISIBLE
-                    binding.fabAddLogs.visibility = View.VISIBLE
+        binding.bottomNavigationView.setupWithNavController(navController)
 
-                    // Setup BottomNavigationView
-                    binding.bottomNavigationView.setupWithNavController(navController)
-                }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in fullScreenDestinations) {
+                // Delay hiding until transition is done
+                binding.bottomAppBar.postDelayed({
+                    // Guard: only hide if we're still on a fullscreen destination
+                    // (user might have navigated back quickly)
+                    if (navController.currentDestination?.id in fullScreenDestinations) {
+                        binding.bottomAppBar.visibility = View.GONE
+                        binding.fabAddLogs.visibility = View.GONE
+                    }
+                }, NAV_ANIM_DURATION)
+            } else {
+                binding.bottomAppBar.visibility = View.VISIBLE
+                binding.fabAddLogs.visibility = View.VISIBLE
             }
         }
     }
-
-    private fun onClickFabLogic(){
-        binding.bottomNavigationView.menu.setGroupCheckable(0, true, false)
-        for (i in 0 until binding.bottomNavigationView.menu.size()) { binding.bottomNavigationView.menu.getItem(i).isChecked = false }
-        binding.bottomNavigationView.menu.setGroupCheckable(0, true, true)
-        navController.navigate(R.id.addLogsFragment)
-    }
-
-
-
 }

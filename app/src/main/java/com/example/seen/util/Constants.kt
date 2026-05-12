@@ -10,5 +10,7 @@ class Constants {
         const val HIGH_GLUCOSE_VALUE = 180
 
         const val QUERY_PAGE_SIZE = 20
+
+        const val NAV_ANIM_DURATION = 220L
     }
 }
