@@ -5,6 +5,8 @@
     <color name="secondary_2">#D7DAF3</color>
     <color name="background">#0A0E27</color>
 
+    <color name="reminder_item">#4F5376</color>
+
     <color name="title">#FFFFFF</color>
     <color name="description">#99A1AF</color>
     <color name="card_title">#FFFFFF</color>

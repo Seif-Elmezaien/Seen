@@ -6,12 +6,14 @@
     <color name="secondary_2">#D7DAF3</color>
     <color name="background">#FFFFFF</color>
 
+    <color name="reminder_item">#FFFFFF</color>
+
     <color name="title">#161A41</color>
     <color name="description">#808080</color>
     <color name="card_title">#3B3D53</color>
     <color name="links">#6976EB</color>
     <color name="text_gery2">#B7B7B7</color>
-    
+
     <color name="description_30">#40808080</color>
     <color name="primary_30">#4D6976EB</color>
     <color name="primary_20">#406976EB</color>
