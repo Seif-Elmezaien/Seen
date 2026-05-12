@@ -17,6 +17,7 @@ import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.google.android.material.button.MaterialButton
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import kotlin.getValue
 
 class Questionnaire1Fragment : Fragment() {
@@ -95,6 +96,7 @@ class Questionnaire1Fragment : Fragment() {
             { _, selectedYear, selectedMonth, selectedDay ->
 
                 val formattedDate = String.format(
+                    Locale.US,
                     "%04d-%02d-%02d",
                     selectedYear,
                     selectedMonth + 1,

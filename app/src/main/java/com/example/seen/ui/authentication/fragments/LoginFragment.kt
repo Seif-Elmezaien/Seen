@@ -146,8 +146,6 @@ class LoginFragment : Fragment() {
                     if (token != null) {
                         setToken(token)
                     }
-                    Log.d("LoginFragment", "Token: $token")
-                    Log.d("LoginFragment", "User: ${response.data?.user}")
 
                     Toast.makeText(requireContext(),
                         getString(R.string.login_succesful),
@@ -162,7 +160,7 @@ class LoginFragment : Fragment() {
 
                     Toast.makeText(
                         requireContext(),
-                        "Error: ${response.message}",
+                        "${response.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                     viewModel.resetLoginState()

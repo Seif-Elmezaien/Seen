@@ -36,21 +36,17 @@ class CommunityViewModel(
     var communityPostsPage = 1
     var communityPostsResponse: PostListResponse? = null
 
-    init {
-        getCommunityPosts(1, "all")
+    fun getCommunityPosts( token: String, page: Int, category: String) = viewModelScope.launch {
+        safePostsCall(token, page, category)
     }
 
-    fun getCommunityPosts(page: Int, category: String) = viewModelScope.launch {
-        safePostsCall(page, category)
-    }
-
-    private suspend fun safePostsCall(page: Int, category: String) {
+    private suspend fun safePostsCall(token: String, page: Int, category: String) {
         communityPosts.postValue(Resource.Loading())
 
         try {
             if (hasInternetConnection()) {
 
-                val response = communityRepository.getCommunityPosts(page, category)
+                val response = communityRepository.getCommunityPosts(token, page, category)
 
                 communityPosts.postValue(handlePostsResponse(response))
 

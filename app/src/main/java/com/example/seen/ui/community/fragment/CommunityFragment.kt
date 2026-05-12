@@ -1,5 +1,6 @@
 package com.example.seen.ui.community.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,6 +37,7 @@ class CommunityFragment : Fragment() {
     val binding get() = _binding!!
 
     private lateinit var viewModel: CommunityViewModel
+    var token: String? = null
 
     var isLoading = false
     var isLastPage = false
@@ -51,9 +53,12 @@ class CommunityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        getToken()
         initializeViewModel()
         setupRecyclerView()
         setPostAdapter()
+        viewModel.getCommunityPosts("Bearer ${token!!}", 1, "General")
 
         viewModel.communityPosts.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
@@ -148,7 +153,7 @@ class CommunityFragment : Fragment() {
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCommunityPosts(1, "all")
+                viewModel.getCommunityPosts("Bearer  ${token!!}", 1, "General")
                 isScrolling = false
             }
         }
@@ -162,6 +167,11 @@ class CommunityFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             addOnScrollListener(this@CommunityFragment.scrollListener)
         }
+    }
+
+    private fun getToken() {
+        val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
+        token = sharedPref.getString("token", null)
     }
 
 

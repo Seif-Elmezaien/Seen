@@ -94,7 +94,7 @@ class QuestionnaireContainerFragment : Fragment() {
                 data.diabetes_type,
                 data.insulin_therapy,
                 data.weight,
-                data.height
+                data.height,
             )
             viewModel.signup(user)
             observeSignupStateState()

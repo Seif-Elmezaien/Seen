@@ -1,6 +1,6 @@
 package com.example.seen.domain.model.authentication
 
-import java.util.Date
+import okhttp3.MultipartBody
 
 
 data class SignupRequest (

@@ -11,6 +11,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -22,19 +23,19 @@ interface SeenAPI {
      * Authentication
      */
     // Login Check
-    @POST("api/login")
+    @POST("login")
     suspend fun login(
         @Body loginRequest: LoginRequest,
     ) : Response<LoginAndSignupResponse>
 
     // Check if email exist
-    @POST("api/check-email")
+    @POST("check-email")
     suspend fun checkEmailExist(
         @Body email: CheckEmailRequest
     ) : Response<CheckEmailResponse>
 
     // Signing User in
-    @POST("api/register")
+    @POST("register")
     suspend fun signup(
         @Body user: SignupRequest
     ) : Response<LoginAndSignupResponse>
@@ -44,8 +45,10 @@ interface SeenAPI {
      * Community
      */
     // Get Posts
-    @GET("api/posts")
+    @GET("posts")
     suspend fun getCommunityPosts(
+        @Header("Authorization")
+        token: String,
         @Query("page")
         page: Int = 1,
         @Query("category")

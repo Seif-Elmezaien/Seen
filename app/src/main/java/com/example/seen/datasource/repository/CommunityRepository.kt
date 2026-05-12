@@ -6,7 +6,7 @@ import retrofit2.Response
 
 class CommunityRepository {
 
-    suspend fun getCommunityPosts(page: Int, category: String): Response<PostListResponse> =
-        RetrofitInstance.api.getCommunityPosts(page, category)
+    suspend fun getCommunityPosts(token: String, page: Int, category: String): Response<PostListResponse> =
+        RetrofitInstance.api.getCommunityPosts(token, page, category)
 
 }

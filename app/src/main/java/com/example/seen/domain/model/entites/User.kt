@@ -12,8 +12,9 @@ data class User(
     var id: Int,
     var first_name: String,
     var last_name: String,
+    var profile_picture: String? = null,
     var email: String,
-    var password: String,
+    var password: String? = null,
     var gender: String,
     var phone: String,
     var birthDate: String,
@@ -26,5 +27,4 @@ data class User(
     var target_glucose_range: String? = null,
     var min_glucose: Double? = null,
     var emergency_contact: String? = null,
-    val profile_img: String? = null,
 )
