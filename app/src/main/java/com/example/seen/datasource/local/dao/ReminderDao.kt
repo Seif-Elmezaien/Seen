@@ -25,7 +25,7 @@ interface ReminderDao {
     @Delete
     suspend fun deleteReminder(reminder: Reminder)
 
-    @Query("SELECT * FROM reminder")
+    @Query("SELECT * FROM reminder ORDER BY time")
     fun getAllReminders(): LiveData<List<Reminder>>
 
 }

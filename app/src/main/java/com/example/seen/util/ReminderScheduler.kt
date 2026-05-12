@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.example.seen.ui.activites.MainActivity
 import com.example.seen.ui.reminder.broadcast.ReminderReceiver
 
 object ReminderScheduler {
@@ -63,5 +62,27 @@ object ReminderScheduler {
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
+    }
+
+    fun cancelReminder(
+        context: Context,
+        reminderId: Int
+    ) {
+
+        val intent = Intent(context, ReminderReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminderId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        alarmManager.cancel(pendingIntent)
+
+        pendingIntent.cancel()
     }
 }

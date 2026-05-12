@@ -19,8 +19,9 @@ class ReminderViewModel(
     suspend fun insertReminder(reminder: Reminder) =
         reminderRepository.insertReminder(reminder)
 
-    suspend fun deleteReminder(reminder: Reminder) =
+    fun deleteReminder(reminder: Reminder) = viewModelScope.launch {
         reminderRepository.deleteReminder(reminder)
+    }
 
     fun getAllReminders() =
         reminderRepository.getAllReminders()

@@ -17,6 +17,7 @@ import com.example.seen.domain.model.entites.Reminder
 import com.example.seen.ui.reminder.viewmodel.ReminderViewModel
 import com.example.seen.ui.reminder.viewmodel.ReminderViewModelProviderFactory
 import com.example.seen.ui.reminder.adapter.ReminderAdapter
+import com.example.seen.util.ReminderScheduler
 
 class ReminderFragment : Fragment() {
     var _binding: FragmentReminderBinding? = null
@@ -90,6 +91,16 @@ class ReminderFragment : Fragment() {
     private fun setupListeners() {
         binding.btnAddReminder.setOnClickListener {
             findNavController().navigate(R.id.action_reminderFragment_to_addReminderFragment)
+        }
+
+        reminderAdapter.setOnDeleteClickListener { reminder ->
+
+            ReminderScheduler.cancelReminder(
+                requireContext(),
+                reminder.reminder_id
+            )
+
+            viewModel.deleteReminder(reminder)
         }
     }
 

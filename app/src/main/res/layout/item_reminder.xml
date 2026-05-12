@@ -5,9 +5,6 @@
     android:id="@+id/cvItemReminder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#0DFFFFFF"
-    android:layout_marginEnd="30dp"
-    android:layout_marginStart="30dp"
     android:layout_marginBottom="20dp">
 
     <!-- Delete Card -->
@@ -15,9 +12,12 @@
         android:id="@+id/cardDelete"
         android:layout_width="80dp"
         android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -37,7 +37,10 @@
         android:id="@+id/cardReminder"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        app:cardBackgroundColor="@android:color/transparent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/background"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
         android:layout_marginEnd="10dp"
@@ -49,7 +52,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#0DFFFFFF"
             android:padding="18dp">
 
             <!-- Medication Icon Background -->

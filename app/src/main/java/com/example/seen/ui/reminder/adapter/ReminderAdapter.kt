@@ -70,6 +70,10 @@ class ReminderAdapter(
                 Date(reminderItem.time)
             )
 
+            cardDelete.setOnClickListener {
+                onDeleteClickListener?.invoke(reminderItem)
+            }
+
         }
     }
 
@@ -77,6 +81,12 @@ class ReminderAdapter(
         "medication" -> R.drawable.ic_medicine_mid_size
         "glucose" -> R.drawable.ic_glucose_mid_size
         else -> R.drawable.ic_meal_mid_size
+    }
+
+    private var onDeleteClickListener: ((Reminder) -> Unit)? = null
+
+    fun setOnDeleteClickListener(listener: (Reminder) -> Unit) {
+        onDeleteClickListener = listener
     }
 
     override fun getItemCount(): Int {
