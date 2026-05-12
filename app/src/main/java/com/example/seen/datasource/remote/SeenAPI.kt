@@ -7,6 +7,8 @@ import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.PostResponse
+import com.example.seen.domain.model.community.response.CommentResponse
+import com.example.seen.domain.model.community.response.SearchResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -54,6 +56,26 @@ interface SeenAPI {
         @Query("category")
         category: String,
     ) : Response<PostListResponse>
+
+    //get post comment
+    @GET("posts/{postId}/comments")
+    suspend fun getPostComments(
+        @Path("postId") postId: Int,
+        @Header("Authorization")
+        token: String,
+        @Query("page")
+        page: Int = 1,
+    ) : Response<CommentResponse>
+
+    @GET("/search")
+    suspend fun searchPostAndUser(
+        @Header("Authorization")
+        token: String,
+        @Query("q")
+        query: String,
+        @Query("page")
+        page: Int = 1,
+    ) : Response<SearchResponse>
 
 
 }
