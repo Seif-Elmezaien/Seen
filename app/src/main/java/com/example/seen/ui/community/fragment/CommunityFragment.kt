@@ -58,7 +58,7 @@ class CommunityFragment : Fragment() {
         initializeViewModel()
         setupRecyclerView()
         setPostAdapter()
-        viewModel.getCommunityPosts("Bearer ${token!!}", 1, "General")
+        viewModel.getCommunityPosts(token!!, 1, "General")
 
         viewModel.communityPosts.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
@@ -171,7 +171,7 @@ class CommunityFragment : Fragment() {
 
     private fun getToken() {
         val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
-        token = sharedPref.getString("token", null)
+        token = "Bearer " + sharedPref.getString("token", null)
     }
 
 
