@@ -11,6 +11,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.seen.datasource.local.dao.LogDao
+import com.example.seen.datasource.local.dao.MedicineDao
 import com.example.seen.datasource.local.dao.ReminderDao
 import com.example.seen.datasource.local.dao.UserDao
 import com.example.seen.domain.model.entites.Medicine
@@ -34,6 +35,7 @@ abstract class SeenDatabase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val logDao: LogDao
     abstract val reminderDao: ReminderDao
+    abstract val medicineDao: MedicineDao
 
 
 

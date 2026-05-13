@@ -8,14 +8,14 @@ class MedicineRepository(
 ) {
     // Medicines
     suspend fun insertMedicine(medicine: Medicine) =
-        db.logDao.insertMedicine(medicine)
+        db.medicineDao.insertMedicine(medicine)
 
     fun getAllMedicines() =
-        db.logDao.getAllMedicines()
+        db.medicineDao.getAllMedicines()
 
     suspend fun deleteMedicine(medicine: Medicine) =
-        db.logDao.deleteMedicine(medicine)
+        db.medicineDao.deleteMedicine(medicine)
 
     suspend fun deleteAllMedicine() =
-        db.logDao.deleteAllMedicine()
+        db.medicineDao.deleteAllMedicine()
 }

@@ -66,17 +66,4 @@ interface LogDao {
     @Transaction()
     @Query("SELECT * FROM logs WHERE logged_at BETWEEN :startOfDay AND :endOfDate ORDER BY logged_at DESC")
     fun getLogByDate(startOfDay: Long, endOfDate: Long) : LiveData<List<FullLog>>
-
-    // insert Medicine
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertMedicine(medicine: Medicine) : Long
-
-    @Query("SELECT * FROM medicine ORDER BY medicine_name ASC")
-    fun getAllMedicines() : LiveData<List<Medicine>>
-
-    @Delete
-    suspend fun deleteMedicine(medicine: Medicine)
-
-    @Query("DELETE FROM medicine")
-    suspend fun deleteAllMedicine()
 }

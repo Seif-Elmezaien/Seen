@@ -352,7 +352,7 @@ class HomeFragment : Fragment() {
                 viewModel.deleteLog(fullLog.log)
                 Snackbar.make(binding.root, "deleted", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo"){
-                        insertLog(fullLog)
+                        undoDeletedLog(fullLog)
                     }
                     addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(snackbar: Snackbar?, event: Int) {
@@ -369,7 +369,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun insertLog(fullLog : FullLog) {
+    private fun undoDeletedLog(fullLog : FullLog) {
         viewModel.insertLog(fullLog.log)
         fullLog.glucose?.let { viewModel.insertRecordGlucose(it) }
         fullLog.medication?.let { viewModel.insertRecordMedication(it) }
