@@ -59,6 +59,7 @@ class CommunityFragment : Fragment() {
         initializeViewModel()
         setupRecyclerView()
         setPostAdapter()
+        handleChips()
         viewModel.getCommunityPosts(token!!, 1, selectedCategory)
 
         viewModel.communityPosts.observe(viewLifecycleOwner, Observer { response ->

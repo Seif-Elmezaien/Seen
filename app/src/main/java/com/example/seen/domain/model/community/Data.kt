@@ -13,4 +13,5 @@ data class Data(
     val likes_count: Int,
     val created_at: String,
     val updated_at: String,
-) : Serializable
+    val is_liked: Boolean? = false,
+    ) : Serializable

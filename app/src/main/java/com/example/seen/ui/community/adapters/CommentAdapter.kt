@@ -58,16 +58,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
             }
             tvCommunty1stcomment.text = comment.comment_text
 
-            ivCommentsLike.isSelected = comment.isLiked
-
-            // Toggle on click
-            ivCommentsLike.setOnClickListener {
-                comment.isLiked = !comment.isLiked
-                ivCommentsLike.isSelected = comment.isLiked
-
-                val newCount = if (comment.isLiked) comment.likes_count!! + 1 else comment.likes_count!! - 1
-                tvCommentsLikesCount.text = newCount.toString()
-            }
+            ivCommentsLike.isSelected = comment.is_liked ?: false
         }
 
     }
