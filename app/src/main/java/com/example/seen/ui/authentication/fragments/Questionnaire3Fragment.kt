@@ -35,7 +35,7 @@ class Questionnaire3Fragment : Fragment() {
         viewModel = (activity as AuthActivity).viewModel
 
         binding.btnPen.setOnClickListener {
-            selectType("Syringes", binding.btnPen)
+            selectType("Pen / Syringes", binding.btnPen)
         }
 
         binding.btnPump.setOnClickListener {
