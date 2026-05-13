@@ -169,12 +169,11 @@ class PostDetailsFragment : Fragment() {
                     .into(ivPostImage)
             }
             tvLikesCountDt.text = args.post.likes_count.toString()
-            if(args.post.user.profile_picture.isNotEmpty()){
-                Glide.with(root)
-                    .load(args.post.user.profile_picture)
-                    .into(ivProfile)
-            }
-
+            tvCommentsCountDt.text = args.post.comments_count.toString()
+            Glide.with(root)
+                .load(args.post.user.profile_picture.isNotEmpty() ?: "")
+                .placeholder(R.drawable.ic_profile)
+                .into(ivProfile)
             binding.arrowBg.setOnClickListener {
                 requireActivity().onBackPressed()
             }

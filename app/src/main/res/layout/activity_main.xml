@@ -21,13 +21,12 @@
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:backgroundTint="@color/background"
         app:fabCradleMargin="15dp"
         app:fabCradleVerticalOffset="10dp"
         app:fabCradleRoundedCornerRadius="0dp"
         android:layout_gravity="bottom"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -49,6 +48,6 @@
         app:tint="@null"
         android:backgroundTint="@color/primary"
         app:layout_anchor="@id/bottomAppBar"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

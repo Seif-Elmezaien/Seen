@@ -54,7 +54,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
             tvCommentsLikesCount.text = comment.likes_count.toString()
             Glide.with(root)
                 .load(toHttp(comment.user.profile_picture) ?: "")
-                .placeholder(R.drawable.ic_no_logs)
+                .placeholder(R.drawable.ic_profile)
                 .into(ivCommentProfile)
             tvCommunty1stcomment.text = comment.comment_text
 
