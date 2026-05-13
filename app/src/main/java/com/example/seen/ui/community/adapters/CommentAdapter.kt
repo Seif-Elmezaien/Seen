@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityCommentBinding
 import com.example.seen.domain.model.community.response.Comment
 
@@ -51,16 +52,19 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
             tvUserCommentName.text = comment.user.full_name
             tvCommentTime.text = comment.created_at
             tvCommentsLikesCount.text = comment.likes_count.toString()
-            if(comment.user.profile_picture.isNotEmpty()){
-                Glide.with(root)
-                    .load(comment.user.profile_picture)
-                    .into(ivCommentProfile)
-            }
+            Glide.with(root)
+                .load(toHttp(comment.user.profile_picture) ?: "")
+                .placeholder(R.drawable.ic_no_logs)
+                .into(ivCommentProfile)
             tvCommunty1stcomment.text = comment.comment_text
 
             ivCommentsLike.isSelected = comment.is_liked ?: false
         }
 
+    }
+
+    fun toHttp(url: String?): String {
+        return url?.replaceFirst("https://", "http://") ?: ""
     }
 
     override fun getItemCount(): Int {

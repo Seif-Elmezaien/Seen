@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityPostBinding
 import com.example.seen.domain.model.community.Data
 
@@ -64,11 +65,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
             }
             tvLikesCount.text = post.likes_count.toString()
             tvCommentsCount.text = post.comments_count.toString()
-            if(post.user.profile_picture.isNotEmpty()){
-                Glide.with(root)
-                    .load(post.user.profile_picture)
-                    .into(ivProfile)
-            }
+            Glide.with(root)
+                .load(toHttp(post.user.profile_picture) ?: "")
+                .placeholder(R.drawable.ic_no_logs)
+                .into(ivProfile)
             root.setOnClickListener {
                 onItemClickListener?.invoke(post)
             }
@@ -76,6 +76,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     }
 
     private var onItemClickListener: ((Data) -> Unit)? = null
+
+    fun toHttp(url: String?): String {
+        return url?.replaceFirst("https://", "http://") ?: ""
+    }
 
     fun setOnItemClickListener(listener: (Data) -> Unit){
         onItemClickListener = listener
