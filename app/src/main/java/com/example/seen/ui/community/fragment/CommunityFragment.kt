@@ -27,6 +27,7 @@ import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.QUERY_PAGE_SIZE
 import com.example.seen.util.Resource
+import kotlinx.coroutines.selects.select
 
 
 class CommunityFragment : Fragment() {
@@ -58,7 +59,7 @@ class CommunityFragment : Fragment() {
         initializeViewModel()
         setupRecyclerView()
         setPostAdapter()
-        viewModel.getCommunityPosts(token!!, 1, "General")
+        viewModel.getCommunityPosts(token!!, 1, selectedCategory)
 
         viewModel.communityPosts.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
@@ -107,16 +108,13 @@ class CommunityFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun setPostAdapter(){
+    private fun setPostAdapter() {
         postAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("post", it)
-            }
-            findNavController().navigate(
-                R.id.action_communityFragment_to_postDetailsFragment,
-                bundle
-            )
+
+            val action =
+                CommunityFragmentDirections
+                    .actionCommunityFragmentToPostDetailsFragment(it)
+            findNavController().navigate(action)
         }
     }
 
@@ -153,7 +151,7 @@ class CommunityFragment : Fragment() {
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCommunityPosts("Bearer  ${token!!}", 1, "General")
+                viewModel.getCommunityPosts("Bearer  ${token!!}", 1, selectedCategory)
                 isScrolling = false
             }
         }
@@ -172,6 +170,25 @@ class CommunityFragment : Fragment() {
     private fun getToken() {
         val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
         token = "Bearer " + sharedPref.getString("token", null)
+    }
+
+    var selectedCategory = "General"
+
+    private fun handleChips(){
+        binding.chipGroupCategories.setOnCheckedStateChangeListener { group, checkedIds ->
+            when (checkedIds.firstOrNull()) {
+                R.id.chipGeneral     -> selectedCategory = "General"
+                R.id.chipType1       -> selectedCategory = "Type1 / LADA"
+                R.id.chipType2       -> selectedCategory = "Type2"
+                R.id.chipMonogenic   -> selectedCategory = "MODY"
+                R.id.chipGestational -> selectedCategory = "Gestational"
+                R.id.chipAdvise      -> selectedCategory = "Advices"
+            }
+
+            viewModel.communityPostsPage = 1
+            viewModel.communityPostsResponse = null
+            viewModel.getCommunityPosts("Bearer  ${token!!}",1, selectedCategory)
+        }
     }
 
 

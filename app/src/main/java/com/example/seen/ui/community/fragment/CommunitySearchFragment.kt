@@ -7,18 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.seen.R
 import com.example.seen.databinding.FragmentCommunityBinding
+import com.example.seen.databinding.FragmentCommunitySearchBinding
 
 
 class CommunitySearchFragment : Fragment() {
 
-    var _binding: FragmentCommunityBinding? = null
+    var _binding: FragmentCommunitySearchBinding? = null
     val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentCommunityBinding.inflate(inflater, container, false)
+        _binding = FragmentCommunitySearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 

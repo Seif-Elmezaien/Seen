@@ -6,23 +6,18 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
-import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
-import com.example.seen.domain.model.community.PostResponse
+import com.example.seen.domain.model.community.response.Comment
+import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
-import com.example.seen.domain.model.entites.FullLog
-import com.example.seen.util.NetworkUtils.hasInternetConnection
 import com.example.seen.util.Resource
 import com.example.seen.util.SeenApplication
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
-import java.util.Calendar
 
 class CommunityViewModel(
     app: Application,
@@ -36,8 +31,21 @@ class CommunityViewModel(
     var communityPostsPage = 1
     var communityPostsResponse: PostListResponse? = null
 
+    val communityComment = MutableLiveData<Resource<CommentResponse>>()
+
+    var communityCommentPage = 1
+
+    var communityCommentResponse: CommentResponse? = null
+
+//    init {
+//        getCommunityPosts("Bearer  ${token!!}", 1, selectedCategory)
+//    }
     fun getCommunityPosts( token: String, page: Int, category: String) = viewModelScope.launch {
         safePostsCall(token, page, category)
+    }
+
+    fun getPostComments(postId: Int, token: String, page: Int) = viewModelScope.launch {
+        safeCommentCall(postId, token, page)
     }
 
     private suspend fun safePostsCall(token: String, page: Int, category: String) {
@@ -92,8 +100,7 @@ class CommunityViewModel(
         return false
     }
 
-    private fun handlePostsResponse(response: Response<PostListResponse>)
-            : Resource<PostListResponse> {
+    private fun handlePostsResponse(response: Response<PostListResponse>) : Resource<PostListResponse> {
 
         if(response.isSuccessful){
             response.body()?.let { resultResponse ->
@@ -105,7 +112,7 @@ class CommunityViewModel(
                 } else {
                     val oldPosts = communityPostsResponse?.data
                     val newPosts = resultResponse.data
-                    oldPosts?.addAll(newPosts)  // ✅ now works
+                    oldPosts?.addAll(newPosts)
                 }
 
                 return Resource.Success(
@@ -116,4 +123,46 @@ class CommunityViewModel(
 
         return Resource.Error(response.message())
     }
+
+    private suspend fun safeCommentCall(id: Int, token: String, page: Int){
+        communityComment.postValue(Resource.Loading())
+
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.getPostComments(id, token, page)
+                communityComment.postValue(handleCommentResponse(response))
+            } else {
+                communityComment.postValue(Resource.Error("No internet connection"))
+
+        }
+            } catch (t: Throwable) {
+            when (t) {
+                is IOException ->
+                    communityComment.postValue(Resource.Error("Network Failure"))
+                else -> communityComment.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+    }
+    }
+
+    private fun handleCommentResponse(response: Response<CommentResponse>): Resource<CommentResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+
+                communityCommentPage++
+
+                if (communityCommentResponse == null) {
+                    communityCommentResponse = resultResponse
+                } else {
+                    val oldComments = communityCommentResponse?.data
+                    val newComments = resultResponse.data
+                    oldComments?.addAll(newComments)
+                }
+                return Resource.Success(
+                    communityCommentResponse ?: resultResponse
+                )
+            }
+    }
+    return Resource.Error(response.message())
+    }
+
 }

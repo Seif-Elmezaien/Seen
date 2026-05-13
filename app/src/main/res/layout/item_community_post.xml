@@ -31,6 +31,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:id="@+id/ivProfile"
                 android:layout_gravity="center"
                 android:padding="2dp"
                 android:scaleType="centerCrop"

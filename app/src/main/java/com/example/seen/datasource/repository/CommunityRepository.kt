@@ -1,6 +1,7 @@
 package com.example.seen.datasource.repository
 
 import com.example.seen.datasource.remote.RetrofitInstance
+import com.example.seen.domain.model.community.response.Comment
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse

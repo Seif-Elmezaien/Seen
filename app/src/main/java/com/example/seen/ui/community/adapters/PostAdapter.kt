@@ -64,7 +64,11 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
             }
             tvLikesCount.text = post.likes_count.toString()
             tvCommentsCount.text = post.comments_count.toString()
-
+            if(post.user.profile_picture.isNotEmpty()){
+                Glide.with(root)
+                    .load(post.user.profile_picture)
+                    .into(ivProfile)
+            }
             root.setOnClickListener {
                 onItemClickListener?.invoke(post)
             }

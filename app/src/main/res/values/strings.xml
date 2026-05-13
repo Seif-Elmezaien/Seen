@@ -224,6 +224,8 @@
     <string name="posts">Posts</string>
     <string name="accounts">Accounts</string>
     <string name="add_post">Add Post</string>
+    <string name="make_comment">Make a comment...</string>
+
 
 
 </resources>

@@ -225,13 +225,11 @@
     <string name="post_time">منذ 1 ثانية</string>
     <string name="Share_your_experience">شارك تجربتك وتواصل مع الآخرين</string>
     <string name="share_something_with_community">شارك شيئا مع المجتمع...</string>
-
     <string name="search">البحث</string>
-
     <string name="posts">منشورات</string>
     <string name="accounts">حسابات</string>
-
     <string name="add_post">إضافة المنشور</string>
+    <string name="make_comment">اكتب تعليقاً...</string>
 
 
 
