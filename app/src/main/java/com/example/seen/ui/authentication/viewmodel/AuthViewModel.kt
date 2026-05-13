@@ -47,7 +47,9 @@ class AuthViewModel(
 
         if (result is Resource.Success) {
             result.data?.let { response ->
-                userRepository.upsertUser(response.user)
+                response.user?.let { user ->
+                    userRepository.upsertUser(user)
+                }
             }
         }
     }
@@ -65,7 +67,9 @@ class AuthViewModel(
 
         if (result is Resource.Success) {
             result.data?.let { response ->
-                userRepository.upsertUser(response.user)
+                response.user?.let {
+                    userRepository.upsertUser(response.user)
+                }
             }
         }
     }
@@ -90,8 +94,9 @@ class AuthViewModel(
                     Log.d("AuthViewModel", "safeApiCall: ${response.body()}")
                     response.body()?.let { return Resource.Success(it) }
                 }
-                Log.d("AuthViewModel", "safeApiCall: ${response.message()}")
-                Resource.Error(response.message())
+                val errorBody = response.errorBody()?.string()
+                Log.d("AuthViewModel", "safeApiCall: ${errorBody}")
+                Resource.Error(errorBody ?: response.message())
             } else {
                 Resource.Error(getStringFromR(R.string.error_internet_connection))
             }
