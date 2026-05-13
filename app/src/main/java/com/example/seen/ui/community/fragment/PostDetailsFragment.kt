@@ -66,8 +66,11 @@ class PostDetailsFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { commentResponse ->
-                        commentAdapter.differ.submitList(commentResponse.data)
-                        isLastPage = commentResponse.data.size < QUERY_PAGE_SIZE
+
+                        val comments = commentResponse.comments ?: emptyList()
+
+                        commentAdapter.differ.submitList(comments)
+                        isLastPage = comments.size < QUERY_PAGE_SIZE
                         if (isLastPage) {
                             binding.rvComments.setPadding(0, 0, 0, 0)
                         }

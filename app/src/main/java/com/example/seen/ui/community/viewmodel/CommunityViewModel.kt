@@ -153,8 +153,8 @@ class CommunityViewModel(
                 if (communityCommentResponse == null) {
                     communityCommentResponse = resultResponse
                 } else {
-                    val oldComments = communityCommentResponse?.data
-                    val newComments = resultResponse.data
+                    val oldComments = communityCommentResponse?.comments
+                    val newComments = resultResponse.comments
                     oldComments?.addAll(newComments)
                 }
                 return Resource.Success(

@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
         R.id.addReminderFragment,
         R.id.reminderFragment,
         R.id.homeEntryFragment,
-        R.id.onboardingContainerFragment
+        R.id.onboardingContainerFragment,
+        R.id.postDetailsFragment
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

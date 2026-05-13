@@ -65,7 +65,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
                 comment.isLiked = !comment.isLiked
                 ivCommentsLike.isSelected = comment.isLiked
 
-                val newCount = if (comment.isLiked) comment.likes_count + 1 else comment.likes_count - 1
+                val newCount = if (comment.isLiked) comment.likes_count!! + 1 else comment.likes_count!! - 1
                 tvCommentsLikesCount.text = newCount.toString()
             }
         }
