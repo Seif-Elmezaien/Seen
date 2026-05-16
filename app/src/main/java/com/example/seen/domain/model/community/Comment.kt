@@ -1,7 +1,4 @@
-package com.example.seen.domain.model.community.response
-
-import com.example.seen.domain.model.community.PostUser
-
+package com.example.seen.domain.model.community
 
 data class Comment(
     val comment_text : String? = "",

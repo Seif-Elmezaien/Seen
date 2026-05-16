@@ -8,5 +8,4 @@ data class PostUser(
     val full_name: String? ="",
     val diabetes_type: String? ="",
     val profile_picture: String,
-    val created_at: String? =""
 ) : Serializable

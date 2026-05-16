@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
-import com.example.seen.domain.model.community.response.Comment
+import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.util.Resource

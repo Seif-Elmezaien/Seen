@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityCommentBinding
-import com.example.seen.domain.model.community.response.Comment
+import com.example.seen.domain.model.community.Comment
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
 import java.text.SimpleDateFormat
