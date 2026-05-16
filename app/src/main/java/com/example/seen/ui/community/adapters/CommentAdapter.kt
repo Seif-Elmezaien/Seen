@@ -72,12 +72,12 @@ class CommentAdapter(
         }
     }
 
-    private fun setProfileBackground(message_type : String) = when (message_type) {
+    private fun setProfileBackground(messageType : String) = when (messageType) {
         "Type1" -> R.drawable.avatar_border_type1
         "Type2" -> R.drawable.avatar_border_type2
         "LADA" -> R.drawable.avatar_border_lada
         "MODY" -> R.drawable.avatar_border_mody
-         else ->  R.drawable.bg_diabetes_gestational
+         else ->  R.drawable.avatar_border_gestational
     }
 
     fun getRelativeTime(isoTimestamp: String): String {

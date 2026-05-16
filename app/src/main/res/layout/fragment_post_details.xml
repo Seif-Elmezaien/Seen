@@ -213,7 +213,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvComments"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -245,7 +245,6 @@
         android:orientation="horizontal"
         android:background="@drawable/bg_post_cardview"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="20dp"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -256,30 +255,33 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
             android:hint="@string/make_comment"
-            android:layoutDirection="rtl"
-            android:textAlignment="viewEnd"
-            android:background="@android:color/transparent"
+            android:background="@drawable/bg_et_comment"
             android:paddingStart="12dp"
             android:paddingEnd="8dp"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
             android:paddingBottom="10dp"
             android:inputType="textMultiLine"
             android:maxLines="4"
             android:minLines="1"
             android:textSize="14sp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/title" />
+            android:textColor="@color/title"
+            android:fontFamily="@font/cairo_medium"
+            android:textColorHint="@color/description" />
 
         <ImageButton
             android:id="@+id/btnSendComment"
             android:layout_width="44dp"
             android:layout_height="44dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
             android:src="@drawable/ic_send_button"
             android:background="@android:color/transparent"
             android:contentDescription="Send comment"
             android:padding="10dp"
-            android:layout_marginStart="4dp" />
+            android:layout_marginStart="6dp" />
 
     </LinearLayout>
 

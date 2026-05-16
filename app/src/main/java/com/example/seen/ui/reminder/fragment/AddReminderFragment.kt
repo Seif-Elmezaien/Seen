@@ -22,7 +22,7 @@ import com.example.seen.domain.model.entites.Reminder
 import com.example.seen.domain.model.entites.SelectedMedication
 import com.example.seen.ui.reminder.viewmodel.ReminderViewModel
 import com.example.seen.ui.reminder.viewmodel.ReminderViewModelProviderFactory
-import com.example.seen.util.ReminderScheduler
+import com.example.seen.ui.reminder.broadcast.ReminderScheduler
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip

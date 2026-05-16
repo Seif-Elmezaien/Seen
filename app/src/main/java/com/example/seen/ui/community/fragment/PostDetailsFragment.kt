@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -60,6 +62,8 @@ class PostDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupKeyboardBehavior()
         getToken()
         initializeViewModel()
         setPostItem()
@@ -178,7 +182,7 @@ class PostDetailsFragment : Fragment() {
                     .into(ivPostImage)
             }
             tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
-            tvCategory.setTextColor(colorRes)
+            tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
             tvLikesCountDt.text = args.post.likes_count.toString()
             tvCommentsCountDt.text = args.post.comments_count.toString()
             Glide.with(root)
@@ -188,15 +192,26 @@ class PostDetailsFragment : Fragment() {
             binding.arrowBg.setOnClickListener {
                 requireActivity().onBackPressed()
             }
-    }
+        }
     }
 
-    private fun setCategoryBackground(message_type: String): Triple<Int, Int, Int> = when (message_type) {
+    private fun setProfileBackground(messageType : String) = when (messageType) {
+        "Type1" -> R.drawable.avatar_border_type1
+        "Type2" -> R.drawable.avatar_border_type2
+        "LADA" -> R.drawable.avatar_border_lada
+        "MODY" -> R.drawable.avatar_border_mody
+        else ->  R.drawable.avatar_border_gestational
+    }
+
+    private fun setCategoryBackground(messageType: String): Triple<Int, Int, Int> = when (messageType) {
         "Type1 / LADA"  -> Triple(R.drawable.bg_diabetes_type1,       R.color.profile_type1_stroke,       R.string.category_type1_lada)
         "Type2"         -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
         "MODY"          -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
-        else            -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
+        "Gestational"   -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
+        "Advices"       -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
+        else            -> Triple(R.drawable.bg_diabetes_general,  R.color.general_yellow, R.string.category_general)
     }
+
 
     private fun setCommentRecyclerView(){
         commentAdapter = CommentAdapter(requireContext())
@@ -248,12 +263,20 @@ class PostDetailsFragment : Fragment() {
         }
     }
 
-    private fun setProfileBackground(message_type : String) = when (message_type) {
-        "Type1" -> R.drawable.avatar_border_type1
-        "Type2" -> R.drawable.avatar_border_type2
-        "LADA" -> R.drawable.avatar_border_lada
-        "MODY" -> R.drawable.avatar_border_mody
-        else ->  R.drawable.bg_diabetes_gestational
+    private fun setupKeyboardBehavior() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            val navHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+
+            binding.commentBar.translationY = 0f
+            binding.commentBar.setPadding(
+                binding.commentBar.paddingLeft,
+                binding.commentBar.paddingTop,
+                binding.commentBar.paddingRight,
+                if (imeHeight > 0) imeHeight else navHeight
+            )
+            insets
+        }
     }
 
 }

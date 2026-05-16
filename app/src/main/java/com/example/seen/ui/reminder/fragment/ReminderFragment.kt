@@ -17,7 +17,7 @@ import com.example.seen.domain.model.entites.Reminder
 import com.example.seen.ui.reminder.viewmodel.ReminderViewModel
 import com.example.seen.ui.reminder.viewmodel.ReminderViewModelProviderFactory
 import com.example.seen.ui.reminder.adapter.ReminderAdapter
-import com.example.seen.util.ReminderScheduler
+import com.example.seen.ui.reminder.broadcast.ReminderScheduler
 
 class ReminderFragment : Fragment() {
     var _binding: FragmentReminderBinding? = null

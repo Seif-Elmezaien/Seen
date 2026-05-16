@@ -3,6 +3,7 @@ package com.example.seen.ui.community.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -73,7 +74,7 @@ class PostAdapter(
                     .into(ivPostImage)
             }
             tvCategory.background = context.getDrawable(bgRes)
-            tvCategory.setTextColor(colorRes)
+            tvCategory.setTextColor(ContextCompat.getColor(context, colorRes))
             tvLikesCount.text = post.likes_count.toString()
             tvCommentsCount.text = post.comments_count.toString()
             Glide.with(root)
@@ -92,7 +93,7 @@ class PostAdapter(
         onItemClickListener = listener
     }
 
-    private fun setProfileBackground(message_type : String) = when (message_type) {
+    private fun setProfileBackground(messageType : String) = when (messageType) {
         "Type1" -> R.drawable.avatar_border_type1
         "Type2" -> R.drawable.avatar_border_type2
         "LADA" -> R.drawable.avatar_border_lada
@@ -100,11 +101,13 @@ class PostAdapter(
         else ->  R.drawable.avatar_border_gestational
     }
 
-    private fun setCategoryBackground(message_type: String): Triple<Int, Int, Int> = when (message_type) {
+    private fun setCategoryBackground(messageType: String): Triple<Int, Int, Int> = when (messageType) {
         "Type1 / LADA"  -> Triple(R.drawable.bg_diabetes_type1,       R.color.profile_type1_stroke,       R.string.category_type1_lada)
         "Type2"         -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
         "MODY"          -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
-        else            -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
+        "Gestational"   -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
+        "Advices"       -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
+        else            -> Triple(R.drawable.bg_diabetes_general,  R.color.general_yellow, R.string.category_general)
     }
 
 

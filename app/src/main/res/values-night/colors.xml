@@ -13,6 +13,7 @@
     <color name="links">#ADB4F3</color>
 
     <color name="description_30">#4099A1AF</color>
+    <color name="comment_background">#1AFFFFFF</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
