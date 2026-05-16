@@ -15,10 +15,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
-            android:id="@+id/commentFrameLayout"
+            android:id="@+id/flCommentAvatarStroke"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/avatar_border"
+            android:background="@drawable/avatar_border_type2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -41,8 +41,8 @@
             android:textColor="@color/title"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/commentFrameLayout"
-            app:layout_constraintTop_toTopOf="@+id/commentFrameLayout" />
+            app:layout_constraintStart_toEndOf="@+id/flCommentAvatarStroke"
+            app:layout_constraintTop_toTopOf="@+id/flCommentAvatarStroke" />
 
         <View
             android:id="@+id/view"

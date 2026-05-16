@@ -160,7 +160,7 @@ class CommunityFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter()  // ✅ create a new instance
+        postAdapter = PostAdapter(requireContext())  // ✅ create a new instance
         binding.rvPosts.apply {
             adapter = postAdapter
             layoutManager = LinearLayoutManager(activity)

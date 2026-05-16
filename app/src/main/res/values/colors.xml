@@ -39,7 +39,11 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="profile_stroke">#3B82F6</color>
+    <color name="profile_type2_stroke">#3B82F6</color>
+    <color name="profile_type1_stroke">#EF4444</color>
+    <color name="profile_mody_stroke">#F97316</color>
+    <color name="profile_lada_stroke">#22C55E</color>
+    <color name="profile_gestational_stroke">#A855F7</color>
     <color name="post_likes">#DC2626</color>
 
     <color name="Type1_lada_red">#EF4444</color>

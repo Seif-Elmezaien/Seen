@@ -231,6 +231,17 @@
     <string name="add_post">إضافة المنشور</string>
     <string name="make_comment">اكتب تعليقاً...</string>
 
+    <!-- Relative Time -->
+    <string name="time_just_now">الآن</string>
+    <string name="time_seconds_ago">منذ %d ثانية</string>
+    <string name="time_one_minute_ago">منذ دقيقة</string>
+    <string name="time_minutes_ago">منذ %d دقيقة</string>
+    <string name="time_one_hour_ago">منذ ساعة</string>
+    <string name="time_hours_ago">منذ %d ساعة</string>
+    <string name="time_one_day_ago">منذ يوم</string>
+    <string name="time_two_days_ago">منذ يومين</string>
+    <string name="time_days_ago">منذ %d أيام</string>
+
 
 
 

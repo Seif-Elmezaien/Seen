@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -26,6 +27,11 @@ import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.QUERY_PAGE_SIZE
 import com.example.seen.util.Resource
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class PostDetailsFragment : Fragment() {
@@ -159,15 +165,17 @@ class PostDetailsFragment : Fragment() {
     private fun setPostItem(){
         binding.apply {
             tvUserPostName.text = args.post.user.full_name
-            tvPostTime.text = args.post.created_at
+            tvPostTime.text = getRelativeTime(args.post.created_at)
             tvCategory.text = args.post.category
             tvPostTitle.text = args.post.title
             tvPostContent.text = args.post.content
+            flAvatarStroke.background = ContextCompat.getDrawable(requireContext(),setProfileBackground(args.post.user.diabetes_type ?: ""))
             if(args.post.images.isNotEmpty()){
                 Glide.with(root)
-                    .load(args.post.images[0].media)
+                    .load(args.post.images[0].url)
                     .into(ivPostImage)
             }
+            tvCategory.background = ContextCompat.getDrawable(requireContext(), setCategoryBackground(args.post.category ?: ""))
             tvLikesCountDt.text = args.post.likes_count.toString()
             tvCommentsCountDt.text = args.post.comments_count.toString()
             Glide.with(root)
@@ -179,13 +187,70 @@ class PostDetailsFragment : Fragment() {
             }
     }
     }
+
+    private fun setCategoryBackground(message_type : String) = when (message_type) {
+        "Type1 / LADA" -> R.drawable.bg_diabetes_type1
+        "Type2" -> R.drawable.bg_diabetes_type2
+        "MODY" -> R.drawable.bg_diabetes_mody
+        else ->  R.drawable.bg_diabetes_gestational
+    }
+
     private fun setCommentRecyclerView(){
-        commentAdapter = CommentAdapter()
+        commentAdapter = CommentAdapter(requireContext())
         binding.rvComments.apply {
             adapter = commentAdapter
             layoutManager = LinearLayoutManager(activity)
             addOnScrollListener(this@PostDetailsFragment.scrollListener)
         }
+    }
+
+    fun getRelativeTime(isoTimestamp: String): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+        val date = sdf.parse(isoTimestamp) ?: return ""
+        val now = Date()
+        val diffMillis = now.time - date.time
+
+        val seconds = diffMillis / 1000
+        val minutes = seconds / 60
+        val hours   = minutes / 60
+
+        val calNow = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val calDate = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { time = date }
+
+        calNow.set(Calendar.HOUR_OF_DAY, 0); calNow.set(Calendar.MINUTE, 0)
+        calNow.set(Calendar.SECOND, 0);      calNow.set(Calendar.MILLISECOND, 0)
+
+        calDate.set(Calendar.HOUR_OF_DAY, 0); calDate.set(Calendar.MINUTE, 0)
+        calDate.set(Calendar.SECOND, 0);       calDate.set(Calendar.MILLISECOND, 0)
+
+        val calendarDays = ((calNow.timeInMillis - calDate.timeInMillis) / (1000 * 60 * 60 * 24)).toInt()
+
+        return when {
+            seconds < 60      -> if (seconds <= 1) getString(R.string.time_just_now)
+            else getString(R.string.time_seconds_ago, seconds)
+            minutes < 60      -> if (minutes == 1L) getString(R.string.time_one_minute_ago)
+            else getString(R.string.time_minutes_ago, minutes)
+            hours < 24        -> if (hours == 1L) getString(R.string.time_one_hour_ago)
+            else getString(R.string.time_hours_ago, hours)
+            calendarDays == 1 -> getString(R.string.time_one_day_ago)
+            calendarDays == 2 -> getString(R.string.time_two_days_ago)
+            calendarDays < 7  -> getString(R.string.time_days_ago, calendarDays)
+            else              -> {
+                val displayFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+                displayFormat.timeZone = TimeZone.getTimeZone("UTC")
+                displayFormat.format(date)
+            }
+        }
+    }
+
+    private fun setProfileBackground(message_type : String) = when (message_type) {
+        "Type1" -> R.drawable.avatar_border_type1
+        "Type2" -> R.drawable.avatar_border_type2
+        "LADA" -> R.drawable.avatar_border_lada
+        "MODY" -> R.drawable.avatar_border_mody
+        else ->  R.drawable.bg_diabetes_gestational
     }
 
 }
