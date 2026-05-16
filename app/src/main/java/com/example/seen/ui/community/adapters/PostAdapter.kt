@@ -58,10 +58,12 @@ class PostAdapter(
         position: Int
     ) {
         val post = differ.currentList[position]
+        val (bgRes, colorRes, categoryRes) = setCategoryBackground(post.category ?: "")
+
         holder.binding.apply {
             tvUserPostName.text = post.user.full_name
             tvPostTime.text = getRelativeTime(post.created_at)
-            tvCategory.text = post.category
+            tvCategory.text = context.getString(categoryRes)
             tvPostTitle.text = post.title
             tvPostContent.text = post.content
             flAvatarStroke.background = context.getDrawable(setProfileBackground(post.user.diabetes_type ?: ""))
@@ -70,7 +72,8 @@ class PostAdapter(
                     .load(post.images[0].url)
                     .into(ivPostImage)
             }
-            tvCategory.background = context.getDrawable(setCategoryBackground(post.category ?: ""))
+            tvCategory.background = context.getDrawable(bgRes)
+            tvCategory.setTextColor(colorRes)
             tvLikesCount.text = post.likes_count.toString()
             tvCommentsCount.text = post.comments_count.toString()
             Glide.with(root)
@@ -97,12 +100,13 @@ class PostAdapter(
         else ->  R.drawable.avatar_border_gestational
     }
 
-    private fun setCategoryBackground(message_type : String) = when (message_type) {
-        "Type1 / LADA" -> R.drawable.bg_diabetes_type1
-        "Type2" -> R.drawable.bg_diabetes_type2
-        "MODY" -> R.drawable.bg_diabetes_mody
-        else ->  R.drawable.bg_diabetes_gestational
+    private fun setCategoryBackground(message_type: String): Triple<Int, Int, Int> = when (message_type) {
+        "Type1 / LADA"  -> Triple(R.drawable.bg_diabetes_type1,       R.color.profile_type1_stroke,       R.string.category_type1_lada)
+        "Type2"         -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
+        "MODY"          -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
+        else            -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
     }
+
 
     fun getRelativeTime(isoTimestamp: String): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())

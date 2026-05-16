@@ -164,9 +164,11 @@ class PostDetailsFragment : Fragment() {
     }
     private fun setPostItem(){
         binding.apply {
+            val (bgRes, colorRes, categoryRes) = setCategoryBackground(args.post.category ?: "")
+
             tvUserPostName.text = args.post.user.full_name
             tvPostTime.text = getRelativeTime(args.post.created_at)
-            tvCategory.text = args.post.category
+            tvCategory.text = getString(categoryRes)
             tvPostTitle.text = args.post.title
             tvPostContent.text = args.post.content
             flAvatarStroke.background = ContextCompat.getDrawable(requireContext(),setProfileBackground(args.post.user.diabetes_type ?: ""))
@@ -175,7 +177,8 @@ class PostDetailsFragment : Fragment() {
                     .load(args.post.images[0].url)
                     .into(ivPostImage)
             }
-            tvCategory.background = ContextCompat.getDrawable(requireContext(), setCategoryBackground(args.post.category ?: ""))
+            tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
+            tvCategory.setTextColor(colorRes)
             tvLikesCountDt.text = args.post.likes_count.toString()
             tvCommentsCountDt.text = args.post.comments_count.toString()
             Glide.with(root)
@@ -188,11 +191,11 @@ class PostDetailsFragment : Fragment() {
     }
     }
 
-    private fun setCategoryBackground(message_type : String) = when (message_type) {
-        "Type1 / LADA" -> R.drawable.bg_diabetes_type1
-        "Type2" -> R.drawable.bg_diabetes_type2
-        "MODY" -> R.drawable.bg_diabetes_mody
-        else ->  R.drawable.bg_diabetes_gestational
+    private fun setCategoryBackground(message_type: String): Triple<Int, Int, Int> = when (message_type) {
+        "Type1 / LADA"  -> Triple(R.drawable.bg_diabetes_type1,       R.color.profile_type1_stroke,       R.string.category_type1_lada)
+        "Type2"         -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
+        "MODY"          -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
+        else            -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
     }
 
     private fun setCommentRecyclerView(){
