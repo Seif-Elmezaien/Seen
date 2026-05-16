@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -16,18 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
 import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.datasource.local.SeenDatabase
-import com.example.seen.datasource.local.SeenDatabase.Companion.invoke
 import com.example.seen.datasource.repository.CommunityRepository
-import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
-import com.example.seen.ui.home.viewmodel.HomeViewModel
-import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
-import com.example.seen.util.Constants.Companion.QUERY_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.COMMENT_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.POST_PAGE_SIZE
 import com.example.seen.util.Resource
-import kotlinx.coroutines.selects.select
+import com.google.android.material.chip.Chip
 
 
 class CommunityFragment : Fragment() {
@@ -60,7 +58,14 @@ class CommunityFragment : Fragment() {
         setupRecyclerView()
         setPostAdapter()
         handleChips()
-        viewModel.getCommunityPosts(token!!, 1, selectedCategory)
+
+        // ✅ Only fetch if no data yet
+        if (viewModel.communityPostsResponse == null) {
+            viewModel.getCommunityPosts(token!!, selectedCategory)
+        } else {
+            // Restore existing data immediately without new API call
+            postAdapter.differ.submitList(viewModel.communityPostsResponse!!.data.toList())
+        }
 
         viewModel.communityPosts.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
@@ -68,10 +73,6 @@ class CommunityFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let { postResponse ->
                         postAdapter.differ.submitList(postResponse.data)
-                        isLastPage = postResponse.data.size < QUERY_PAGE_SIZE
-                        if (isLastPage) {
-                            binding.rvPosts.setPadding(0, 0, 0, 0)
-                        }
                     }
                 }
                 is Resource.Error -> {
@@ -148,11 +149,11 @@ class CommunityFragment : Fragment() {
             val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
             val isNotAtBeginning = firstVisibleItemPosition >= 0
-            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
+            val isTotalMoreThanVisible = totalItemCount >= POST_PAGE_SIZE
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getCommunityPosts("Bearer  ${token!!}", 1, selectedCategory)
+                viewModel.getCommunityPosts(token!!,  selectedCategory)
                 isScrolling = false
             }
         }
@@ -175,20 +176,31 @@ class CommunityFragment : Fragment() {
 
     var selectedCategory = "General"
 
-    private fun handleChips(){
-        binding.chipGroupCategories.setOnCheckedStateChangeListener { group, checkedIds ->
-            when (checkedIds.firstOrNull()) {
-                R.id.chipGeneral     -> selectedCategory = "General"
-                R.id.chipType1       -> selectedCategory = "Type1 / LADA"
-                R.id.chipType2       -> selectedCategory = "Type2"
-                R.id.chipMonogenic   -> selectedCategory = "MODY"
-                R.id.chipGestational -> selectedCategory = "Gestational"
-                R.id.chipAdvise      -> selectedCategory = "Advices"
+    private fun handleChips() {
+        binding.chipGroupCategories.children
+            .filterIsInstance<Chip>()
+            .forEach { chip ->
+                chip.setOnClickListener { chip.isChecked = true }
             }
 
-            viewModel.communityPostsPage = 1
-            viewModel.communityPostsResponse = null
-            viewModel.getCommunityPosts("Bearer  ${token!!}",1, selectedCategory)
+        binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedIds ->
+            val newCategory = when (checkedIds.firstOrNull()) {
+                R.id.chipGeneral     -> "General"
+                R.id.chipType1       -> "Type1 / LADA"
+                R.id.chipType2       -> "Type2"
+                R.id.chipMonogenic   -> "MODY"
+                R.id.chipGestational -> "Gestational"
+                R.id.chipAdvise      -> "Advices"
+                else -> selectedCategory
+            }
+
+            // ✅ Only reset and fetch if category actually changed
+            if (newCategory != selectedCategory) {
+                selectedCategory = newCategory
+                viewModel.communityPostsPage = 1
+                viewModel.communityPostsResponse = null
+                viewModel.getCommunityPosts(token!!, selectedCategory)
+            }
         }
     }
 

@@ -37,24 +37,22 @@ class CommunityViewModel(
 
     var communityCommentResponse: CommentResponse? = null
 
-//    init {
-//        getCommunityPosts("Bearer  ${token!!}", 1, selectedCategory)
-//    }
-    fun getCommunityPosts( token: String, page: Int, category: String) = viewModelScope.launch {
-        safePostsCall(token, page, category)
+
+    fun getCommunityPosts( token: String, category: String) = viewModelScope.launch {
+        safePostsCall(token, category)
     }
 
-    fun getPostComments(postId: Int, token: String, page: Int) = viewModelScope.launch {
-        safeCommentCall(postId, token, page)
+    fun getPostComments(postId: Int, token: String) = viewModelScope.launch {
+        safeCommentCall(postId, token)
     }
 
-    private suspend fun safePostsCall(token: String, page: Int, category: String) {
+    private suspend fun safePostsCall(token: String, category: String) {
         communityPosts.postValue(Resource.Loading())
 
         try {
             if (hasInternetConnection()) {
 
-                val response = communityRepository.getCommunityPosts(token, page, category)
+                val response = communityRepository.getCommunityPosts(token, communityPostsPage, category)
 
                 communityPosts.postValue(handlePostsResponse(response))
 
@@ -124,12 +122,12 @@ class CommunityViewModel(
         return Resource.Error(response.message())
     }
 
-    private suspend fun safeCommentCall(id: Int, token: String, page: Int){
+    private suspend fun safeCommentCall(id: Int, token: String){
         communityComment.postValue(Resource.Loading())
 
         try {
             if (hasInternetConnection()) {
-                val response = communityRepository.getPostComments(id, token, page)
+                val response = communityRepository.getPostComments(token, id, communityCommentPage)
                 communityComment.postValue(handleCommentResponse(response))
             } else {
                 communityComment.postValue(Resource.Error("No internet connection"))

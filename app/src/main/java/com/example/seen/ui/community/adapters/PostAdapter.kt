@@ -2,6 +2,7 @@ package com.example.seen.ui.community.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -67,18 +68,23 @@ class PostAdapter(
             tvCategory.text = context.getString(categoryRes)
             tvPostTitle.text = post.title
             tvPostContent.text = post.content
-            flAvatarStroke.background = context.getDrawable(setProfileBackground(post.user.diabetes_type ?: ""))
+            flAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(post.user.diabetes_type ?: ""))
+            tvCategory.background = ContextCompat.getDrawable(context, bgRes)
             if(post.images.isNotEmpty()){
+                ivPostImage.visibility = View.VISIBLE
                 Glide.with(root)
                     .load(post.images[0].url)
                     .into(ivPostImage)
             }
-            tvCategory.background = context.getDrawable(bgRes)
+            else {
+                ivPostImage.visibility = View.GONE
+            }
+            tvCategory.background = ContextCompat.getDrawable(context, bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(context, colorRes))
             tvLikesCount.text = post.likes_count.toString()
             tvCommentsCount.text = post.comments_count.toString()
             Glide.with(root)
-                .load(post.user.profile_picture ?: "")
+                .load(post.user.profile_picture.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivProfile)
             root.setOnClickListener {

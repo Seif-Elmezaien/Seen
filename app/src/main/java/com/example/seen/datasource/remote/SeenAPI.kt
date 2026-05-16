@@ -58,9 +58,9 @@ interface SeenAPI {
     //get post comment
     @GET("posts/{postId}/comments")
     suspend fun getPostComments(
-        @Path("postId") postId: Int,
         @Header("Authorization")
         token: String,
+        @Path("postId") postId: Int,
         @Query("page")
         page: Int = 1,
     ) : Response<CommentResponse>

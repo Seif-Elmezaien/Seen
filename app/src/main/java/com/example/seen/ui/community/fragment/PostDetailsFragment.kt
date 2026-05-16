@@ -13,21 +13,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.seen.R
-import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.databinding.FragmentPostDetailsBinding
 import com.example.seen.datasource.local.SeenDatabase
-import com.example.seen.datasource.local.SeenDatabase.Companion.invoke
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.community.adapters.CommentAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
-import com.example.seen.util.Constants.Companion.QUERY_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.POST_PAGE_SIZE
 import com.example.seen.util.Resource
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -50,7 +49,6 @@ class PostDetailsFragment : Fragment() {
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
-    var currentPage = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +67,7 @@ class PostDetailsFragment : Fragment() {
         setPostItem()
         setCommentRecyclerView()
 
-        viewModel.getPostComments(args.post.id, token!!, page = 1)
+        viewModel.getPostComments(args.post.id, token!!)
 
         viewModel.communityComment.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
@@ -80,8 +78,8 @@ class PostDetailsFragment : Fragment() {
                         val comments = commentResponse.comments ?: emptyList()
 
                         commentAdapter.differ.submitList(comments)
-                        isLastPage = comments.size < QUERY_PAGE_SIZE
-                        if (isLastPage) {
+                        isLastPage = comments.size < args.post.comments_count
+                        if (isLastPage){
                             binding.rvComments.setPadding(0, 0, 0, 0)
                         }
                     }
@@ -128,12 +126,11 @@ class PostDetailsFragment : Fragment() {
             val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
             val isNotAtBeginning = firstVisibleItemPosition >= 0
-            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
+            val isTotalMoreThanVisible = totalItemCount >= POST_PAGE_SIZE
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                currentPage++  // increment before fetching
-                viewModel.getPostComments(args.post.id, token!!, currentPage)
+                viewModel.getPostComments(args.post.id, token!!)
                 isScrolling = false
             }
         }
@@ -177,20 +174,24 @@ class PostDetailsFragment : Fragment() {
             tvPostContent.text = args.post.content
             flAvatarStroke.background = ContextCompat.getDrawable(requireContext(),setProfileBackground(args.post.user.diabetes_type ?: ""))
             if(args.post.images.isNotEmpty()){
+                ivPostImage.visibility = View.VISIBLE
                 Glide.with(root)
                     .load(args.post.images[0].url)
                     .into(ivPostImage)
+            }
+            else {
+                ivPostImage.visibility = View.GONE
             }
             tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
             tvLikesCountDt.text = args.post.likes_count.toString()
             tvCommentsCountDt.text = args.post.comments_count.toString()
             Glide.with(root)
-                .load(args.post.user.profile_picture.isNotEmpty() ?: "")
+                .load(args.post.user.profile_picture.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivProfile)
             binding.arrowBg.setOnClickListener {
-                requireActivity().onBackPressed()
+                findNavController().navigateUp()
             }
         }
     }

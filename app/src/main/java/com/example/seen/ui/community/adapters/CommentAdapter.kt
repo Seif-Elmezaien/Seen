@@ -3,6 +3,7 @@ package com.example.seen.ui.community.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -62,9 +63,9 @@ class CommentAdapter(
             tvUserCommentName.text = comment.user.full_name
             tvCommentTime.text = getRelativeTime(comment.created_at ?: "")
             tvCommentsLikesCount.text = comment.likes_count.toString()
-            flCommentAvatarStroke.background = context.getDrawable(setProfileBackground(comment.user.diabetes_type ?: ""))
+            flCommentAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(comment.user.diabetes_type ?: ""))
             Glide.with(root)
-                .load(comment.user.profile_picture ?: "")
+                .load(comment.user.profile_picture.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivCommentProfile)
             tvCommunty1stcomment.text = comment.comment_text
