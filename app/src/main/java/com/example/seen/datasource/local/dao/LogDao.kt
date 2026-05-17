@@ -20,40 +20,28 @@ interface LogDao {
 
     //Logs
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLog(log: Log) : Long
-
-    @Update
-    suspend fun updateLog(log: Log)
+    suspend fun insertLog(log: Log)
 
     @Delete
     suspend fun deleteLog(log: Log)
 
     //RecordGlucose
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertRecordGlucose(recordGlucose: RecordGlucose): Long
-
-    @Update
-    suspend fun updateRecordGlucose(recordGlucose: RecordGlucose)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecordGlucose(recordGlucose: RecordGlucose)
 
     @Delete
     suspend fun deleteRecordGlucose(recordGlucose: RecordGlucose)
 
     //RecordMeal
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertRecordMeal(recordMeal: RecordMeal) : Long
-
-    @Update
-    suspend fun updateRecordMeal(recordMeal: RecordMeal)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecordMeal(recordMeal: RecordMeal)
 
     @Delete
     suspend fun deleteRecordMeal(recordMeal: RecordMeal)
 
     //RecordMedication
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertRecordMedication(recordMedication: RecordMedication): Long
-
-    @Update
-    suspend fun updateRecordMedication(recordMedication: RecordMedication)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecordMedication(recordMedication: RecordMedication)
 
     @Delete
     suspend fun deleteRecordMedication(recordMedication: RecordMedication)
@@ -66,4 +54,11 @@ interface LogDao {
     @Transaction()
     @Query("SELECT * FROM logs WHERE logged_at BETWEEN :startOfDay AND :endOfDate ORDER BY logged_at DESC")
     fun getLogByDate(startOfDay: Long, endOfDate: Long) : LiveData<List<FullLog>>
+
+    @Transaction
+    @Query("SELECT * FROM logs WHERE is_synced = 0")
+    suspend fun getUnsyncedFullLogs(): List<FullLog>
+
+    @Query("UPDATE logs SET is_synced = 1 WHERE log_id = :logId")
+    suspend fun markSynced(logId: String)
 }

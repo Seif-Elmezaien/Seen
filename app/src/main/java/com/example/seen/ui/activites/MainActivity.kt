@@ -1,26 +1,35 @@
 package com.example.seen.ui.activites
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.seen.R
 import com.example.seen.databinding.ActivityMainBinding
+import com.example.seen.datasource.local.SeenDatabase
+import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.util.Constants.Companion.NAV_ANIM_DURATION
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
+    private lateinit var repository: LogRepository
+    private var token : String? = null
 
     // Fragments that should hide the bottom bar
     private val fullScreenDestinations = setOf(
@@ -37,6 +46,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val db = SeenDatabase(applicationContext)
+        repository = LogRepository(db)
+
+        token = checkToken()
+
         if(checkToken() == null){
             goToAuthActivity()
             return
@@ -44,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpSystemSettings()
         setUpBottomMenuNavController()
+        observeConnectivity()
 
         binding.fabAddLogs.setOnClickListener {
 //            onClickFabLogic()
@@ -104,5 +119,18 @@ class MainActivity : AppCompatActivity() {
                 binding.fabAddLogs.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun observeConnectivity() {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                // triggers every time internet comes back
+                lifecycleScope.launch {
+                    repository.syncToServer("Bearer $token")
+                }
+            }
+        })
     }
 }

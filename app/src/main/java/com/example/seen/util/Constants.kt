@@ -1,9 +1,13 @@
 package com.example.seen.util
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class Constants {
     companion object{
-        const val BASE_URL = "https://ollie-wroth-tributarily.ngrok-free.dev/api/" // Loay
-        const val BASE_URL2 = "https://inquisitorial-elba-undistractedly.ngrok-free.dev/api/" // Ziad
+        const val BASE_URL2 = "https://ollie-wroth-tributarily.ngrok-free.dev/api/" // Loay
+        const val BASE_URL = "https://inquisitorial-elba-undistractedly.ngrok-free.dev/api/" // Ziad
         const val SEARCH_POST_TIME_DELAY = 500L
 
         const val LOW_GLUCOSE_VALUE = 70
@@ -14,4 +18,9 @@ class Constants {
 
         const val NAV_ANIM_DURATION = 220L
     }
+}
+
+fun Long.toFormattedDate(): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+    return sdf.format(Date(this))
 }

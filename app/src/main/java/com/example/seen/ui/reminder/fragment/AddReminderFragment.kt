@@ -222,7 +222,7 @@ class AddReminderFragment : Fragment() {
                 etMedication.error = getString(R.string.please_fill_medication_name)
                 etMedication.requestFocus()
             } else {
-                viewModel.insertMedicine(Medicine(0, name))
+                viewModel.insertMedicine(Medicine( medicine_name = name))
                 bottomSheetDialog.dismiss()
             }
         }

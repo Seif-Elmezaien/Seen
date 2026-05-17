@@ -12,6 +12,7 @@ import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
+import com.example.seen.domain.model.logs.CombinedLogRequestResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -27,6 +28,25 @@ interface SeenAPI {
 
     @POST("register")
     suspend fun signup(@Body request: SignupRequest): Response<LoginAndSignupResponse>
+
+    // ─── Logs ───────────────────────────────────────────────────────
+
+    @POST("logs/android")
+    suspend fun uploadLog(
+        @Header("Authorization") token: String,
+        @Body log: CombinedLogRequestResponse)
+    : Response<Unit>
+
+    @PUT("logs")
+    suspend fun updateLog(
+        @Body log: CombinedLogRequestResponse
+    ): Response<Unit>
+
+    @DELETE("logs")
+    suspend fun deleteLog( @Body log: CombinedLogRequestResponse ): Response<Unit>
+
+    @GET("logs")
+    suspend fun getLogs(): Response<List<CombinedLogRequestResponse>>
 
     // ─── Posts ────────────────────────────────────────────────────────────────
 

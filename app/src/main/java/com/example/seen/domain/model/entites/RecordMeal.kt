@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -17,7 +18,7 @@ import androidx.room.PrimaryKey
 data class RecordMeal(
     @PrimaryKey(autoGenerate = true)
     val meal_id: Int,
-    val log_id: Int,
+    val log_id: String,
     val meal_type: String, // "Breakfast", "Lunch", "Dinner", "Random"
     val meal_description: String,
     val total_carb: Int? = null,

@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -18,9 +19,9 @@ import androidx.room.PrimaryKey
 data class RecordGlucose(
     @PrimaryKey(autoGenerate = true)
     val reading_id: Int,
-    val log_id: Int,
+    val log_id: String,
     val reading_type: String, // "Fasting", "Before Meal", "After Meal", "Random".
     val glucose_level: Int,
     val a1c_estimation: Float? = null,
-    val notes: String? = null
+    val notes: String? = null,
 )

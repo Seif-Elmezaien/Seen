@@ -298,7 +298,7 @@ class AddLogsFragment : Fragment() {
                 etMedication.error = getString(R.string.please_fill_medication_name)
                 etMedication.requestFocus()
             } else {
-                viewModel.insertMedicine(Medicine(0, name))
+                viewModel.insertMedicine(Medicine(medicine_name = name))
                 bottomSheetDialog.dismiss()
             }
         }
@@ -494,12 +494,12 @@ class AddLogsFragment : Fragment() {
     private fun saveLog() {
         lifecycleScope.launch {
             val log = Log(
-                log_id = 0,
                 log_title = binding.etLogTitle.text.toString().trim(),
                 log_description = binding.etLogDescription.text.toString().trim(),
                 logged_at = selectedCalendar.timeInMillis
             )
-            val logId = viewModel.insertLog(log).toInt()
+            viewModel.insertLog(log)
+            val logId = log.log_id
 
             if (hasGlucoseFilled()) insertGlucoseRecord(logId)
             if (hasMedicationFilled()) insertMedicationRecord(logId)
@@ -509,7 +509,7 @@ class AddLogsFragment : Fragment() {
         }
     }
 
-    private suspend fun insertGlucoseRecord(logId: Int) {
+    private suspend fun insertGlucoseRecord(logId: String) {
         viewModel.insertRecordGlucose(
             RecordGlucose(
                 reading_id = 0,
@@ -522,7 +522,7 @@ class AddLogsFragment : Fragment() {
         )
     }
 
-    private suspend fun insertMedicationRecord(logId: Int) {
+    private suspend fun insertMedicationRecord(logId: String) {
         viewModel.insertRecordMedication(
             RecordMedication(
                 medication_id = 0,
@@ -533,7 +533,7 @@ class AddLogsFragment : Fragment() {
         )
     }
 
-    private suspend fun insertMealRecord(logId: Int) {
+    private suspend fun insertMealRecord(logId: String) {
         viewModel.insertRecordMeal(
             RecordMeal(
                 meal_id = 0,
