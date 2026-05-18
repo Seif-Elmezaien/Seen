@@ -23,6 +23,7 @@ import com.example.seen.databinding.FragmentPostDetailsBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.community.Comment
 import com.example.seen.ui.community.adapters.CommentAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
@@ -45,10 +46,12 @@ class PostDetailsFragment : Fragment() {
 
     private lateinit var commentAdapter: CommentAdapter
     private val args: PostDetailsFragmentArgs by navArgs()
-
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
+
+    // ─── New: track which comment user wants to edit/delete ───
+    private var selectedCommentId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,44 +72,130 @@ class PostDetailsFragment : Fragment() {
 
         viewModel.getPostComments(args.post.id, token!!)
 
+        observeGetComments()
+
+        observeAddComment()
+        observeEditComment()
+        observeDeleteComment()
+        observeLikeComment()
+
+        // ─── New: Send button click ───
+        binding.btnSendComment.setOnClickListener {
+            val text = binding.etComment.text.toString().trim()
+            if (text.isNotEmpty()) {
+                viewModel.addComment(token!!, args.post.id, text)
+                binding.etComment.setText("")
+            }
+        }
+    }
+
+
+
+    private fun observeGetComments() {
         viewModel.communityComment.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { commentResponse ->
-
                         val comments = commentResponse.comments ?: emptyList()
-
                         commentAdapter.differ.submitList(comments)
                         isLastPage = comments.size < args.post.comments_count
-                        if (isLastPage){
-                            binding.rvComments.setPadding(0, 0, 0, 0)
-                        }
+                        if (isLastPage) binding.rvComments.setPadding(0, 0, 0, 0)
+                    }
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "Error: $it", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                is Resource.Loading -> showProgressBar()
+            }
+        })
+    }
+    private fun observeAddComment() {
+        viewModel.addCommentResult.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let { newComment ->
+                        // add the new comment at top of list
+                        commentAdapter.addComment(newComment)
+                        // scroll to top so user sees it
+                        binding.rvComments.scrollToPosition(0)
                     }
                 }
                 is Resource.Error -> {
                     hideProgressBar()
-                    response.message?.let { message ->
-                        Toast.makeText(activity, "Error: $message", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> showProgressBar()
+            }
+        }
+    }
+
+    private fun observeEditComment() {
+        viewModel.editCommentResult.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let { updatedComment ->
+                        // update just that one comment in the list
+                        commentAdapter.updateComment(updatedComment)
                     }
                 }
-                is Resource.Loading -> {
-                    showProgressBar()
+                is Resource.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
                 }
+                is Resource.Loading -> showProgressBar()
             }
-        })
+        }
+    }
+
+    private fun observeDeleteComment() {
+        viewModel.deleteCommentResult.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    // remove the deleted comment from the list
+                    commentAdapter.removeComment(selectedCommentId)
+                    selectedCommentId = -1
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> showProgressBar()
+            }
+        }
+    }
+
+    private fun observeLikeComment() {
+        viewModel.likeCommentResult.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    // UI already updated optimistically in adapter
+                    // nothing extra needed here
+                }
+                is Resource.Error -> {
+                    Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> { /* optional: show small loader */ }
+            }
+        }
     }
 
     private fun hideProgressBar() {
         binding.paginationProgressBar.visibility = View.INVISIBLE
         isLoading = false
     }
-
     private fun showProgressBar() {
         binding.paginationProgressBar.visibility = View.VISIBLE
         isLoading = true
     }
-
     val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
@@ -135,8 +224,6 @@ class PostDetailsFragment : Fragment() {
             }
         }
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -195,7 +282,6 @@ class PostDetailsFragment : Fragment() {
             }
         }
     }
-
     private fun setProfileBackground(messageType : String) = when (messageType) {
         "Type1" -> R.drawable.avatar_border_type1
         "Type2" -> R.drawable.avatar_border_type2
@@ -203,7 +289,6 @@ class PostDetailsFragment : Fragment() {
         "MODY" -> R.drawable.avatar_border_mody
         else ->  R.drawable.avatar_border_gestational
     }
-
     private fun setCategoryBackground(messageType: String): Triple<Int, Int, Int> = when (messageType) {
         "Type1 / LADA"  -> Triple(R.drawable.bg_diabetes_type1,       R.color.profile_type1_stroke,       R.string.category_type1_lada)
         "Type2"         -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
@@ -212,15 +297,68 @@ class PostDetailsFragment : Fragment() {
         "Advices"       -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
         else            -> Triple(R.drawable.bg_diabetes_general,  R.color.general_yellow, R.string.category_general)
     }
+    private fun setCommentRecyclerView() {
+        commentAdapter = CommentAdapter(
+            context = requireContext(),
 
+            // ─── Like: toggle like on server ───
+            onLikeClick = { comment ->
+                viewModel.likeComment(token!!, comment.id ?: return@CommentAdapter)
+            },
 
-    private fun setCommentRecyclerView(){
-        commentAdapter = CommentAdapter(requireContext())
+            // ─── Edit: show a dialog to edit text ───
+            onEditClick = { comment ->
+                selectedCommentId = comment.id ?: return@CommentAdapter
+                showEditCommentDialog(comment)
+            },
+
+            // ─── Delete: show confirmation dialog ───
+            onDeleteClick = { comment ->
+                selectedCommentId = comment.id ?: return@CommentAdapter
+                showDeleteCommentDialog(comment)
+            }
+        )
+
         binding.rvComments.apply {
             adapter = commentAdapter
             layoutManager = LinearLayoutManager(activity)
             addOnScrollListener(this@PostDetailsFragment.scrollListener)
         }
+    }
+
+    // ════════════════════════════════════════════════════════
+    //  Dialogs
+    // ════════════════════════════════════════════════════════
+
+    private fun showEditCommentDialog(comment: Comment) {
+        // simple input dialog
+        val editText = android.widget.EditText(requireContext())
+        editText.setText(comment.comment_text)
+
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Edit Comment")
+            .setView(editText)
+            .setPositiveButton("Save") { _, _ ->
+                val newText = editText.text.toString().trim()
+                if (newText.isNotEmpty()) {
+                    //!! (Non-null Assertion)
+                    viewModel.editComment(token!!, comment.id!!, newText)
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showDeleteCommentDialog(comment: Comment) {
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Delete Comment")
+            .setMessage("Are you sure you want to delete this comment?")
+            .setPositiveButton("Delete") { _, _ ->
+                //!! (Non-null Assertion)
+                viewModel.deleteComment(token!!, comment.id!!)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     fun getRelativeTime(isoTimestamp: String): String {
@@ -279,5 +417,4 @@ class PostDetailsFragment : Fragment() {
             insets
         }
     }
-
 }

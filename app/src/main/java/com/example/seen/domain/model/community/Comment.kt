@@ -7,6 +7,6 @@ data class Comment(
     val likes_count : Int? = null,
     val post_id: Int? = null,
     val updated_at: String? ="",
-    val user: PostUser,
+    val user: PostUser?,
     val is_liked : Boolean? = null
 )

@@ -127,7 +127,7 @@ interface SeenAPI {
     suspend fun getCommentLikes(
         @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int,
-    ): PostUser
+    ): Response<PostUser>
 
     // ─── Search ───────────────────────────────────────────────────────────────
 

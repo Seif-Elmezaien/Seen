@@ -20,7 +20,10 @@ import java.util.Locale
 import java.util.TimeZone
 
 class CommentAdapter(
-    val context: Context
+    val context: Context,
+    private val onLikeClick: (Comment) -> Unit,
+    private val onEditClick: (Comment) -> Unit,
+    private val onDeleteClick: (Comment) -> Unit,
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     inner class CommentViewHolder(val binding: ItemCommunityCommentBinding) : RecyclerView.ViewHolder(binding.root)
@@ -60,17 +63,52 @@ class CommentAdapter(
     ) {
         val comment = differ.currentList[position]
         holder.binding.apply {
-            tvUserCommentName.text = comment.user.full_name
+            tvUserCommentName.text = comment.user?.full_name ?: ""
             tvCommentTime.text = getRelativeTime(comment.created_at ?: "")
             tvCommentsLikesCount.text = comment.likes_count.toString()
-            flCommentAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(comment.user.diabetes_type ?: ""))
+            flCommentAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(comment.user?.diabetes_type ?: ""))
             Glide.with(root)
-                .load(comment.user.profile_picture.takeIf { it.isNotEmpty() })
+                .load(comment.user?.profile_picture?.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivCommentProfile)
             tvCommunty1stcomment.text = comment.comment_text
             ivCommentsLike.isSelected = comment.is_liked ?: false
+            ivCommentsLike.setOnClickListener {
+                onLikeClick(comment)
+            }
+
+            // ─── Edit button ───
+            editComment.setOnClickListener {
+                onEditClick(comment)
+            }
+
+            // ─── Delete button ───
+            deleteComment.setOnClickListener {
+                onDeleteClick(comment)
+            }
         }
+    }
+
+    // ─── New: Helper to update one comment locally after like/edit ───
+    fun addComment(comment: Comment) {
+        val newList = differ.currentList.toMutableList()
+        newList.add(0, comment)
+        differ.submitList(newList.toList())  // ← toList() forces a NEW list reference
+    }
+
+    fun updateComment(comment: Comment) {
+        val newList = differ.currentList.toMutableList()
+        val index = newList.indexOfFirst { it.id == comment.id }
+        if (index != -1) {
+            newList[index] = comment
+            differ.submitList(newList.toList())
+        }
+    }
+
+    fun removeComment(commentId: Int) {
+        val newList = differ.currentList.toMutableList()
+        newList.removeAll { it.id == commentId }
+        differ.submitList(newList.toList())
     }
 
     private fun setProfileBackground(messageType : String) = when (messageType) {
@@ -80,12 +118,11 @@ class CommentAdapter(
         "MODY" -> R.drawable.avatar_border_mody
          else ->  R.drawable.avatar_border_gestational
     }
-
     fun getRelativeTime(isoTimestamp: String): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
         sdf.timeZone = TimeZone.getTimeZone("UTC")
 
-        val date = sdf.parse(isoTimestamp) ?: return ""
+        val date = try { sdf.parse(isoTimestamp) } catch (e: Exception) { null } ?: return ""
         val now = Date()
         val diffMillis = now.time - date.time
 
@@ -125,7 +162,4 @@ class CommentAdapter(
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
-
-
-
 }
