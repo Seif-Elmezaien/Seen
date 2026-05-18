@@ -1,20 +1,24 @@
 package com.example.seen.datasource.repository
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.remote.RetrofitInstance
-import com.example.seen.datasource.remote.SeenAPI
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
-import com.example.seen.domain.model.logs.CombinedLogRequestResponse
+import com.example.seen.domain.model.logs.CombinedLogRequest
 import com.example.seen.domain.model.logs.GlucoseRequest
 import com.example.seen.domain.model.logs.MealRequest
 import com.example.seen.domain.model.logs.MedicationRequest
+import com.example.seen.domain.model.logs.UpdateSince
 import com.example.seen.util.toFormattedDate
+import com.example.seen.util.toTimestamp
 
 class LogRepository(
     val db : SeenDatabase,
+    val prefs: SharedPreferences? = null
 ) {
 
     // Logs
@@ -60,12 +64,12 @@ class LogRepository(
             try {
                 val response = RetrofitInstance.api.uploadLog(
                     token,
-                    CombinedLogRequestResponse(
+                    CombinedLogRequest(
                         log_id = fullLog.log.log_id,
                         log_title = fullLog.log.log_title,
                         log_description = fullLog.log.log_description,
                         logged_at = fullLog.log.logged_at.toFormattedDate(),
-                        recordGlucose = fullLog.glucose?.let {
+                        record_glucose = fullLog.glucose?.let {
                             GlucoseRequest(
                                 glucose_level = it.glucose_level,
                                 reading_type = it.reading_type,
@@ -73,7 +77,7 @@ class LogRepository(
                                 notes = it.notes
                             )
                         },
-                        recordMeal = fullLog.meal?.let {
+                        record_meal = fullLog.meal?.let {
                             MealRequest(
                                 meal_type = it.meal_type,
                                 meal_description = it.meal_description,
@@ -82,7 +86,7 @@ class LogRepository(
                                 notes = it.notes
                             )
                         },
-                        recordMedication = fullLog.medication?.let {
+                        record_medication = fullLog.medication?.let {
                             MedicationRequest(
                                 medications = it.medications,
                                 notes = it.notes
@@ -96,6 +100,76 @@ class LogRepository(
             } catch (e: Exception) {
                 // no internet, skip and retry next time
             }
+        }
+    }
+
+    suspend fun syncFromServer(token: String) {
+        try {
+            val lastSync = prefs?.getLong("last_sync", 0L)
+            val updatedSince = if (lastSync == 0L) null else lastSync?.toFormattedDate()
+
+            android.util.Log.d("logrepo", "syncFromServer: $updatedSince")
+            val response = RetrofitInstance.api.syncLogs(token, updatedSince)
+            if (response.isSuccessful) {
+
+                val logs = response.body()?.data ?: return
+
+                logs.forEach { serverLog ->
+
+                    db.logDao.insertLog(
+                        Log(
+                            log_id = serverLog.log_id,
+                            log_title = serverLog.log_title ?: "",
+                            log_description = serverLog.log_description ?: "",
+                            logged_at = serverLog.logged_at.toTimestamp(),
+                            is_synced = true
+                        )
+                    )
+
+                    serverLog.record_glucose?.let {
+                        db.logDao.insertRecordGlucose(
+                            RecordGlucose(
+                                reading_id = 0,
+                                log_id = serverLog.log_id,
+                                reading_type = it.reading_type,
+                                glucose_level = it.glucose_level,
+                                a1c_estimation = it.a1c_estimation,
+                                notes = it.notes
+                            )
+                        )
+                    }
+
+                    serverLog.record_meal?.let {
+                        db.logDao.insertRecordMeal(
+                            RecordMeal(
+                                meal_id = 0,
+                                log_id = serverLog.log_id,
+                                meal_type = it.meal_type,
+                                meal_description = it.meal_description ?: "",
+                                total_carb = it.total_carb,
+                                total_calories = it.total_calories,
+                                notes = it.notes
+                            )
+                        )
+                    }
+
+                    serverLog.record_medication?.let {
+                        db.logDao.insertRecordMedication(
+                            RecordMedication(
+                                medication_id = 0,
+                                log_id = serverLog.log_id,
+                                medications = it.medications,
+                                notes = it.notes
+                            )
+                        )
+                    }
+                }
+
+                // save last sync time after successful fetch
+                prefs?.edit { putLong("last_sync", System.currentTimeMillis()) }
+            }
+        } catch (e: Exception) {
+            // no internet, skip
         }
     }
 

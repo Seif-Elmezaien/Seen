@@ -24,3 +24,20 @@ fun Long.toFormattedDate(): String {
     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
     return sdf.format(Date(this))
 }
+
+fun String?.toTimestamp(): Long {
+    if (this == null) return System.currentTimeMillis()
+    return try {
+        // try ISO 8601 format first (from server)
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
+        sdf.parse(this)?.time ?: System.currentTimeMillis()
+    } catch (e: Exception) {
+        try {
+            // fallback to normal format
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            sdf.parse(this)?.time ?: System.currentTimeMillis()
+        } catch (e: Exception) {
+            System.currentTimeMillis()
+        }
+    }
+}

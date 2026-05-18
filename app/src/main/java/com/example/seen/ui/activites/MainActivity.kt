@@ -2,6 +2,7 @@ package com.example.seen.ui.activites
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -28,8 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
-    private lateinit var repository: LogRepository
+    private lateinit var logRepository: LogRepository
     private var token : String? = null
+    lateinit var sharedPref : SharedPreferences
 
     // Fragments that should hide the bottom bar
     private val fullScreenDestinations = setOf(
@@ -46,15 +48,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val db = SeenDatabase(applicationContext)
-        repository = LogRepository(db)
-
+        sharedPref = getSharedPreferences("Auth", MODE_PRIVATE)
         token = checkToken()
 
-        if(checkToken() == null){
+        if(token == null){
             goToAuthActivity()
             return
         }
+
+        val db = SeenDatabase(applicationContext)
+        logRepository = LogRepository(db, sharedPref)
 
         setUpSystemSettings()
         setUpBottomMenuNavController()
@@ -67,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkToken(): String? {
-        val sharedPref = getSharedPreferences("Auth", MODE_PRIVATE)
+
         return sharedPref.getString("token", null)
     }
 
@@ -128,7 +131,8 @@ class MainActivity : AppCompatActivity() {
             override fun onAvailable(network: Network) {
                 // triggers every time internet comes back
                 lifecycleScope.launch {
-                    repository.syncToServer("Bearer $token")
+                    logRepository.syncToServer("Bearer $token")
+                    logRepository.syncFromServer("Bearer $token")
                 }
             }
         })

@@ -7,10 +7,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
 import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Log
-import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication

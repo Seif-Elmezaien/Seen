@@ -12,7 +12,8 @@ import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
-import com.example.seen.domain.model.logs.CombinedLogRequestResponse
+import com.example.seen.domain.model.logs.CombinedLogRequest
+import com.example.seen.domain.model.logs.CombinedLogResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -34,19 +35,26 @@ interface SeenAPI {
     @POST("logs/android")
     suspend fun uploadLog(
         @Header("Authorization") token: String,
-        @Body log: CombinedLogRequestResponse)
+        @Body log: CombinedLogRequest)
     : Response<Unit>
 
     @PUT("logs")
     suspend fun updateLog(
-        @Body log: CombinedLogRequestResponse
+        @Header("Authorization") token: String,
+        @Body log: CombinedLogRequest
     ): Response<Unit>
 
     @DELETE("logs")
-    suspend fun deleteLog( @Body log: CombinedLogRequestResponse ): Response<Unit>
+    suspend fun deleteLog(
+        @Header("Authorization") token: String,
+        @Body log: CombinedLogRequest
+    ): Response<Unit>
 
-    @GET("logs")
-    suspend fun getLogs(): Response<List<CombinedLogRequestResponse>>
+    @GET("logs/sync")
+    suspend fun syncLogs(
+        @Header("Authorization") token: String,
+        @Query("last_sync") updatedSince: String?= null
+    ): Response<CombinedLogResponse>
 
     // ─── Posts ────────────────────────────────────────────────────────────────
 
