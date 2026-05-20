@@ -98,6 +98,20 @@ class HomeAdapter(
             ivMeal.visibility = if (logItem.meal == null) View.GONE else View.VISIBLE
             ivMedicine.visibility = if (logItem.medication == null) View.GONE else View.VISIBLE
 
+            val medicineParams = ivMedicine.layoutParams as ViewGroup.MarginLayoutParams
+            val mealParams = ivMeal.layoutParams as ViewGroup.MarginLayoutParams
+
+            if (glucoseValue == null && logItem.medication != null) {
+                medicineParams.marginStart = 0
+            }
+
+            if (logItem.medication == null && logItem.meal != null) {
+                mealParams.marginStart = 0
+            }
+
+            ivMedicine.layoutParams = medicineParams
+            ivMeal.layoutParams = mealParams
+
             root.setOnClickListener {
                 onItemClickListener?.invoke(logItem)
             }

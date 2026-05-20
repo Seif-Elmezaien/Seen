@@ -37,8 +37,8 @@
             android:id="@+id/action_homeFragment_to_reminderFragment"
             app:destination="@id/reminderFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_displayLogsFragment"
-            app:destination="@id/displayLogsFragment" />
+            android:id="@+id/action_homeFragment_to_logDetailFragment"
+            app:destination="@id/logDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/communityFragment"
@@ -104,9 +104,9 @@
         android:label="fragment_create_post"
         tools:layout="@layout/fragment_create_post" />
     <fragment
-        android:id="@+id/displayLogsFragment"
-        android:name="com.example.seen.ui.home.fragment.DisplayLogsFragment"
-        android:label="DisplayLogsFragment" >
+        android:id="@+id/logDetailFragment"
+        android:name="com.example.seen.ui.home.fragment.LogDetailFragment"
+        android:label="LogDetailFragment" >
         <argument
             android:name="FullLog"
             app:argType="com.example.seen.domain.model.entites.FullLog" />

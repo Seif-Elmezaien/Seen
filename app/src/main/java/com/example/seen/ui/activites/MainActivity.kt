@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     // Fragments that should hide the bottom bar
     private val fullScreenDestinations = setOf(
         R.id.addLogsFragment,
-        R.id.displayLogsFragment,
+        R.id.logDetailFragment,
         R.id.addReminderFragment,
         R.id.reminderFragment,
         R.id.homeEntryFragment,

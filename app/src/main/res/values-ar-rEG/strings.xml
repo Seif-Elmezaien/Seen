@@ -212,13 +212,18 @@
     <string name="medicine_name_hint">اكتب اسم الدواء</string>
     <string name="btn_add_medicine">إضافة الدواء</string>
 
-    <!-- DisplayLogFragment -->
+    <!-- LogDetailFragment -->
     <string name="edit_log">تعديل السجل</string>
     <string name="delete_log">مسح السجل</string>
     <string name="glucose_record">سجل الجلوكوز</string>
     <string name="medication_record">سجل الادوية</string>
     <string name="meal_record">سجل الوجبات</string>
     <string name="medications">الادوية</string>
+
+    <string name="alert_dialog_title_log">مسح السجل</string>
+    <string name="alert_dialog_message_log">هل أنت متأكد من رغبتك في حذف هذا السجل؟</string>
+    <string name="alert_dialog_positive_button_log">حذف</string>
+    <string name="alert_dialog_negative_button_log">الغاء</string>
 
 
     <!-- community fragment -->

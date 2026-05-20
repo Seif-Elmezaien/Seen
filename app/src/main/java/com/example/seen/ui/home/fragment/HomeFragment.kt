@@ -179,7 +179,7 @@ class HomeFragment : Fragment() {
 
         homeAdapter.setOnItemClickListener {
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToDisplayLogsFragment(it)
+                HomeFragmentDirections.actionHomeFragmentToLogDetailFragment(it)
             )
         }
     }
