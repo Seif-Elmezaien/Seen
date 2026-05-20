@@ -1,8 +1,11 @@
 package com.example.seen.domain.model.entites
 
+import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Relation
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class FullLog(
     @Embedded
     val log: Log,
@@ -24,4 +27,4 @@ data class FullLog(
     entityColumn = "log_id"
     )
     val medication: RecordMedication?
-)
+) : Parcelable

@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_homeFragment_to_reminderFragment"
             app:destination="@id/reminderFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_displayLogsFragment"
+            app:destination="@id/displayLogsFragment" />
     </fragment>
     <fragment
         android:id="@+id/communityFragment"
@@ -45,6 +48,12 @@
         <action
             android:id="@+id/action_communityFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
+        <action
+            android:id="@+id/action_communityFragment_to_communitySearchFragment"
+            app:destination="@id/communitySearchFragment" />
+        <action
+            android:id="@+id/action_communityFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
@@ -83,5 +92,23 @@
         <argument
             android:name="post"
             app:argType="com.example.seen.domain.model.community.Data" />
+    </fragment>
+    <fragment
+        android:id="@+id/communitySearchFragment"
+        android:name="com.example.seen.ui.community.fragment.CommunitySearchFragment"
+        android:label="fragment_community_search"
+        tools:layout="@layout/fragment_community_search" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.seen.ui.community.fragment.CreatePostFragment"
+        android:label="fragment_create_post"
+        tools:layout="@layout/fragment_create_post" />
+    <fragment
+        android:id="@+id/displayLogsFragment"
+        android:name="com.example.seen.ui.home.fragment.DisplayLogsFragment"
+        android:label="DisplayLogsFragment" >
+        <argument
+            android:name="FullLog"
+            app:argType="com.example.seen.domain.model.entites.FullLog" />
     </fragment>
 </navigation>

@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_post_cardview">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="25dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_post_cardview"
+                    android:elevation="10dp">
+
+                    <TextView
+                        android:id="@+id/tvLogDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:fontFamily="@font/cairo"
+                        android:text="May 3, 2026, 11:00 AM"
+                        android:textColor="@color/primary"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvLogTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="Morning Log"
+                        android:textColor="@color/title"
+                        android:textSize="30sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLogDate" />
+
+                    <TextView
+                        android:id="@+id/tvLogDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/cairo"
+                        android:text="Felt good after breakfast."
+                        android:textColor="@color/description"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLogTitle" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditLog"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/bg_display_log_button_gradient"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/edit_log"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_edit_log"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconSize="18dp"
+                        app:iconTint="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLogDescription" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDeleteLog"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="30dp"
+                        android:background="@drawable/bg_delete_log"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/delete_log"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bad_sugar_reading"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_delete"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/bad_sugar_reading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btnEditLog" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvGlucose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardElevation="8dp"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mcvHeader">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/HeaderGlucose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/ivGlucose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:src="@drawable/ic_glucose_log_display"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvGlucoseRecord"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/cairo_bold"
+                            android:text="@string/glucose_record"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ivGlucose"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/BodyGlucose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background_card_log_display"
+                        app:layout_constraintTop_toBottomOf="@id/HeaderGlucose"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <!-- GLUCOSE LEVEL -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionGlucoseLevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/good_sugar_reading_10"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelGlucoseLevel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/glucose_log_sugar_measurement_value_title"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvGlucoseLevel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="120 mg/dl"
+                                android:textSize="18sp"
+                                android:textColor="@color/good_sugar_reading"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelGlucoseLevel"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerGlucoseLevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionGlucoseLevel"/>
+
+                        <!-- READING TYPE -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionReadingType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerGlucoseLevel"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelReadingType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/glucose_log_measurement_type_title"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvReadingType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="random"
+                                android:textSize="18sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelReadingType"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerReadingType"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionReadingType"/>
+
+                        <!-- A1C ESTIMATION -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionA1c"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerReadingType"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelA1c"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/glucose_log_a1c_title"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvA1c"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="N/A"
+                                android:textSize="16sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelA1c"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerA1c"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionA1c"/>
+
+                        <!-- NOTES -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionGlucoseNotes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerA1c"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelGlucoseNotes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/notes_title"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvGlucoseNotes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="No notes provided"
+                                android:textSize="18sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelGlucoseNotes"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvMedication"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:visibility="visible"
+                android:elevation="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardElevation="8dp"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mcvGlucose">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/HeaderMedication"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/ivMedication"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:src="@drawable/ic_glucose_log_display"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvMedicationRecord"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/cairo_bold"
+                            android:text="@string/medication_record"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ivMedication"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/BodyMedication"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background_card_log_display"
+                        app:layout_constraintTop_toBottomOf="@id/HeaderMedication"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <!-- READING TYPE -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMedications"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMedications"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/medications"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <!-- Chips for selected medications -->
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroupMedications"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="24dp"
+                                android:layout_marginBottom="16dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/labelMedications"
+                                app:singleLine="false" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerMedications"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionMedications"/>
+
+                        <!-- NOTES -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMedicationNotes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerMedications"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMedicationNotes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/notes_title"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvMedicationNotes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="No notes provided"
+                                android:textSize="18sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelMedicationNotes"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvMeal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardElevation="8dp"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mcvMedication">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/HeaderMeal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/ivMeal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:src="@drawable/ic_meal_log_display"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvMealRecord"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/cairo_bold"
+                            android:text="@string/meal_record"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ivMeal"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/BodyMeal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background_card_log_display"
+                        app:layout_constraintTop_toBottomOf="@id/HeaderMeal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <!-- Meal TYPE -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMealType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMealType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/meal_type"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvMealType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="random"
+                                android:textSize="18sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelMealType"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerMealType"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionMealType"/>
+
+                        <!-- Meal Description -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMealDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerMealType"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMealDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/meal_description"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvMealDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="N/A"
+                                android:textSize="16sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelMealDescription"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerMealDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionMealDescription"/>
+
+                        <!-- Meal Carbs -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMealCarbs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerMealDescription"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMealCarbs"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/carbs_estimation"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvMealCarbs"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="N/A"
+                                android:textSize="16sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelMealCarbs"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerMealCarbs"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionMealCarbs"/>
+
+                        <!-- Meal Description -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMealCalories"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerMealCarbs"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMealCalories"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/calories_estimation"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvMealCalories"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="N/A"
+                                android:textSize="16sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelMealCalories"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/dividerMealCalories"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider_30"
+                            app:layout_constraintTop_toBottomOf="@id/sectionMealCalories"/>
+
+                        <!-- NOTES -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/sectionMealNotes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dividerMealCalories"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <TextView
+                                android:id="@+id/labelMealNotes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/notes_title"
+                                android:textAllCaps="true"
+                                android:textSize="11sp"
+                                android:textColor="@color/description"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvMealNotes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="No notes provided"
+                                android:textSize="18sp"
+                                android:textColor="@color/title"
+                                android:fontFamily="@font/cairo_semibold"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginEnd="16dp"
+                                app:layout_constraintTop_toBottomOf="@id/labelMealNotes"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

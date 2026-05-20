@@ -176,6 +176,12 @@ class HomeFragment : Fragment() {
         binding.ivCalendar.setOnClickListener {
             showDatePicker()
         }
+
+        homeAdapter.setOnItemClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToDisplayLogsFragment(it)
+            )
+        }
     }
 
     private fun selectDate(date: Long, selectedView: View) {
@@ -375,6 +381,7 @@ class HomeFragment : Fragment() {
         fullLog.medication?.let { viewModel.insertRecordMedication(it) }
         fullLog.meal?.let { viewModel.insertRecordMeal(it) }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

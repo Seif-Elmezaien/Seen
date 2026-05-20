@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
 import com.example.seen.databinding.ItemHomeLogsBinding
 import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.domain.model.entites.Reminder
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
 import java.text.SimpleDateFormat
@@ -96,6 +97,10 @@ class HomeAdapter(
             // Handle other icons
             ivMeal.visibility = if (logItem.meal == null) View.GONE else View.VISIBLE
             ivMedicine.visibility = if (logItem.medication == null) View.GONE else View.VISIBLE
+
+            root.setOnClickListener {
+                onItemClickListener?.invoke(logItem)
+            }
         }
     }
 
@@ -105,6 +110,13 @@ class HomeAdapter(
     private fun getSugarStyle(value: Int): Pair<Int, Int> = when {
         value in LOW_GLUCOSE_VALUE..HIGH_GLUCOSE_VALUE -> R.drawable.bg_blood_good_reading to R.color.good_sugar_reading
         else -> R.drawable.bg_blood_bad_reading to R.color.bad_sugar_reading
+    }
+
+
+    private var onItemClickListener: ((FullLog) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (FullLog) -> Unit) {
+        onItemClickListener = listener
     }
 
     override fun getItemCount(): Int {

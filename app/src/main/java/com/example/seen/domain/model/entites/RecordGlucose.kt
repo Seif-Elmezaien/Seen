@@ -1,11 +1,14 @@
 package com.example.seen.domain.model.entites
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import java.util.UUID
 
+@Parcelize
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Log::class,
@@ -15,7 +18,6 @@ import java.util.UUID
     )],
     indices = [Index(value = ["log_id"], unique = true)]
 )
-
 data class RecordGlucose(
     @PrimaryKey(autoGenerate = true)
     val reading_id: Int,
@@ -24,4 +26,4 @@ data class RecordGlucose(
     val glucose_level: Int,
     val a1c_estimation: Float? = null,
     val notes: String? = null,
-)
+): Parcelable

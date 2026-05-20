@@ -1,9 +1,12 @@
 package com.example.seen.domain.model.entites
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import java.util.UUID
 
+@Parcelize
 @Entity(tableName = "logs")
 data class Log(
     @PrimaryKey()
@@ -13,4 +16,4 @@ data class Log(
     val logged_at: Long = System.currentTimeMillis(), // store as timestamp
     val updated_at: Long = System.currentTimeMillis(),
     val is_synced: Boolean = false
-    )
+) : Parcelable

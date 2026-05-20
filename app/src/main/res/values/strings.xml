@@ -154,8 +154,6 @@
     <string name="seen_reminder">Seen Reminder</string>
     <string name="medicine_name_notification">Medicine:</string>
 
-
-
     <!-- AddLogs fragment -->
     <string name="logs">Logs</string>
     <string name="log_title">Title</string>
@@ -167,14 +165,14 @@
     <string name="button_glucose_title">Glucose</string>
     <string name="button_medication_title">Medication</string>
     <string name="button_meal_title">Meal</string>
-    <string name="glucose_log_measurement_type_title">Measurement type</string>
+    <string name="glucose_log_measurement_type_title">Reading type</string>
     <string name="glucose_log_measurement_type_random">Random</string>
     <string name="glucose_log_measurement_type_after_meal">After meal</string>
     <string name="glucose_log_measurement_type_before_meal">Before meal</string>
     <string name="glucose_log_measurement_type_fasting">Fasting</string>
-    <string name="glucose_log_sugar_measurement_value_title">Sugar measurement value</string>
+    <string name="glucose_log_sugar_measurement_value_title">Glucose level</string>
     <string name="glucose_log_sugar_measurement_value_hint">Blood sugar measurement value (mg/dl)</string>
-    <string name="glucose_log_a1c_title">A1C value</string>
+    <string name="glucose_log_a1c_title">A1C estimation</string>
     <string name="glucose_log_a1c_hint">A1C</string>
     <string name="notes_title">Notes</string>
     <string name="notes_hint">Write your Notes...</string>
@@ -209,6 +207,13 @@
     <string name="medicine_name_hint">Enter medicine name</string>
     <string name="btn_add_medicine">Add Medicine</string>
 
+    <!-- DisplayLogFragment -->
+    <string name="edit_log">Edit Log</string>
+    <string name="delete_log">Delete Log</string>
+    <string name="glucose_record">Glucose Record</string>
+    <string name="medication_record">Medication Record</string>
+    <string name="meal_record">Meal Record</string>
+    <string name="medications">Medications</string>
 
     <!-- community fragment -->
     <string name="category_type1_lada">Type 1 / LADA</string>
@@ -236,7 +241,6 @@
     <string name="time_one_day_ago">1 day ago</string>
     <string name="time_two_days_ago">2 days ago</string>
     <string name="time_days_ago">%d days ago</string>
-
 
 
 </resources>

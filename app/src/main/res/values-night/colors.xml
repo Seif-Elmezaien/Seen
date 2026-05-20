@@ -4,6 +4,8 @@
     <color name="secondary">#ADB4F3</color>
     <color name="secondary_2">#D7DAF3</color>
     <color name="background">#0A0E27</color>
+    <color name="background_card_log_display">#1E224F</color>
+
 
     <color name="reminder_item">#4F5376</color>
 
@@ -11,6 +13,8 @@
     <color name="description">#99A1AF</color>
     <color name="card_title">#FFFFFF</color>
     <color name="links">#ADB4F3</color>
+
+
 
     <color name="description_30">#4099A1AF</color>
     <color name="comment_background">#1AFFFFFF</color>
