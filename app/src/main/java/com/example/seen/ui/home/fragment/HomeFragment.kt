@@ -142,6 +142,7 @@ class HomeFragment : Fragment() {
         viewModel.selectedDate.observe(viewLifecycleOwner) { timestamp ->
             selectedDate = timestamp
             updateSelectedDateText(timestamp)
+            updateDateSelectorUi(timestamp)
         }
     }
 
@@ -161,6 +162,35 @@ class HomeFragment : Fragment() {
 
     private fun updateSelectedDateText(timestamp: Long) {
         binding.tvChosenDate.text = sdf.format(Date(timestamp))
+    }
+
+    private fun updateDateSelectorUi(timestamp: Long) {
+        val today = System.currentTimeMillis()
+        val yesterday = today - 24 * 60 * 60 * 1000
+
+        val isSameDay = { a: Long, b: Long ->
+            val sdf = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+            sdf.format(Date(a)) == sdf.format(Date(b))
+        }
+
+        resetDateSelector()
+
+        when {
+            isSameDay(timestamp, today) -> {
+                binding.tvToday.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
+                binding.tvToday.setTextColor(requireContext().getColor(R.color.primary))
+                binding.tvToday.isEnabled = false
+            }
+            isSameDay(timestamp, yesterday) -> {
+                binding.tvYesterday.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
+                binding.tvYesterday.setTextColor(requireContext().getColor(R.color.primary))
+                binding.tvYesterday.isEnabled = false
+            }
+            else -> {
+                binding.ivCalendar.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_tab_active)
+                binding.ivCalendar.setColorFilter(requireContext().getColor(R.color.primary))
+            }
+        }
     }
 
     private fun setupListeners() {
