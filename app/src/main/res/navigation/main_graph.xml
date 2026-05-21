@@ -110,5 +110,16 @@
         <argument
             android:name="FullLog"
             app:argType="com.example.seen.domain.model.entites.FullLog" />
+        <action
+            android:id="@+id/action_logDetailFragment_to_editLogsFragment"
+            app:destination="@id/editLogsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editLogsFragment"
+        android:name="com.example.seen.ui.home.fragment.EditLogsFragment"
+        android:label="EditLogsFragment" >
+        <argument
+            android:name="FullLog"
+            app:argType="com.example.seen.domain.model.entites.FullLog" />
     </fragment>
 </navigation>

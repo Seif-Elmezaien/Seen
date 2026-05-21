@@ -17,11 +17,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.seen.R
 import com.example.seen.databinding.FragmentAddLogsBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.MedicineRepository
+import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.RecordGlucose
@@ -46,9 +48,11 @@ import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import kotlin.getValue
 
-class AddLogsFragment : Fragment() {
+class EditLogsFragment : Fragment() {
     private var _binding: FragmentAddLogsBinding? = null
     private val binding get() = _binding!!
 
@@ -64,9 +68,11 @@ class AddLogsFragment : Fragment() {
 
     private val medicineList = mutableListOf<SelectedMedication>()
 
+    private val args: EditLogsFragmentArgs by navArgs()
+    private lateinit var fullLog: FullLog
+
     private var token : String? = null
     lateinit var sharedPref : SharedPreferences
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,6 +84,8 @@ class AddLogsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fullLog = args.FullLog
 
         initializeViewModel()
         setupUi()
@@ -105,8 +113,93 @@ class AddLogsFragment : Fragment() {
     }
 
     private fun setupUi() {
+        updateHeaderUi()
+        updateGlucoseUi(fullLog.glucose)
+        updateMedicationUi(fullLog.medication)
+        updateMealUi(fullLog.meal)
+        binding.btnAddNewLog.text = getString(R.string.edit_log)
+    }
+
+    private fun updateHeaderUi(){
+        binding.etLogTitle.setText(fullLog.log.log_title)
+        binding.etLogDescription.setText(fullLog.log.log_description)
+        selectedCalendar.time = Date(fullLog.log.logged_at)
         updateDateText()
         updateTimeText()
+    }
+
+    private fun updateGlucoseUi(glucose: RecordGlucose?){
+        if (glucose == null) {
+            return
+        }
+
+        selectedMeasurementType = glucose.reading_type
+
+        // ← add this
+        val glucoseButtons = mapOf(
+            "Random" to binding.tvGlucoseRandom,
+            "Before Meal" to binding.tvGlucoseBeforeMeal,
+            "After Meal" to binding.tvGlucoseAfterMeal,
+            "Fasting" to binding.tvGlucoseFasting
+        )
+        glucoseButtons[selectedMeasurementType]?.let { setTypeButtonActive(it) }
+
+        binding.etGlucoseLogValue.setText(glucose.glucose_level.toString())
+        binding.etGlucoseLogValue.background = ContextCompat.getDrawable(
+            requireContext(),
+            getSugarStyle(glucose.glucose_level)
+        )
+
+
+        if (glucose.a1c_estimation != null){
+            binding.etA1c.setText(glucose.a1c_estimation.toString())
+        }
+        if (glucose.notes != null){
+            binding.etGlucoseNotes.setText(glucose.notes)
+        }
+    }
+
+    private fun updateMedicationUi(medication: RecordMedication?){
+        if (medication == null) {
+            return
+        }
+
+        medicineList.addAll(medication.medications)
+
+        if (medication.notes != null){
+            binding.etMedicationNotes.setText(medication.notes)
+        }
+    }
+
+    private fun updateMealUi(meal: RecordMeal?){
+        if(meal == null){
+            return
+        }
+
+        selectedMealType = meal.meal_type
+
+        // ← add this
+        val mealButtons = mapOf(
+            "Breakfast" to binding.tvBreakfast,
+            "Lunch" to binding.tvLunch,
+            "Dinner" to binding.tvDinner,
+            "Snack" to binding.tvSnack
+        )
+        mealButtons[meal.meal_type]?.let { setTypeButtonActive(it) }
+
+        binding.etMealDescription.setText(meal.meal_description)
+
+        if (meal.total_carb != null){
+            binding.etCarbs.setText(meal.total_carb.toString())
+        }
+
+        if (meal.total_calories != null)(
+            binding.etCalories.setText(meal.total_calories.toString())
+        )
+
+        if (meal.notes != null){
+            binding.etMealNotes.setText(meal.notes)
+        }
     }
 
     private fun updateDateText() {
@@ -500,6 +593,7 @@ class AddLogsFragment : Fragment() {
     private fun saveLog() {
         lifecycleScope.launch {
             val log = Log(
+                log_id = fullLog.log.log_id,
                 log_title = binding.etLogTitle.text.toString().trim(),
                 log_description = binding.etLogDescription.text.toString().trim(),
                 logged_at = selectedCalendar.timeInMillis
@@ -511,8 +605,6 @@ class AddLogsFragment : Fragment() {
             if (hasMedicationFilled()) insertMedicationRecord(logId)
             if (hasMealFilled()) insertMealRecord(logId)
 
-            android.util.Log.d("AddLogs", "isOnline: ${requireContext().isOnline()}")
-            android.util.Log.d("AddLogs", "token: $token")
             if (requireContext().isOnline()){
                 viewModel.syncToServer(token!!)
             }

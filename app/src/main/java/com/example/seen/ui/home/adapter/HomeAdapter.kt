@@ -101,13 +101,14 @@ class HomeAdapter(
             val medicineParams = ivMedicine.layoutParams as ViewGroup.MarginLayoutParams
             val mealParams = ivMeal.layoutParams as ViewGroup.MarginLayoutParams
 
-            if (glucoseValue == null && logItem.medication != null) {
+            if (glucoseValue == null && logItem.meal != null) {
+                mealParams.marginStart = 0
+            }
+
+            if (logItem.medication == null && logItem.medication != null) {
                 medicineParams.marginStart = 0
             }
 
-            if (logItem.medication == null && logItem.meal != null) {
-                mealParams.marginStart = 0
-            }
 
             ivMedicine.layoutParams = medicineParams
             ivMeal.layoutParams = mealParams

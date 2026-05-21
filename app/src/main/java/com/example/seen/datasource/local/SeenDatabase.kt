@@ -10,10 +10,12 @@ import com.example.seen.domain.model.entites.User
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.seen.datasource.local.dao.DeletedLogDao
 import com.example.seen.datasource.local.dao.LogDao
 import com.example.seen.datasource.local.dao.MedicineDao
 import com.example.seen.datasource.local.dao.ReminderDao
 import com.example.seen.datasource.local.dao.UserDao
+import com.example.seen.domain.model.entites.DeletedLog
 import com.example.seen.domain.model.entites.Medicine
 import com.example.seen.domain.model.entites.Reminder
 
@@ -26,9 +28,10 @@ import com.example.seen.domain.model.entites.Reminder
         RecordMeal::class,
         RecordMedication::class,
         Medicine::class,
-        Reminder::class  // add this
+        Reminder::class,
+        DeletedLog::class
     ],
-    version = 3
+    version = 4
 )
 @TypeConverters(Converters :: class)
 abstract class SeenDatabase : RoomDatabase() {
@@ -36,9 +39,7 @@ abstract class SeenDatabase : RoomDatabase() {
     abstract val logDao: LogDao
     abstract val reminderDao: ReminderDao
     abstract val medicineDao: MedicineDao
-
-
-
+    abstract val deletedLogDao: DeletedLogDao
 
     companion object {
         @Volatile

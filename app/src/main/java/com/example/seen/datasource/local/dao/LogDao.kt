@@ -23,26 +23,20 @@ interface LogDao {
     @Delete
     suspend fun deleteLog(log: Log)
 
+    @Query("Delete FROM logs WHERE log_id = :logId")
+    suspend fun deleteLog(logId: String)
+
     //RecordGlucose
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecordGlucose(recordGlucose: RecordGlucose)
-
-    @Delete
-    suspend fun deleteRecordGlucose(recordGlucose: RecordGlucose)
 
     //RecordMeal
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecordMeal(recordMeal: RecordMeal)
 
-    @Delete
-    suspend fun deleteRecordMeal(recordMeal: RecordMeal)
-
     //RecordMedication
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecordMedication(recordMedication: RecordMedication)
-
-    @Delete
-    suspend fun deleteRecordMedication(recordMedication: RecordMedication)
 
     //get All Logs
     @Transaction()
@@ -52,6 +46,10 @@ interface LogDao {
     @Transaction()
     @Query("SELECT * FROM logs WHERE logged_at BETWEEN :startOfDay AND :endOfDate ORDER BY logged_at DESC")
     fun getLogByDate(startOfDay: Long, endOfDate: Long) : LiveData<List<FullLog>>
+
+    @Transaction
+    @Query("SELECT * FROM logs WHERE log_id = :logId")
+    fun getLogById(logId: String): LiveData<FullLog>
 
     @Transaction
     @Query("SELECT * FROM logs WHERE is_synced = 0")

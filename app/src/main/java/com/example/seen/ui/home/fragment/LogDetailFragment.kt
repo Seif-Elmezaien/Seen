@@ -1,5 +1,7 @@
 package com.example.seen.ui.home.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,10 +16,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.seen.R
 import com.example.seen.databinding.FragmentLogDetailBinding
 import com.example.seen.datasource.local.SeenDatabase
-import com.example.seen.datasource.local.SeenDatabase.Companion.invoke
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
-import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
@@ -27,6 +27,7 @@ import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
+import com.example.seen.util.isOnline
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.text.SimpleDateFormat
@@ -44,6 +45,9 @@ class LogDetailFragment : Fragment() {
     private val args: LogDetailFragmentArgs by navArgs()
     private lateinit var fullLog: FullLog
 
+    private var token : String? = null
+    lateinit var sharedPref : SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +61,9 @@ class LogDetailFragment : Fragment() {
 
         fullLog = args.FullLog
         initializeViewModel()
+        observeLog()
         setupUi()
+        getToken()
         setupListeners()
 
     }
@@ -80,6 +86,15 @@ class LogDetailFragment : Fragment() {
             .get(HomeViewModel::class.java)
     }
 
+    private fun observeLog(){
+        viewModel.getLogById(fullLog.log.log_id).observe(viewLifecycleOwner) { updatedLog ->
+            if (updatedLog != null) {
+                fullLog = updatedLog
+                setupUi()
+            }
+        }
+    }
+
     private fun setupUi(){
 
         setupHeader(fullLog.log)
@@ -90,7 +105,9 @@ class LogDetailFragment : Fragment() {
 
     private fun setupListeners(){
         binding.btnEditLog.setOnClickListener {
-
+            findNavController().navigate(
+                LogDetailFragmentDirections.actionLogDetailFragmentToEditLogsFragment(fullLog)
+            )
         }
 
         binding.btnDeleteLog.setOnClickListener {
@@ -239,10 +256,20 @@ class LogDetailFragment : Fragment() {
             .setMessage(getString(R.string.alert_dialog_message_log))
             .setPositiveButton(getString(R.string.alert_dialog_positive_button_log)) { _, _ ->
                 viewModel.deleteLog(fullLog.log)
+
+                if (requireContext().isOnline()){
+                    viewModel.syncToServer(token!!)
+                }
+
                 findNavController().popBackStack()
             }
             .setNegativeButton(getString(R.string.alert_dialog_negative_button_log), null)
             .show()
+    }
+
+    private fun getToken() {
+        sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
+        token = "Bearer " + sharedPref.getString("token", null)
     }
 
     override fun onDestroyView() {

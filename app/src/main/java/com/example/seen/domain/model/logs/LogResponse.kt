@@ -1,6 +1,6 @@
 package com.example.seen.domain.model.logs
 
-data class CombinedLogResponse(
+data class LogResponse(
     val success: Boolean,
-    val data: List<CombinedLogRequest>
+    val data: LogData
 )

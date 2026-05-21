@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
-    private lateinit var logRepository: LogRepository
+    lateinit var logRepository: LogRepository
     private var token : String? = null
     lateinit var sharedPref : SharedPreferences
 
@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private val fullScreenDestinations = setOf(
         R.id.addLogsFragment,
         R.id.logDetailFragment,
+        R.id.editLogsFragment,
         R.id.addReminderFragment,
         R.id.reminderFragment,
         R.id.homeEntryFragment,
@@ -71,7 +72,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkToken(): String? {
-
         return sharedPref.getString("token", null)
     }
 

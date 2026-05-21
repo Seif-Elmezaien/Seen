@@ -4,15 +4,16 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.remote.RetrofitInstance
+import com.example.seen.domain.model.entites.DeletedLog
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
-import com.example.seen.domain.model.logs.CombinedLogRequest
+import com.example.seen.domain.model.entites.SelectedMedication
+import com.example.seen.domain.model.logs.LogRequest
 import com.example.seen.domain.model.logs.GlucoseRequest
 import com.example.seen.domain.model.logs.MealRequest
 import com.example.seen.domain.model.logs.MedicationRequest
-import com.example.seen.domain.model.logs.UpdateSince
 import com.example.seen.util.toFormattedDate
 import com.example.seen.util.toTimestamp
 
@@ -22,33 +23,27 @@ class LogRepository(
 ) {
 
     // Logs
-    suspend fun insertLog(log: Log) =
+    suspend fun insertLog(log: Log) {
         db.logDao.insertLog(log)
+        db.deletedLogDao.remove(log.log_id)
+    }
 
-    suspend fun deleteLog(log: Log) =
-        db.logDao.deleteLog(log)
+    suspend fun deleteLog(log: Log) {
+        db.logDao.deleteLog(log)                          // delete locally
+        db.deletedLogDao.insert(DeletedLog(log.log_id))   // queue for server
+    }
 
     // RecordGlucose
     suspend fun insertRecordGlucose(recordGlucose: RecordGlucose) =
         db.logDao.insertRecordGlucose(recordGlucose)
 
-    suspend fun deleteRecordGlucose(recordGlucose: RecordGlucose) =
-        db.logDao.deleteRecordGlucose(recordGlucose)
-
     // RecordMeal
     suspend fun insertRecordMeal(recordMeal: RecordMeal) =
         db.logDao.insertRecordMeal(recordMeal)
 
-    suspend fun deleteRecordMeal(recordMeal: RecordMeal) =
-        db.logDao.deleteRecordMeal(recordMeal)
-
-
     // RecordMedication
     suspend fun insertRecordMedication(recordMedication: RecordMedication) =
         db.logDao.insertRecordMedication(recordMedication)
-
-    suspend fun deleteRecordMedication(recordMedication: RecordMedication) =
-        db.logDao.deleteRecordMedication(recordMedication)
 
     // get all Logs
     fun getAllLogs() =
@@ -57,14 +52,18 @@ class LogRepository(
     fun getLogsByDate(startOfDay: Long, endOfDay: Long) =
         db.logDao.getLogByDate(startOfDay, endOfDay)
 
+    fun getLogById(logId: String) =
+        db.logDao.getLogById(logId)
+
     // ↓ Sync
     suspend fun syncToServer(token : String) {
         val unsyncedLogs = db.logDao.getUnsyncedFullLogs()
         unsyncedLogs.forEach { fullLog ->
+            val selectedMedication = fullLog.medication?.medications?.map { it.medication_name }
             try {
                 val response = RetrofitInstance.api.uploadLog(
                     token,
-                    CombinedLogRequest(
+                    LogRequest(
                         log_id = fullLog.log.log_id,
                         log_title = fullLog.log.log_title,
                         log_description = fullLog.log.log_description,
@@ -88,7 +87,7 @@ class LogRepository(
                         },
                         record_medication = fullLog.medication?.let {
                             MedicationRequest(
-                                medications = it.medications,
+                                medications = selectedMedication!!,
                                 notes = it.notes
                             )
                         }
@@ -101,6 +100,19 @@ class LogRepository(
                 // no internet, skip and retry next time
             }
         }
+
+        val pendingDeletes = db.deletedLogDao.getAll()
+        pendingDeletes.forEach { deleted ->
+            try {
+                val response = RetrofitInstance.api.deleteLog(token, deleted.log_id)
+                if (response.isSuccessful || response.code() == 404) {
+                    db.deletedLogDao.remove(deleted.log_id)
+                }
+
+            } catch (e: Exception) {
+                // offline, retry next time
+            }
+        }
     }
 
     suspend fun syncFromServer(token: String) {
@@ -108,13 +120,13 @@ class LogRepository(
             val lastSync = prefs?.getLong("last_sync", 0L)
             val updatedSince = if (lastSync == 0L) null else lastSync?.toFormattedDate()
 
-            android.util.Log.d("logrepo", "syncFromServer: $updatedSince")
             val response = RetrofitInstance.api.syncLogs(token, updatedSince)
             if (response.isSuccessful) {
 
-                val logs = response.body()?.data ?: return
+                val newLogs = response.body()?.data?.upserted_logs ?: return
+                val deletedLogs = response.body()?.data?.deleted_log_ids ?: emptyList()
 
-                logs.forEach { serverLog ->
+                newLogs.forEach { serverLog ->
 
                     db.logDao.insertLog(
                         Log(
@@ -154,15 +166,22 @@ class LogRepository(
                     }
 
                     serverLog.record_medication?.let {
+                        val selectedMedication = it.medications.map { name ->
+                            SelectedMedication(name)
+                        }
                         db.logDao.insertRecordMedication(
                             RecordMedication(
                                 medication_id = 0,
                                 log_id = serverLog.log_id,
-                                medications = it.medications,
+                                medications = selectedMedication,
                                 notes = it.notes
                             )
                         )
                     }
+                }
+
+                deletedLogs.forEach {
+                    db.logDao.deleteLog(it)
                 }
 
                 // save last sync time after successful fetch
@@ -170,6 +189,7 @@ class LogRepository(
             }
         } catch (e: Exception) {
             // no internet, skip
+            android.util.Log.e("logrepo", "error: ${e.message}", e)
         }
     }
 

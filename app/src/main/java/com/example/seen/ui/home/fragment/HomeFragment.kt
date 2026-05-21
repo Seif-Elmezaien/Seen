@@ -1,14 +1,14 @@
 package com.example.seen.ui.home.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -20,9 +20,11 @@ import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.domain.model.entites.Log
 import com.example.seen.ui.home.adapter.HomeAdapter
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
+import com.example.seen.util.isOnline
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -37,7 +39,6 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.collections.get
 
 
 class HomeFragment : Fragment() {
@@ -49,6 +50,9 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private var selectedDate = System.currentTimeMillis()
     private val sdf = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+
+    private var token : String? = null
+    lateinit var sharedPref : SharedPreferences
 
 
     override fun onCreateView(
@@ -66,6 +70,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
         setupUI()
+        getToken()
         setupListeners()
         observeData()
         deleteOnSwipe()
@@ -352,17 +357,26 @@ class HomeFragment : Fragment() {
                 return true
             }
 
+            var undoClicked = false
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
                 val fullLog = homeAdapter.differ.currentList[position]
                 viewModel.deleteLog(fullLog.log)
+
                 Snackbar.make(binding.root, "deleted", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo"){
+                        undoClicked = true
                         undoDeletedLog(fullLog)
                     }
                     addCallback(object : Snackbar.Callback() {
-                        override fun onDismissed(snackbar: Snackbar?, event: Int) {
-                            // deletion is already done, nothing extra needed
+                        override fun onDismissed(snackbar: Snackbar?, event: Int)
+                        {
+                            if (!undoClicked && requireContext().isOnline()) {
+                                android.util.Log.d("Home", "undo not clicked")
+                                viewModel.syncToServer(token!!)
+                            }
+                            undoClicked = false
                         }
                     })
                     show()
@@ -380,6 +394,11 @@ class HomeFragment : Fragment() {
         fullLog.glucose?.let { viewModel.insertRecordGlucose(it) }
         fullLog.medication?.let { viewModel.insertRecordMedication(it) }
         fullLog.meal?.let { viewModel.insertRecordMeal(it) }
+    }
+
+    private fun getToken() {
+        sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
+        token = "Bearer " + sharedPref.getString("token", null)
     }
 
 

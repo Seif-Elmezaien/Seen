@@ -37,4 +37,7 @@ class AddLogsViewModel(
         medicineRepository.insertMedicine(medicine)
     }
 
+    suspend fun syncToServer(token: String) =
+        logRepository.syncToServer(token)
+
 }

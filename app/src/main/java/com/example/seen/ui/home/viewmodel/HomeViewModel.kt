@@ -65,4 +65,11 @@ class HomeViewModel(
     fun insertRecordMeal(recordMeal: RecordMeal) = viewModelScope.launch {
         logRepository.insertRecordMeal(recordMeal)
     }
+
+    fun getLogById(logId: String) =
+        logRepository.getLogById(logId)
+
+    fun syncToServer(token: String) = viewModelScope.launch {
+        logRepository.syncToServer(token)
+    }
 }

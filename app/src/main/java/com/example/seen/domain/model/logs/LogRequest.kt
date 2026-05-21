@@ -1,6 +1,6 @@
 package com.example.seen.domain.model.logs
 
-data class CombinedLogRequest(
+data class LogRequest(
     val log_id: String,
     val log_title: String?,
     val log_description: String?,
