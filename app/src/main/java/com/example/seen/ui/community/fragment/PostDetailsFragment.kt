@@ -27,7 +27,14 @@ import com.example.seen.domain.model.community.Comment
 import com.example.seen.ui.community.adapters.CommentAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
+import com.example.seen.util.Constants.Companion.ADVICES
+import com.example.seen.util.Constants.Companion.GESTATIONAL
+import com.example.seen.util.Constants.Companion.LADA
+import com.example.seen.util.Constants.Companion.MODY
 import com.example.seen.util.Constants.Companion.POST_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.TYPE1_LADA
+import com.example.seen.util.Constants.Companion.TYPE_1
+import com.example.seen.util.Constants.Companion.TYPE_2
 import com.example.seen.util.Resource
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -283,19 +290,19 @@ class PostDetailsFragment : Fragment() {
         }
     }
     private fun setProfileBackground(messageType : String) = when (messageType) {
-        "Type1" -> R.drawable.avatar_border_type1
-        "Type2" -> R.drawable.avatar_border_type2
-        "LADA" -> R.drawable.avatar_border_lada
-        "MODY" -> R.drawable.avatar_border_mody
+        TYPE_1 -> R.drawable.avatar_border_type1
+        TYPE_2 -> R.drawable.avatar_border_type2
+        LADA -> R.drawable.avatar_border_lada
+        MODY -> R.drawable.avatar_border_mody
         else ->  R.drawable.avatar_border_gestational
     }
     private fun setCategoryBackground(messageType: String): Triple<Int, Int, Int> = when (messageType) {
-        "Type1 / LADA"  -> Triple(R.drawable.bg_diabetes_type1,       R.color.profile_type1_stroke,       R.string.category_type1_lada)
-        "Type2"         -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
-        "MODY"          -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
-        "Gestational"   -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
-        "Advices"       -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
-        else            -> Triple(R.drawable.bg_diabetes_general,  R.color.general_yellow, R.string.category_general)
+        TYPE1_LADA      -> Triple(R.drawable.bg_diabetes_type1,        R.color.profile_type1_stroke,       R.string.category_type1_lada)
+        TYPE_2          -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
+        MODY            -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
+        GESTATIONAL     -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
+        ADVICES         -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
+        else            -> Triple(R.drawable.bg_diabetes_general,      R.color.general_yellow,             R.string.category_general)
     }
     private fun setCommentRecyclerView() {
         commentAdapter = CommentAdapter(

@@ -24,6 +24,11 @@ import com.example.seen.domain.model.entites.Log
 import com.example.seen.ui.home.adapter.HomeAdapter
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
+import com.example.seen.util.Constants.Companion.GESTATIONAL
+import com.example.seen.util.Constants.Companion.LADA
+import com.example.seen.util.Constants.Companion.MODY
+import com.example.seen.util.Constants.Companion.TYPE_1
+import com.example.seen.util.Constants.Companion.TYPE_2
 import com.example.seen.util.isOnline
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -125,11 +130,11 @@ class HomeFragment : Fragment() {
 
     private fun setUserDiabetesType(userDiabetesType: String) =
         when(userDiabetesType){
-            "Type1" -> R.string.type_1
-            "Type2" -> R.string.type_2
-            "LADA"  -> R.string.type_lada
-            "MODY"  -> R.string.type_mody
-            "Gestational" -> R.string.type_gestational
+            TYPE_1 -> R.string.type_1
+            TYPE_2 -> R.string.type_2
+            LADA  -> R.string.type_lada
+            MODY  -> R.string.type_mody
+            GESTATIONAL -> R.string.type_gestational
             else -> R.string.type_1
         }
 

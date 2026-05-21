@@ -12,7 +12,11 @@ import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityCommentBinding
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
+import com.example.seen.util.Constants.Companion.LADA
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
+import com.example.seen.util.Constants.Companion.MODY
+import com.example.seen.util.Constants.Companion.TYPE_1
+import com.example.seen.util.Constants.Companion.TYPE_2
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -112,11 +116,11 @@ class CommentAdapter(
     }
 
     private fun setProfileBackground(messageType : String) = when (messageType) {
-        "Type1" -> R.drawable.avatar_border_type1
-        "Type2" -> R.drawable.avatar_border_type2
-        "LADA" -> R.drawable.avatar_border_lada
-        "MODY" -> R.drawable.avatar_border_mody
-         else ->  R.drawable.avatar_border_gestational
+        TYPE_1 -> R.drawable.avatar_border_type1
+        TYPE_2 -> R.drawable.avatar_border_type2
+        LADA -> R.drawable.avatar_border_lada
+        MODY -> R.drawable.avatar_border_mody
+        else ->  R.drawable.avatar_border_gestational
     }
     fun getRelativeTime(isoTimestamp: String): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())

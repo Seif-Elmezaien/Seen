@@ -12,6 +12,12 @@ import com.example.seen.databinding.FragmentQuestionnaire1Binding
 import com.example.seen.databinding.FragmentQuestionnaire2Binding
 import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
+import com.example.seen.util.Constants.Companion.GESTATIONAL
+import com.example.seen.util.Constants.Companion.LADA
+import com.example.seen.util.Constants.Companion.MODY
+import com.example.seen.util.Constants.Companion.OTHER
+import com.example.seen.util.Constants.Companion.TYPE_1
+import com.example.seen.util.Constants.Companion.TYPE_2
 import com.google.android.material.button.MaterialButton
 import kotlin.getValue
 
@@ -34,27 +40,27 @@ class Questionnaire2Fragment : Fragment() {
         viewModel = (activity as AuthActivity).viewModel
 
         binding.btnType1.setOnClickListener {
-            selectType("Type1", binding.btnType1)
+            selectType(TYPE_1, binding.btnType1)
         }
 
         binding.btnType2.setOnClickListener {
-            selectType("Type2", binding.btnType2)
+            selectType(TYPE_2, binding.btnType2)
         }
 
         binding.btnLada.setOnClickListener {
-            selectType("LADA", binding.btnLada)
+            selectType(LADA, binding.btnLada)
         }
 
         binding.btnMody.setOnClickListener {
-            selectType("MODY", binding.btnMody)
+            selectType(MODY, binding.btnMody)
         }
 
         binding.btnGestational.setOnClickListener {
-            selectType("Gestational", binding.btnGestational)
+            selectType(GESTATIONAL, binding.btnGestational)
         }
 
         binding.btnOther.setOnClickListener {
-            selectType("other", binding.btnOther)
+            selectType(OTHER, binding.btnOther)
         }
 
         binding.btnBack.setOnClickListener {

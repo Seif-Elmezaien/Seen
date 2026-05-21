@@ -15,36 +15,25 @@ class Constants {
         const val LOW_GLUCOSE_VALUE = 70
         const val HIGH_GLUCOSE_VALUE = 180
 
+        // Diabetes types
+        const val TYPE_1 = "Type1"
+        const val TYPE_2 = "Type2"
+        const val LADA = "LADA"
+        const val MODY = "MODY"
+        const val GESTATIONAL = "Gestational"
+        const val OTHER = "other"
+        const val PEN_SYRINGES = "Pen / Syringes"
+        const val PUMP = "pump"
+        const val NO_INSULIN = "No insulin"
+
+        // Community categories
+        const val GENERAL = "General"
+        const val TYPE1_LADA = "Type1 / LADA"
+        const val ADVICES = "Advices"
+
         const val POST_PAGE_SIZE = 10
         const val COMMENT_PAGE_SIZE = 20
 
         const val NAV_ANIM_DURATION = 220L
     }
-}
-
-fun Long.toFormattedDate(): String {
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
-    return sdf.format(Date(this))
-}
-
-fun String?.toTimestamp(): Long {
-    if (this == null) return System.currentTimeMillis()
-    return try {
-        // try ISO 8601 format first (from server)
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
-        sdf.parse(this)?.time ?: System.currentTimeMillis()
-    } catch (e: Exception) {
-        try {
-            // fallback to normal format
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            sdf.parse(this)?.time ?: System.currentTimeMillis()
-        } catch (e: Exception) {
-            System.currentTimeMillis()
-        }
-    }
-}
-
-fun Context.isOnline(): Boolean {
-    val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return cm.activeNetwork != null
 }

@@ -22,8 +22,13 @@ import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
-import com.example.seen.util.Constants.Companion.COMMENT_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.ADVICES
+import com.example.seen.util.Constants.Companion.GENERAL
+import com.example.seen.util.Constants.Companion.GESTATIONAL
+import com.example.seen.util.Constants.Companion.MODY
 import com.example.seen.util.Constants.Companion.POST_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.TYPE1_LADA
+import com.example.seen.util.Constants.Companion.TYPE_2
 import com.example.seen.util.Resource
 import com.google.android.material.chip.Chip
 
@@ -174,7 +179,7 @@ class CommunityFragment : Fragment() {
         token = "Bearer " + sharedPref.getString("token", null)
     }
 
-    var selectedCategory = "General"
+    var selectedCategory = GENERAL
 
     private fun handleChips() {
         binding.chipGroupCategories.children
@@ -185,12 +190,12 @@ class CommunityFragment : Fragment() {
 
         binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedIds ->
             val newCategory = when (checkedIds.firstOrNull()) {
-                R.id.chipGeneral     -> "General"
-                R.id.chipType1       -> "Type1 / LADA"
-                R.id.chipType2       -> "Type2"
-                R.id.chipMonogenic   -> "MODY"
-                R.id.chipGestational -> "Gestational"
-                R.id.chipAdvise      -> "Advices"
+                R.id.chipGeneral     -> GENERAL
+                R.id.chipType1Lada   -> TYPE1_LADA
+                R.id.chipType2       -> TYPE_2
+                R.id.chipMonogenic   -> MODY
+                R.id.chipGestational -> GESTATIONAL
+                R.id.chipAdvise      -> ADVICES
                 else -> selectedCategory
             }
 

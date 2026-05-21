@@ -11,6 +11,9 @@ import com.example.seen.R
 import com.example.seen.databinding.FragmentQuestionnaire3Binding
 import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
+import com.example.seen.util.Constants.Companion.NO_INSULIN
+import com.example.seen.util.Constants.Companion.PEN_SYRINGES
+import com.example.seen.util.Constants.Companion.PUMP
 import com.google.android.material.button.MaterialButton
 import kotlin.getValue
 
@@ -35,15 +38,15 @@ class Questionnaire3Fragment : Fragment() {
         viewModel = (activity as AuthActivity).viewModel
 
         binding.btnPen.setOnClickListener {
-            selectType("Pen / Syringes", binding.btnPen)
+            selectType(PEN_SYRINGES, binding.btnPen)
         }
 
         binding.btnPump.setOnClickListener {
-            selectType("pump", binding.btnPump)
+            selectType(PUMP, binding.btnPump)
         }
 
         binding.btnNoInsulin.setOnClickListener {
-            selectType("No insulin", binding.btnNoInsulin)
+            selectType(NO_INSULIN, binding.btnNoInsulin)
         }
 
         binding.btnBack.setOnClickListener {
