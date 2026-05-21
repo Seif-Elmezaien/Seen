@@ -1,6 +1,7 @@
 package com.example.seen.ui.community.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,22 +89,53 @@ class PostAdapter(
             }
             tvCategory.background = ContextCompat.getDrawable(context, bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(context, colorRes))
+            ivLike.isSelected = post.is_liked ?: false
             tvLikesCount.text = post.likes_count.toString()
             tvCommentsCount.text = post.comments_count.toString()
             Glide.with(root)
                 .load(post.user.profile_picture.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivProfile)
-            root.setOnClickListener {
-                onItemClickListener?.invoke(post)
+            ivComment.setOnClickListener {
+                onCommentClickListener?.invoke(post)
+            }
+
+            Log.d("LIKE_DEBUG", "isLiked ? = ${post.is_liked}")
+            ivLike.setOnClickListener {
+
+                val currentList = differ.currentList.toMutableList()
+
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+
+                val currentPost = currentList[adapterPosition]
+
+                val newLikedState = !(currentPost.is_liked ?: false)
+
+                val updatedPost = currentPost.copy(
+                    is_liked = newLikedState,
+                    likes_count = currentPost.likes_count + if (newLikedState) 1 else -1
+                )
+
+                currentList[adapterPosition] = updatedPost
+
+                differ.submitList(currentList)
+                Log.d("LIKE_DEBUG", "isLiked ? = ${post.is_liked}")
+
+                onLikeClickListener?.invoke(updatedPost)
             }
         }
     }
 
-    private var onItemClickListener: ((Data) -> Unit)? = null
+    private var onCommentClickListener: ((Data) -> Unit)? = null
+    private var onLikeClickListener: ((Data) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Data) -> Unit){
-        onItemClickListener = listener
+    fun setOnCommentClickListener(listener: (Data) -> Unit){
+        onCommentClickListener = listener
+    }
+
+    fun setOnLikeClickListener(listener: (Data) -> Unit){
+        onLikeClickListener = listener
     }
 
     private fun setProfileBackground(messageType : String) = when (messageType) {

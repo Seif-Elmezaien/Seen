@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.response.CommentResponse
@@ -33,6 +34,9 @@ class CommunityViewModel(
     var communityPostsPage = 1
     var communityPostsResponse: PostListResponse? = null
 
+    val likePostResult = MutableLiveData<Resource<Unit>>()
+    val likeError = MutableLiveData<Int>() // postId to revert
+
     val communityComment = MutableLiveData<Resource<CommentResponse>>()
 
     var communityCommentPage = 1
@@ -51,8 +55,18 @@ class CommunityViewModel(
 
 
 
-    fun getCommunityPosts( token: String, category: String) = viewModelScope.launch {
+    fun getCommunityPosts(token: String, category: String, isNewCategory: Boolean = false) = viewModelScope.launch {
+        // If we are switching categories, reset the pagination state first
+        if (isNewCategory) {
+            communityPostsPage = 1
+            communityPostsResponse = null
+        }
+
         safePostsCall(token, category)
+    }
+
+    fun likePost(token: String, postId: Int) = viewModelScope.launch {
+        safeLikePostCall(token, postId)
     }
 
     fun getPostComments(postId: Int, token: String) = viewModelScope.launch {
@@ -104,32 +118,6 @@ class CommunityViewModel(
             }
         }
     }
-    fun hasInternetConnection(): Boolean {
-        val connectivityManager = getApplication<SeenApplication>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-            return when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            connectivityManager.activeNetworkInfo?.run {
-                return when (type) {
-                    ConnectivityManager.TYPE_WIFI -> true
-                    ConnectivityManager.TYPE_MOBILE -> true
-                    else -> false
-                }
-            }
-        }
-        return false
-    }
 
     private fun handlePostsResponse(response: Response<PostListResponse>) : Resource<PostListResponse> {
 
@@ -141,9 +129,9 @@ class CommunityViewModel(
                 if(communityPostsResponse == null){
                     communityPostsResponse = resultResponse
                 } else {
-                    val oldPosts = communityPostsResponse?.data
                     val newPosts = resultResponse.data
-                    oldPosts?.addAll(newPosts)
+                    val mergedList = ((communityPostsResponse?.data ?: emptyList()) + newPosts).toMutableList()
+                    communityPostsResponse = resultResponse.copy(data = mergedList)
                 }
 
                 return Resource.Success(
@@ -153,6 +141,23 @@ class CommunityViewModel(
         }
 
         return Resource.Error(response.message())
+    }
+
+    private suspend fun safeLikePostCall(token: String, postId: Int) {
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.likePost(token, postId)
+                if (response.isSuccessful) {
+                    likePostResult.postValue(Resource.Success(Unit))
+                } else {
+                    likeError.postValue(postId) // revert UI
+                }
+            } else {
+                likeError.postValue(postId)
+            }
+        } catch (t: Throwable) {
+            likeError.postValue(postId)
+        }
     }
 
     private suspend fun safeCommentCall(id: Int, token: String){
@@ -307,6 +312,33 @@ class CommunityViewModel(
                 else -> commentLikesResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
             }
         }
+    }
+
+    fun hasInternetConnection(): Boolean {
+        val connectivityManager = getApplication<SeenApplication>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val activeNetwork = connectivityManager.activeNetwork ?: return false
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+            return when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            connectivityManager.activeNetworkInfo?.run {
+                return when (type) {
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    else -> false
+                }
+            }
+        }
+        return false
     }
 
 

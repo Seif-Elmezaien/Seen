@@ -2,6 +2,7 @@ package com.example.seen.ui.community.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +44,8 @@ class CommunityFragment : Fragment() {
     private lateinit var viewModel: CommunityViewModel
     var token: String? = null
 
+    var selectedCategory = GENERAL
+
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
@@ -62,9 +65,10 @@ class CommunityFragment : Fragment() {
         initializeViewModel()
         setupRecyclerView()
         setPostAdapter()
+        observeLikeError()
         handleChips()
 
-        // ✅ Only fetch if no data yet
+        // Only fetch if no data yet
         if (viewModel.communityPostsResponse == null) {
             viewModel.getCommunityPosts(token!!, selectedCategory)
         } else {
@@ -77,7 +81,18 @@ class CommunityFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { postResponse ->
-                        postAdapter.differ.submitList(postResponse.data)
+                        val cached = viewModel.communityPostsResponse
+
+                        if (cached != null) {
+                            postAdapter.differ.submitList(cached.data.toList())
+                        } else {
+                            val data = viewModel.communityPostsResponse?.data
+                                ?: response.data?.data
+
+                            if (data != null) {
+                                postAdapter.differ.submitList(data.toList())
+                            }
+                        }
                     }
                 }
                 is Resource.Error -> {
@@ -91,6 +106,11 @@ class CommunityFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun getToken() {
+        val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
+        token = "Bearer " + sharedPref.getString("token", null)
     }
 
     private fun initializeViewModel(){
@@ -111,17 +131,69 @@ class CommunityFragment : Fragment() {
             .get(CommunityViewModel::class.java)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupRecyclerView() {
+        postAdapter = PostAdapter(requireContext())  // ✅ create a new instance
+        binding.rvPosts.apply {
+            adapter = postAdapter
+            layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(this@CommunityFragment.scrollListener)
+        }
     }
-    private fun setPostAdapter() {
-        postAdapter.setOnItemClickListener {
 
+    private fun setPostAdapter() {
+        postAdapter.setOnCommentClickListener {
             val action =
                 CommunityFragmentDirections
                     .actionCommunityFragmentToPostDetailsFragment(it)
             findNavController().navigate(action)
+        }
+
+        postAdapter.setOnLikeClickListener { updatedPost ->
+
+            viewModel.communityPostsResponse?.let { response ->
+
+                val updatedList = response.data.toMutableList()
+
+                val index = updatedList.indexOfFirst { it.id == updatedPost.id }
+
+                if (index != -1) {
+                    updatedList[index] = updatedPost
+
+                    viewModel.communityPostsResponse =
+                        response.copy(data = updatedList)
+                }
+            }
+
+            viewModel.likePost(token!!, updatedPost.id)
+        }
+    }
+
+    private fun observeLikeError(){
+        viewModel.likeError.observe(viewLifecycleOwner) { postId ->
+
+            val currentList = postAdapter.differ.currentList.toMutableList()
+
+            val position = currentList.indexOfFirst { it.id == postId }
+
+            if (position != -1) {
+
+                val post = currentList[position]
+
+                val revertedPost = post.copy(
+                    is_liked = !(post.is_liked ?: false),
+                    likes_count = post.likes_count + if (post.is_liked == true) -1 else 1
+                )
+
+                currentList[position] = revertedPost
+
+                postAdapter.differ.submitList(currentList)
+
+
+                viewModel.communityPostsResponse =
+                    viewModel.communityPostsResponse?.copy(
+                        data = currentList
+                    )
+            }
         }
     }
 
@@ -163,24 +235,6 @@ class CommunityFragment : Fragment() {
             }
         }
     }
-
-
-    private fun setupRecyclerView() {
-        postAdapter = PostAdapter(requireContext())  // ✅ create a new instance
-        binding.rvPosts.apply {
-            adapter = postAdapter
-            layoutManager = LinearLayoutManager(activity)
-            addOnScrollListener(this@CommunityFragment.scrollListener)
-        }
-    }
-
-    private fun getToken() {
-        val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
-        token = "Bearer " + sharedPref.getString("token", null)
-    }
-
-    var selectedCategory = GENERAL
-
     private fun handleChips() {
         binding.chipGroupCategories.children
             .filterIsInstance<Chip>()
@@ -199,15 +253,14 @@ class CommunityFragment : Fragment() {
                 else -> selectedCategory
             }
 
-            // ✅ Only reset and fetch if category actually changed
-            if (newCategory != selectedCategory) {
-                selectedCategory = newCategory
-                viewModel.communityPostsPage = 1
-                viewModel.communityPostsResponse = null
-                viewModel.getCommunityPosts(token!!, selectedCategory)
-            }
+            selectedCategory = newCategory
+
+            viewModel.getCommunityPosts(token!!, selectedCategory, true)
         }
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

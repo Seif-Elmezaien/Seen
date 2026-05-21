@@ -122,6 +122,7 @@ class CommentAdapter(
         MODY -> R.drawable.avatar_border_mody
         else ->  R.drawable.avatar_border_gestational
     }
+
     fun getRelativeTime(isoTimestamp: String): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
         sdf.timeZone = TimeZone.getTimeZone("UTC")

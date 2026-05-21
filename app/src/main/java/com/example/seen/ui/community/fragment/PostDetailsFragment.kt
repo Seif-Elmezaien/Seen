@@ -278,6 +278,7 @@ class PostDetailsFragment : Fragment() {
             }
             tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
+            ivLike.isSelected = args.post.is_liked ?: false
             tvLikesCountDt.text = args.post.likes_count.toString()
             tvCommentsCountDt.text = args.post.comments_count.toString()
             Glide.with(root)
