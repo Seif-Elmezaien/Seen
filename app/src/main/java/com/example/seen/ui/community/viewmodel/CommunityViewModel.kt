@@ -15,11 +15,13 @@ import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
+import com.example.seen.domain.model.community.response.SearchResponse
 import com.example.seen.util.Resource
 import com.example.seen.util.SeenApplication
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
+import java.util.Collections.emptyList
 
 class CommunityViewModel(
     app: Application,
@@ -51,6 +53,10 @@ class CommunityViewModel(
     val commentLikesResult = MutableLiveData<Resource<PostUser>>()
 
 
+    val searchResults = MutableLiveData<Resource<SearchResponse>>()
+    var searchPage = 1
+    var searchResponse: SearchResponse? = null
+    var lastSearchQuery: String = ""
 
     fun getCommunityPosts(token: String, category: String, isNewCategory: Boolean = false) = viewModelScope.launch {
         // If we are switching categories, reset the pagination state first
@@ -346,6 +352,8 @@ class CommunityViewModel(
         }
         return false
     }
+
+
 
 
 }

@@ -241,6 +241,9 @@
     <string name="accounts">حسابات</string>
     <string name="add_post">إضافة المنشور</string>
     <string name="make_comment">اكتب تعليقاً...</string>
+    <string name="searchEmpty">لا يوجد نتائج لهذا البحث</string>
+    <string name="searchAgain">ابحث عن شئ اخر</string>
+
 
     <!-- Relative Time -->
     <string name="time_just_now">الآن</string>

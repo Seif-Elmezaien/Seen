@@ -42,4 +42,17 @@
         <item name="checkedIconVisible">false</item>
     </style>
 
+    <style name="SearchCategory" parent="Widget.MaterialComponents.Chip.Choice">
+
+        <item name="android:textAppearance">@style/ChipTextAppearance</item>
+        <item name="android:textColor">@color/chip_text_selector</item>
+        <item name="chipBackgroundColor">@color/chip_bg_selector</item>
+        <item name="chipCornerRadius">30dp</item>
+        <item name="chipIconVisible">true</item>
+        <item name="chipStartPadding">16dp</item>
+        <item name="chipEndPadding">16dp</item>
+        <item name="chipMinHeight">42dp</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
 </resources>

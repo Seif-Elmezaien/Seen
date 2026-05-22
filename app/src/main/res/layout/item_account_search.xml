@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
-            android:id="@+id/flCommentAvatarStroke"
+            android:id="@+id/flAccountAvatarStroke"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/avatar_border_type2"
@@ -25,6 +25,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:id="@+id/ivAccount"
                 android:layout_gravity="center"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
@@ -32,7 +33,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/tvUserCommentName"
+            android:id="@+id/tvUserAccounttName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
@@ -40,9 +41,9 @@
             android:text="منتصر إسماعيل"
             android:textColor="@color/title"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/flCommentAvatarStroke"
-            app:layout_constraintTop_toTopOf="@+id/flCommentAvatarStroke" />
+            app:layout_constraintBottom_toBottomOf="@+id/flAccountAvatarStroke"
+            app:layout_constraintStart_toEndOf="@+id/flAccountAvatarStroke"
+            app:layout_constraintTop_toTopOf="@+id/flAccountAvatarStroke" />
 
         <View
             android:id="@+id/view"
@@ -50,7 +51,7 @@
             android:layout_height="2dp"
             android:layout_marginTop="24dp"
             android:background="#80D9D9D9"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserCommentName"
+            app:layout_constraintTop_toBottomOf="@+id/flAccountAvatarStroke"
             tools:layout_editor_absoluteX="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

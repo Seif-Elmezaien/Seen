@@ -235,6 +235,8 @@
     <string name="accounts">Accounts</string>
     <string name="add_post">Add Post</string>
     <string name="make_comment">Make a comment...</string>
+    <string name="searchEmpty">No results were found for this search.</string>
+    <string name="searchAgain">Search for something else.</string>
 
     <!-- Relative Time -->
     <string name="time_just_now">Just now</string>
