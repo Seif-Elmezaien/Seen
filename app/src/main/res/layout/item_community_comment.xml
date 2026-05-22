@@ -54,15 +54,17 @@
             app:layout_constraintTop_toBottomOf="@+id/tvUserCommentName" />
 
         <TextView
-            android:id="@+id/tv_communty_1stcomment"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvCommentText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo"
-            android:text="خطوة بسيطة بس فرقها كبير 👏"
+            android:text="خطوة بسيطة بس فرقها كبير  👏"
             android:textColor="@color/description"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="normal"
+            app:layout_constraintEnd_toStartOf="@+id/editComment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/flCommentAvatarStroke" />
 
@@ -72,13 +74,13 @@
             android:layout_height="2dp"
             android:layout_marginTop="16dp"
             android:background="#80D9D9D9"
-            app:layout_constraintTop_toBottomOf="@+id/tv_communty_1stcomment"
+            app:layout_constraintTop_toBottomOf="@+id/tvCommentText"
             tools:layout_editor_absoluteX="16dp" />
 
         <ImageView
             android:id="@+id/iv_comments_like"
-            android:layout_width="16dp"
-            android:layout_height="14dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/heart_selector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -90,7 +92,7 @@
             android:paddingTop="4dp"
             android:text="120"
             android:textColor="@color/description"
-            android:textSize="8dp"
+            android:textSize="12dp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="@+id/iv_comments_like"
             app:layout_constraintStart_toStartOf="@+id/iv_comments_like"
@@ -98,8 +100,9 @@
 
         <ImageView
             android:id="@+id/deleteComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/ic_delete"
@@ -108,15 +111,15 @@
 
         <ImageView
             android:id="@+id/editComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/ic_edit_comment"
             app:layout_constraintBottom_toBottomOf="@+id/deleteComment"
             app:layout_constraintEnd_toStartOf="@+id/deleteComment"
             app:layout_constraintTop_toTopOf="@+id/deleteComment"
             android:layout_marginEnd="15dp"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

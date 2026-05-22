@@ -28,7 +28,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
@@ -48,8 +47,8 @@ class AddReminderFragment : Fragment() {
     private val sdfDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     private val sdfTime = SimpleDateFormat("h:mm a", Locale.getDefault())
 
-    private enum class LogType { glucose, medication, meal }
-    private var activeLogType = LogType.glucose
+    private enum class ReminderType { glucose, medication, meal }
+    private var activeReminderType = ReminderType.glucose
     private var medicine: SelectedMedication? = null
 
     override fun onCreateView(
@@ -96,11 +95,11 @@ class AddReminderFragment : Fragment() {
 
         binding.ivBack.setOnClickListener { findNavController().popBackStack() }
 
-        binding.btnGlucose.setOnClickListener { switchLogType(LogType.glucose) }
+        binding.btnGlucose.setOnClickListener { switchLogType(ReminderType.glucose) }
 
-        binding.btnMedication.setOnClickListener { switchLogType(LogType.medication) }
+        binding.btnMedication.setOnClickListener { switchLogType(ReminderType.medication) }
 
-        binding.btnMeal.setOnClickListener { switchLogType(LogType.meal) }
+        binding.btnMeal.setOnClickListener { switchLogType(ReminderType.meal) }
 
         binding.etReminderTime.setOnClickListener { showTimePicker() }
 
@@ -121,15 +120,15 @@ class AddReminderFragment : Fragment() {
         binding.etReminderDate.setText(sdfDate.format(selectedCalendar.time))
     }
 
-    private fun switchLogType(type: LogType) {
-        if (activeLogType == type) return
-        activeLogType = type
+    private fun switchLogType(type: ReminderType) {
+        if (activeReminderType == type) return
+        activeReminderType = type
 
-        setButtonActive(binding.btnGlucose, type == LogType.glucose)
-        setButtonActive(binding.btnMedication, type == LogType.medication)
-        setButtonActive(binding.btnMeal, type == LogType.meal)
+        setButtonActive(binding.btnGlucose, type == ReminderType.glucose)
+        setButtonActive(binding.btnMedication, type == ReminderType.medication)
+        setButtonActive(binding.btnMeal, type == ReminderType.meal)
 
-        binding.clMedication.visibility = if (type == LogType.medication) View.VISIBLE else View.GONE
+        binding.clMedication.visibility = if (type == ReminderType.medication) View.VISIBLE else View.GONE
     }
 
     private fun setButtonActive(button: MaterialButton, isActive: Boolean) {
@@ -324,7 +323,7 @@ class AddReminderFragment : Fragment() {
         lifecycleScope.launch {
             val reminder = Reminder(
                 0,
-                activeLogType.toString(),
+                activeReminderType.toString(),
                 title,
                 selectedCalendar.timeInMillis,
                 medicine?.medication_name,
@@ -335,7 +334,7 @@ class AddReminderFragment : Fragment() {
             ReminderScheduler.scheduleReminder(
                 requireContext(),
                 reminderId,
-                activeLogType.toString(),
+                activeReminderType.toString(),
                 reminder.message,
                 reminder.time,
                 reminder.medication_name

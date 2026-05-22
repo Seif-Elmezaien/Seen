@@ -13,7 +13,7 @@ class Constants {
         const val SEARCH_POST_TIME_DELAY = 500L
 
         const val LOW_GLUCOSE_VALUE = 70
-        const val HIGH_GLUCOSE_VALUE = 180
+        const val HIGH_GLUCOSE_VALUE = 220
 
         // Diabetes types
         const val TYPE_1 = "Type1"

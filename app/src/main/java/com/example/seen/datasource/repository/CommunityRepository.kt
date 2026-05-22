@@ -4,6 +4,7 @@ import com.example.seen.datasource.remote.RetrofitInstance
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.PostRequest
+import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
@@ -36,10 +37,10 @@ class CommunityRepository {
     suspend fun getPostComments(token: String, postId: Int, page: Int): Response<CommentResponse> =
         RetrofitInstance.api.getPostComments(token, postId, page)
 
-    suspend fun addComment(token: String, postId: Int, comment: CommentRequest): Response<Comment> =
+    suspend fun addComment(token: String, postId: Int, comment: CommentRequest): Response<AddCommentResponse> =
         RetrofitInstance.api.addComment(token, postId, comment)
 
-    suspend fun editComment(token: String, commentId: Int, comment: CommentRequest): Response<Comment> =
+    suspend fun editComment(token: String, commentId: Int, comment: CommentRequest): Response<AddCommentResponse> =
         RetrofitInstance.api.editComment(token, commentId, comment)
 
     suspend fun deleteComment(token: String, commentId: Int): Response<Unit> =

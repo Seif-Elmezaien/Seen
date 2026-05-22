@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityCommentBinding
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LADA
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
@@ -25,9 +26,6 @@ import java.util.TimeZone
 
 class CommentAdapter(
     val context: Context,
-    private val onLikeClick: (Comment) -> Unit,
-    private val onEditClick: (Comment) -> Unit,
-    private val onDeleteClick: (Comment) -> Unit,
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     inner class CommentViewHolder(val binding: ItemCommunityCommentBinding) : RecyclerView.ViewHolder(binding.root)
@@ -69,28 +67,53 @@ class CommentAdapter(
         holder.binding.apply {
             tvUserCommentName.text = comment.user?.full_name ?: ""
             tvCommentTime.text = getRelativeTime(comment.created_at ?: "")
-            tvCommentsLikesCount.text = comment.likes_count.toString()
             flCommentAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(comment.user?.diabetes_type ?: ""))
             Glide.with(root)
                 .load(comment.user?.profile_picture?.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivCommentProfile)
-            tvCommunty1stcomment.text = comment.comment_text
+            tvCommentText.text = comment.comment_text
             ivCommentsLike.isSelected = comment.is_liked ?: false
+            tvCommentsLikesCount.text = comment.likes_count.toString()
+
             ivCommentsLike.setOnClickListener {
-                onLikeClick(comment)
-            }
+                val currentList = differ.currentList.toMutableList()
 
-            // ─── Edit button ───
-            editComment.setOnClickListener {
-                onEditClick(comment)
-            }
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
 
-            // ─── Delete button ───
-            deleteComment.setOnClickListener {
-                onDeleteClick(comment)
+                val currentComment = currentList[adapterPosition]
+
+                val newLikedState = !(currentComment.is_liked ?: false)
+
+                val updatedComment = currentComment.copy(
+                    is_liked = newLikedState,
+                    likes_count = currentComment.likes_count!! + if (newLikedState) 1 else -1
+                )
+
+                currentList[adapterPosition] = updatedComment
+
+                differ.submitList(currentList)
+
+                onLikeClickListener?.invoke(comment)
             }
+            editComment.setOnClickListener    { onEditClickListener?.invoke(comment) }
+            deleteComment.setOnClickListener  { onDeleteClickListener?.invoke(comment) }
         }
+    }
+
+    private var onLikeClickListener: ((Comment) -> Unit)? = null
+    private var onEditClickListener: ((Comment) -> Unit)? = null
+    private var onDeleteClickListener: ((Comment) -> Unit)? = null
+
+    fun setOnLikeClickListener(listener: (Comment) -> Unit) {
+        onLikeClickListener = listener
+    }
+    fun setOnEditClickListener(listener: (Comment) -> Unit) {
+        onEditClickListener = listener
+    }
+    fun setOnDeleteClickListener(listener: (Comment) -> Unit) {
+        onDeleteClickListener = listener
     }
 
     // ─── New: Helper to update one comment locally after like/edit ───

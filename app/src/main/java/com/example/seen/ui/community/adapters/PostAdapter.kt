@@ -100,7 +100,6 @@ class PostAdapter(
                 onCommentClickListener?.invoke(post)
             }
 
-            Log.d("LIKE_DEBUG", "isLiked ? = ${post.is_liked}")
             ivLike.setOnClickListener {
 
                 val currentList = differ.currentList.toMutableList()
@@ -120,7 +119,6 @@ class PostAdapter(
                 currentList[adapterPosition] = updatedPost
 
                 differ.submitList(currentList)
-                Log.d("LIKE_DEBUG", "isLiked ? = ${post.is_liked}")
 
                 onLikeClickListener?.invoke(updatedPost)
             }

@@ -28,10 +28,10 @@ import com.example.seen.ui.community.adapters.CommentAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.ADVICES
+import com.example.seen.util.Constants.Companion.COMMENT_PAGE_SIZE
 import com.example.seen.util.Constants.Companion.GESTATIONAL
 import com.example.seen.util.Constants.Companion.LADA
 import com.example.seen.util.Constants.Companion.MODY
-import com.example.seen.util.Constants.Companion.POST_PAGE_SIZE
 import com.example.seen.util.Constants.Companion.TYPE1_LADA
 import com.example.seen.util.Constants.Companion.TYPE_1
 import com.example.seen.util.Constants.Companion.TYPE_2
@@ -53,6 +53,9 @@ class PostDetailsFragment : Fragment() {
 
     private lateinit var commentAdapter: CommentAdapter
     private val args: PostDetailsFragmentArgs by navArgs()
+    var isLiked = false
+    var likesCount = 0
+
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
@@ -71,20 +74,21 @@ class PostDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupKeyboardBehavior()
         getToken()
+        setupKeyboardBehavior()
         initializeViewModel()
         setPostItem()
         setCommentRecyclerView()
 
         viewModel.getPostComments(args.post.id, token!!)
 
+        observeLikeError()
         observeGetComments()
 
+        observeLikeComment()
         observeAddComment()
         observeEditComment()
         observeDeleteComment()
-        observeLikeComment()
 
         // ─── New: Send button click ───
         binding.btnSendComment.setOnClickListener {
@@ -96,29 +100,171 @@ class PostDetailsFragment : Fragment() {
         }
     }
 
+    private fun getToken() {
+        val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
+        token = "Bearer " + sharedPref.getString("token", null)
+    }
 
+    private fun initializeViewModel(){
+        // Application context to avoid leaks
+        val db = SeenDatabase(requireContext().applicationContext)
+        val userRepository = UserRepository(db)
+        val communityRepository = CommunityRepository()
+
+        // create factory
+        val factory = CommunityViewModelProviderFactory(
+            requireActivity().application,
+            userRepository,
+            communityRepository
+        )
+
+        // initialize ViewModel by activity
+        viewModel = ViewModelProvider(requireActivity(), factory)
+            .get(CommunityViewModel::class.java)
+    }
+
+    private fun setPostItem(){
+        binding.apply {
+            val (bgRes, colorRes, categoryRes) = setCategoryBackground(args.post.category ?: "")
+            isLiked = args.post.is_liked ?: false
+            likesCount = args.post.likes_count
+
+            tvUserPostName.text = args.post.user.full_name
+            tvPostTime.text = getRelativeTime(args.post.created_at)
+            tvCategory.text = getString(categoryRes)
+            tvPostTitle.text = args.post.title
+            tvPostContent.text = args.post.content
+            flAvatarStroke.background = ContextCompat.getDrawable(requireContext(),setProfileBackground(args.post.user.diabetes_type ?: ""))
+            if(args.post.images.isNotEmpty()){
+                ivPostImage.visibility = View.VISIBLE
+                Glide.with(root)
+                    .load(args.post.images[0].url)
+                    .into(ivPostImage)
+            }
+            else {
+                ivPostImage.visibility = View.GONE
+            }
+            tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
+            tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
+            ivLike.isSelected = isLiked
+            tvLikesCount.text = likesCount.toString()
+            tvCommentsCount.text = args.post.comments_count.toString()
+            Glide.with(root)
+                .load(args.post.user.profile_picture.takeIf { it.isNotEmpty() })
+                .placeholder(R.drawable.ic_profile)
+                .into(ivProfile)
+            arrowBg.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+            ivLike.setOnClickListener {
+                // 1. flip UI immediately
+                isLiked = !isLiked
+                likesCount += if (isLiked) 1 else -1
+                ivLike.isSelected = isLiked
+                tvLikesCount.text = likesCount.toString()
+
+                // 2. update the shared cache so CommunityFragment sees it
+                viewModel.communityPostsResponse?.let { response ->
+                    val updatedList = response.data.toMutableList()
+                    val index = updatedList.indexOfFirst { it.id == args.post.id }
+                    if (index != -1) {
+                        updatedList[index] = updatedList[index].copy(
+                            is_liked = isLiked,
+                            likes_count = likesCount
+                        )
+                        viewModel.communityPostsResponse = response.copy(data = updatedList)
+                    }
+                }
+                // 3. fire API
+                viewModel.likePost(token!!, args.post.id)
+            }
+        }
+    }
+
+    private fun setCommentRecyclerView() {
+        commentAdapter = CommentAdapter(requireContext())
+
+        binding.rvComments.apply {
+            adapter = commentAdapter
+            layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(this@PostDetailsFragment.scrollListener)
+        }
+
+        commentAdapter.setOnLikeClickListener { updatedComment ->
+            viewModel.communityCommentResponse?.let { response ->
+
+                val updatedList = response.comments.toMutableList()
+
+                val index = updatedList.indexOfFirst { it.id == updatedComment.id }
+
+                if (index != -1) {
+                    updatedList[index] = updatedComment
+
+                    viewModel.communityCommentResponse =
+                        response.copy(comments = updatedList)
+                }
+            }
+
+            viewModel.likeComment(token!!, updatedComment.id!!)
+        }
+    }
+
+    private fun hideProgressBar() {
+        binding.paginationProgressBar.visibility = View.INVISIBLE
+        isLoading = false
+    }
+    private fun showProgressBar() {
+        binding.paginationProgressBar.visibility = View.VISIBLE
+        isLoading = true
+    }
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+            val isTotalMoreThanVisible = totalItemCount >= COMMENT_PAGE_SIZE
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
+                    isTotalMoreThanVisible && isScrolling
+            if (shouldPaginate) {
+                viewModel.getPostComments(args.post.id, token!!)
+                isScrolling = false
+            }
+        }
+    }
 
     private fun observeGetComments() {
         viewModel.communityComment.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
-                    response.data?.let { commentResponse ->
-                        val comments = commentResponse.comments ?: emptyList()
-                        commentAdapter.differ.submitList(comments)
-                        isLastPage = comments.size < args.post.comments_count
-                        if (isLastPage) binding.rvComments.setPadding(0, 0, 0, 0)
+                    viewModel.communityCommentResponse?.comments.let {
+                        commentAdapter.differ.submitList(it?.toList())
                     }
                 }
-
                 is Resource.Error -> {
                     hideProgressBar()
-                    response.message?.let {
-                        Toast.makeText(activity, "Error: $it", Toast.LENGTH_LONG).show()
+                    response.message?.let { message ->
+                        Toast.makeText(activity, "Error: $message", Toast.LENGTH_LONG).show()
                     }
                 }
-
-                is Resource.Loading -> showProgressBar()
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
             }
         })
     }
@@ -129,16 +275,36 @@ class PostDetailsFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let { newComment ->
                         // add the new comment at top of list
-                        commentAdapter.addComment(newComment)
+                        commentAdapter.addComment(newComment.comment)
                         // scroll to top so user sees it
                         binding.rvComments.scrollToPosition(0)
+
+                        // ✅ increment the count shown on the post header
+                        val current = binding.tvCommentsCount.text
+                            .toString().toIntOrNull() ?: 0
+                        binding.tvCommentsCount.text = (current + 1).toString()
                     }
+
+                    viewModel.communityPostsResponse?.let { postsResponse ->
+                        val updatedList = postsResponse.data.toMutableList()
+                        val index = updatedList.indexOfFirst { it.id == args.post.id }
+                        if (index != -1) {
+                            updatedList[index] = updatedList[index].copy(
+                                comments_count = updatedList[index].comments_count + 1
+                            )
+                            viewModel.communityPostsResponse = postsResponse.copy(data = updatedList)
+                        }
+                    }
+
+                    viewModel.clearAddCommentState()
                 }
                 is Resource.Error -> {
                     hideProgressBar()
                     Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Loading -> showProgressBar()
+
+                else -> Unit
             }
         }
     }
@@ -150,14 +316,18 @@ class PostDetailsFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let { updatedComment ->
                         // update just that one comment in the list
-                        commentAdapter.updateComment(updatedComment)
+                        commentAdapter.updateComment(updatedComment.comment)
                     }
+
+                    viewModel.clearEditCommentState()
                 }
                 is Resource.Error -> {
                     hideProgressBar()
                     Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Loading -> showProgressBar()
+
+                else -> Unit
             }
         }
     }
@@ -195,142 +365,20 @@ class PostDetailsFragment : Fragment() {
         }
     }
 
-    private fun hideProgressBar() {
-        binding.paginationProgressBar.visibility = View.INVISIBLE
-        isLoading = false
-    }
-    private fun showProgressBar() {
-        binding.paginationProgressBar.visibility = View.VISIBLE
-        isLoading = true
-    }
-    val scrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            super.onScrollStateChanged(recyclerView, newState)
-            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                isScrolling = true
-            }
-        }
-
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-            val visibleItemCount = layoutManager.childCount
-            val totalItemCount = layoutManager.itemCount
-
-            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
-            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
-            val isNotAtBeginning = firstVisibleItemPosition >= 0
-            val isTotalMoreThanVisible = totalItemCount >= POST_PAGE_SIZE
-            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
-                    isTotalMoreThanVisible && isScrolling
-            if (shouldPaginate) {
-                viewModel.getPostComments(args.post.id, token!!)
-                isScrolling = false
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    private fun initializeViewModel(){
-        // Application context to avoid leaks
-        val db = SeenDatabase(requireContext().applicationContext)
-        val userRepository = UserRepository(db)
-        val communityRepository = CommunityRepository()
 
-        // create factory
-        val factory = CommunityViewModelProviderFactory(
-            requireActivity().application,
-            userRepository,
-            communityRepository
-        )
-
-        // initialize ViewModel
-        viewModel = ViewModelProvider(this, factory)
-            .get(CommunityViewModel::class.java)
-    }
-    private fun getToken() {
-        val sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
-        token = "Bearer " + sharedPref.getString("token", null)
-    }
-    private fun setPostItem(){
-        binding.apply {
-            val (bgRes, colorRes, categoryRes) = setCategoryBackground(args.post.category ?: "")
-
-            tvUserPostName.text = args.post.user.full_name
-            tvPostTime.text = getRelativeTime(args.post.created_at)
-            tvCategory.text = getString(categoryRes)
-            tvPostTitle.text = args.post.title
-            tvPostContent.text = args.post.content
-            flAvatarStroke.background = ContextCompat.getDrawable(requireContext(),setProfileBackground(args.post.user.diabetes_type ?: ""))
-            if(args.post.images.isNotEmpty()){
-                ivPostImage.visibility = View.VISIBLE
-                Glide.with(root)
-                    .load(args.post.images[0].url)
-                    .into(ivPostImage)
+    private fun observeLikeError(){
+        viewModel.likeError.observe(viewLifecycleOwner) { postId ->
+            if (postId == args.post.id) {
+                // revert the local UI vars
+                isLiked = !isLiked
+                likesCount += if (isLiked) 1 else -1
+                binding.ivLike.isSelected = isLiked
+                binding.tvLikesCount.text = likesCount.toString()
             }
-            else {
-                ivPostImage.visibility = View.GONE
-            }
-            tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
-            tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
-            ivLike.isSelected = args.post.is_liked ?: false
-            tvLikesCountDt.text = args.post.likes_count.toString()
-            tvCommentsCountDt.text = args.post.comments_count.toString()
-            Glide.with(root)
-                .load(args.post.user.profile_picture.takeIf { it.isNotEmpty() })
-                .placeholder(R.drawable.ic_profile)
-                .into(ivProfile)
-            binding.arrowBg.setOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
-    }
-    private fun setProfileBackground(messageType : String) = when (messageType) {
-        TYPE_1 -> R.drawable.avatar_border_type1
-        TYPE_2 -> R.drawable.avatar_border_type2
-        LADA -> R.drawable.avatar_border_lada
-        MODY -> R.drawable.avatar_border_mody
-        else ->  R.drawable.avatar_border_gestational
-    }
-    private fun setCategoryBackground(messageType: String): Triple<Int, Int, Int> = when (messageType) {
-        TYPE1_LADA      -> Triple(R.drawable.bg_diabetes_type1,        R.color.profile_type1_stroke,       R.string.category_type1_lada)
-        TYPE_2          -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
-        MODY            -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
-        GESTATIONAL     -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
-        ADVICES         -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
-        else            -> Triple(R.drawable.bg_diabetes_general,      R.color.general_yellow,             R.string.category_general)
-    }
-    private fun setCommentRecyclerView() {
-        commentAdapter = CommentAdapter(
-            context = requireContext(),
-
-            // ─── Like: toggle like on server ───
-            onLikeClick = { comment ->
-                viewModel.likeComment(token!!, comment.id ?: return@CommentAdapter)
-            },
-
-            // ─── Edit: show a dialog to edit text ───
-            onEditClick = { comment ->
-                selectedCommentId = comment.id ?: return@CommentAdapter
-                showEditCommentDialog(comment)
-            },
-
-            // ─── Delete: show confirmation dialog ───
-            onDeleteClick = { comment ->
-                selectedCommentId = comment.id ?: return@CommentAdapter
-                showDeleteCommentDialog(comment)
-            }
-        )
-
-        binding.rvComments.apply {
-            adapter = commentAdapter
-            layoutManager = LinearLayoutManager(activity)
-            addOnScrollListener(this@PostDetailsFragment.scrollListener)
         }
     }
 
@@ -367,6 +415,23 @@ class PostDetailsFragment : Fragment() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    private fun setProfileBackground(messageType : String) = when (messageType) {
+        TYPE_1 -> R.drawable.avatar_border_type1
+        TYPE_2 -> R.drawable.avatar_border_type2
+        LADA -> R.drawable.avatar_border_lada
+        MODY -> R.drawable.avatar_border_mody
+        else ->  R.drawable.avatar_border_gestational
+    }
+
+    private fun setCategoryBackground(messageType: String): Triple<Int, Int, Int> = when (messageType) {
+        TYPE1_LADA      -> Triple(R.drawable.bg_diabetes_type1,        R.color.profile_type1_stroke,       R.string.category_type1_lada)
+        TYPE_2          -> Triple(R.drawable.bg_diabetes_type2,        R.color.profile_type2_stroke,       R.string.category_type2)
+        MODY            -> Triple(R.drawable.bg_diabetes_mody,         R.color.profile_mody_stroke,        R.string.category_mody)
+        GESTATIONAL     -> Triple(R.drawable.bg_diabetes_gestational,  R.color.profile_gestational_stroke, R.string.category_gestational)
+        ADVICES         -> Triple(R.drawable.bg_diabetes_advise,       R.color.advise_gray,                R.string.category_advise)
+        else            -> Triple(R.drawable.bg_diabetes_general,      R.color.general_yellow,             R.string.category_general)
     }
 
     fun getRelativeTime(isoTimestamp: String): String {

@@ -10,10 +10,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
-import com.example.seen.domain.model.community.Comment
-import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
+import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.util.Resource
@@ -38,14 +37,12 @@ class CommunityViewModel(
     val likeError = MutableLiveData<Int>() // postId to revert
 
     val communityComment = MutableLiveData<Resource<CommentResponse>>()
-
     var communityCommentPage = 1
-
     var communityCommentResponse: CommentResponse? = null
 
-    val addCommentResult = MutableLiveData<Resource<Comment>>()
+    val addCommentResult = MutableLiveData<Resource<AddCommentResponse>?>()
 
-    val editCommentResult = MutableLiveData<Resource<Comment>>()
+    val editCommentResult = MutableLiveData<Resource<AddCommentResponse>?>()
 
     val deleteCommentResult = MutableLiveData<Resource<Unit>>()
 
@@ -177,7 +174,7 @@ class CommunityViewModel(
                     communityComment.postValue(Resource.Error("Network Failure"))
                 else -> communityComment.postValue(Resource.Error("Conversion Error: ${t.message}"))
             }
-    }
+        }
     }
 
     private fun handleCommentResponse(response: Response<CommentResponse>): Resource<CommentResponse> {
@@ -189,9 +186,9 @@ class CommunityViewModel(
                 if (communityCommentResponse == null) {
                     communityCommentResponse = resultResponse
                 } else {
-                    val oldComments = communityCommentResponse?.comments
-                    val newComments = resultResponse.comments
-                    oldComments?.addAll(newComments)
+                    val newComment = resultResponse.comments
+                    val mergedList = ((communityCommentResponse?.comments ?: emptyList()) + newComment).toMutableList()
+                    communityCommentResponse = resultResponse.copy(comments = mergedList)
                 }
                 return Resource.Success(
                     communityCommentResponse ?: resultResponse
@@ -208,7 +205,7 @@ class CommunityViewModel(
                 val response = communityRepository.addComment(token, postId, CommentRequest(content))
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        addCommentResult.postValue(Resource.Success(it)) // ← extract .comment
+                        addCommentResult.postValue(Resource.Success(it))
                     }
                 } else {
                     addCommentResult.postValue(Resource.Error(response.message()))
@@ -222,6 +219,10 @@ class CommunityViewModel(
                 else -> addCommentResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
             }
         }
+    }
+
+    fun clearAddCommentState() {
+        addCommentResult.value = null
     }
 
     private suspend fun safeEditCommentCall(token: String, commentId: Int, content: String) {
@@ -248,6 +249,11 @@ class CommunityViewModel(
             }
         }
     }
+
+    fun clearEditCommentState() {
+        editCommentResult.value = null
+    }
+
 
     private suspend fun safeDeleteCommentCall(token: String, commentId: Int) {
         deleteCommentResult.postValue(Resource.Loading())

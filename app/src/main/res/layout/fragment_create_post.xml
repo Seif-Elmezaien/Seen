@@ -39,10 +39,11 @@
                 android:id="@+id/ic_back_arrow"
                 android:layout_width="8dp"
                 android:layout_height="16dp"
-                android:src="@drawable/ic_back_arrow"
+                android:src="@drawable/ic_go_back_add_logs"
                 android:layout_marginTop="64dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/tvCoomunity"

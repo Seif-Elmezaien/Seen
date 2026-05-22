@@ -169,41 +169,44 @@
 
                     <ImageView
                         android:id="@+id/ivLike"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/heart_selector"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/view" />
 
                     <TextView
-                        android:id="@+id/tv_likes_count_dt"
+                        android:id="@+id/tv_likes_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="120"
                         android:textColor="@color/description"
-                        app:layout_constraintBottom_toBottomOf="@+id/ivLike"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/ivLike"
                         app:layout_constraintTop_toTopOf="@+id/ivLike" />
 
                     <ImageView
                         android:id="@+id/ivComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginStart="16dp"
                         android:src="@drawable/ic_post_comments"
-                        app:layout_constraintStart_toEndOf="@+id/tv_likes_count_dt"
-                        app:layout_constraintTop_toTopOf="@+id/tv_likes_count_dt" />
+                        app:layout_constraintStart_toEndOf="@+id/tv_likes_count"
+                        app:layout_constraintTop_toTopOf="@+id/ivLike" />
 
                     <TextView
-                        android:id="@+id/tv_comments_count_dt"
+                        android:id="@+id/tv_comments_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="80"
+                        android:text="120"
                         android:textColor="@color/description"
+                        android:textStyle="normal"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginStart="10dp"
                         app:layout_constraintStart_toEndOf="@+id/ivComment"
                         app:layout_constraintTop_toTopOf="@+id/ivComment" />
 

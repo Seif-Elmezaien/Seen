@@ -9,6 +9,7 @@ import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.PostRequest
+import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
@@ -110,14 +111,14 @@ interface SeenAPI {
         @Header("Authorization") token: String,
         @Path("postId") postId: Int,
         @Body comment: CommentRequest,
-    ): Response<Comment>
+    ): Response<AddCommentResponse>
 
     @PUT("comments/{commentId}")
     suspend fun editComment(
         @Header("Authorization") token: String,
         @Path("commentId") commentId: Int,
         @Body comment: CommentRequest,
-    ): Response<Comment>
+    ): Response<AddCommentResponse>
 
     @DELETE("comments/{commentId}")
     suspend fun deleteComment(

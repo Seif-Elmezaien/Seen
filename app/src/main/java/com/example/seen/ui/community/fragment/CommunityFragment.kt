@@ -2,7 +2,6 @@ package com.example.seen.ui.community.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +19,7 @@ import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.community.Data
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
@@ -80,19 +80,8 @@ class CommunityFragment : Fragment() {
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
-                    response.data?.let { postResponse ->
-                        val cached = viewModel.communityPostsResponse
-
-                        if (cached != null) {
-                            postAdapter.differ.submitList(cached.data.toList())
-                        } else {
-                            val data = viewModel.communityPostsResponse?.data
-                                ?: response.data?.data
-
-                            if (data != null) {
-                                postAdapter.differ.submitList(data.toList())
-                            }
-                        }
+                    viewModel.communityPostsResponse?.data?.let {
+                    postAdapter.differ.submitList(it.toList())
                     }
                 }
                 is Resource.Error -> {
@@ -126,8 +115,8 @@ class CommunityFragment : Fragment() {
             communityRepository
         )
 
-        // initialize ViewModel
-        viewModel = ViewModelProvider(this, factory)
+        // initialize ViewModel by activity
+        viewModel = ViewModelProvider(requireActivity(), factory)
             .get(CommunityViewModel::class.java)
     }
 
@@ -142,6 +131,8 @@ class CommunityFragment : Fragment() {
 
     private fun setPostAdapter() {
         postAdapter.setOnCommentClickListener {
+            viewModel.communityCommentPage = 1
+            viewModel.communityCommentResponse = null
             val action =
                 CommunityFragmentDirections
                     .actionCommunityFragmentToPostDetailsFragment(it)
@@ -149,23 +140,26 @@ class CommunityFragment : Fragment() {
         }
 
         postAdapter.setOnLikeClickListener { updatedPost ->
-
-            viewModel.communityPostsResponse?.let { response ->
-
-                val updatedList = response.data.toMutableList()
-
-                val index = updatedList.indexOfFirst { it.id == updatedPost.id }
-
-                if (index != -1) {
-                    updatedList[index] = updatedPost
-
-                    viewModel.communityPostsResponse =
-                        response.copy(data = updatedList)
-                }
-            }
-
-            viewModel.likePost(token!!, updatedPost.id)
+            likePost(updatedPost)
         }
+    }
+
+    private fun likePost(updatedPost: Data) {
+        viewModel.communityPostsResponse?.let { response ->
+
+            val updatedList = response.data.toMutableList()
+
+            val index = updatedList.indexOfFirst { it.id == updatedPost.id }
+
+            if (index != -1) {
+                updatedList[index] = updatedPost
+
+                viewModel.communityPostsResponse =
+                    response.copy(data = updatedList)
+            }
+        }
+
+        viewModel.likePost(token!!, updatedPost.id)
     }
 
     private fun observeLikeError(){
@@ -178,16 +172,13 @@ class CommunityFragment : Fragment() {
             if (position != -1) {
 
                 val post = currentList[position]
-
                 val revertedPost = post.copy(
                     is_liked = !(post.is_liked ?: false),
                     likes_count = post.likes_count + if (post.is_liked == true) -1 else 1
                 )
 
                 currentList[position] = revertedPost
-
                 postAdapter.differ.submitList(currentList)
-
 
                 viewModel.communityPostsResponse =
                     viewModel.communityPostsResponse?.copy(
