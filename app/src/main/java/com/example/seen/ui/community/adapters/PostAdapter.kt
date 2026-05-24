@@ -78,15 +78,9 @@ class PostAdapter(
             tvPostContent.text = post.content
             flAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(post.user.diabetes_type ?: ""))
             tvCategory.background = ContextCompat.getDrawable(context, bgRes)
-            if(post.images.isNotEmpty()){
-                ivPostImage.visibility = View.VISIBLE
-                Glide.with(root)
-                    .load(post.images[0].url)
-                    .into(ivPostImage)
-            }
-            else {
-                ivPostImage.visibility = View.GONE
-            }
+
+            bindPhotos(holder.binding, post.images.map { it.url })
+
             tvCategory.background = ContextCompat.getDrawable(context, bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(context, colorRes))
             ivLike.isSelected = post.is_liked ?: false
@@ -191,6 +185,44 @@ class PostAdapter(
                 val displayFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
                 displayFormat.timeZone = TimeZone.getTimeZone("UTC")
                 displayFormat.format(date)
+            }
+        }
+    }
+
+    private fun bindPhotos(binding: ItemCommunityPostBinding, photos: List<String>) {
+        binding.apply {
+            when (photos.size) {
+                0 -> {
+                    ivPhoto1.visibility = View.GONE
+                    layoutRow2.visibility = View.GONE
+                }
+                1 -> {
+                    ivPhoto1.visibility = View.VISIBLE
+                    layoutRow2.visibility = View.GONE
+                    Glide.with(context).load(photos[0]).into(ivPhoto1)
+                }
+                2 -> {
+                    ivPhoto1.visibility = View.VISIBLE
+                    layoutRow2.visibility = View.VISIBLE
+                    flPhoto3.visibility = View.GONE
+                    Glide.with(context).load(photos[0]).into(ivPhoto1)
+                    Glide.with(context).load(photos[1]).into(ivPhoto2)
+                }
+                else -> {
+                    ivPhoto1.visibility = View.VISIBLE
+                    layoutRow2.visibility = View.VISIBLE
+                    flPhoto3.visibility = View.VISIBLE
+                    Glide.with(context).load(photos[0]).into(ivPhoto1)
+                    Glide.with(context).load(photos[1]).into(ivPhoto2)
+                    Glide.with(context).load(photos[2]).into(ivPhoto3)
+
+                    if (photos.size > 3) {
+                        tvMoreCount.visibility = View.VISIBLE
+                        tvMoreCount.text = "+${photos.size - 3}"
+                    } else {
+                        tvMoreCount.visibility = View.GONE
+                    }
+                }
             }
         }
     }

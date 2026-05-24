@@ -329,6 +329,7 @@ class HomeFragment : Fragment() {
             position = XAxis.XAxisPosition.BOTTOM                       // places the X-axis at the bottom of the chart
             granularity = 1f                                            // ensures labels appear at every 1 unit (no skipping)
             axisMinimum = 0f                                            // sets the minimum X value (start of the axis)
+            axisMaximum = (entries.size + 1).toFloat()
             spaceMin = 1f                                               // adds extra empty space before the first entry
             spaceMax = 1f                                               // adds extra empty space after the last entry
             setDrawGridLines(true)                                      // enables vertical grid lines across the chart

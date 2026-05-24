@@ -127,7 +127,6 @@ class HomeAdapter(
         else -> R.drawable.bg_blood_bad_reading to R.color.bad_sugar_reading
     }
 
-
     private var onItemClickListener: ((FullLog) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (FullLog) -> Unit) {

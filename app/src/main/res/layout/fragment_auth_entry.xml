@@ -36,6 +36,7 @@
         android:fontFamily="@font/cairo_bold"
         android:textSize="18sp"
         android:text="@string/login"
+        android:textColor="@color/white"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

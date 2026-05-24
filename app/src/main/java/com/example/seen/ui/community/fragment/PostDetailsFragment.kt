@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.FragmentPostDetailsBinding
+import com.example.seen.databinding.ItemCommunityPostBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
@@ -139,15 +140,9 @@ class PostDetailsFragment : Fragment() {
             tvPostTitle.text = args.post.title
             tvPostContent.text = args.post.content
             flAvatarStroke.background = ContextCompat.getDrawable(requireContext(),setProfileBackground(args.post.user.diabetes_type ?: ""))
-            if(args.post.images.isNotEmpty()){
-                ivPostImage.visibility = View.VISIBLE
-                Glide.with(root)
-                    .load(args.post.images[0].url)
-                    .into(ivPostImage)
-            }
-            else {
-                ivPostImage.visibility = View.GONE
-            }
+
+            bindPhotos(args.post.images.map { it.url })
+
             tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
             ivLike.isSelected = isLiked
@@ -182,6 +177,44 @@ class PostDetailsFragment : Fragment() {
                 }
                 // 3. fire API
                 viewModel.likePost(token!!, args.post.id)
+            }
+        }
+    }
+
+    private fun bindPhotos(photos: List<String>) {
+        binding.apply {
+            when (photos.size) {
+                0 -> {
+                    ivPhoto1.visibility = View.GONE
+                    layoutRow2.visibility = View.GONE
+                }
+                1 -> {
+                    ivPhoto1.visibility = View.VISIBLE
+                    layoutRow2.visibility = View.GONE
+                    Glide.with(requireContext()).load(photos[0]).into(ivPhoto1)
+                }
+                2 -> {
+                    ivPhoto1.visibility = View.VISIBLE
+                    layoutRow2.visibility = View.VISIBLE
+                    flPhoto3.visibility = View.GONE
+                    Glide.with(requireContext()).load(photos[0]).into(ivPhoto1)
+                    Glide.with(requireContext()).load(photos[1]).into(ivPhoto2)
+                }
+                else -> {
+                    ivPhoto1.visibility = View.VISIBLE
+                    layoutRow2.visibility = View.VISIBLE
+                    flPhoto3.visibility = View.VISIBLE
+                    Glide.with(requireContext()).load(photos[0]).into(ivPhoto1)
+                    Glide.with(requireContext()).load(photos[1]).into(ivPhoto2)
+                    Glide.with(requireContext()).load(photos[2]).into(ivPhoto3)
+
+                    if (photos.size > 3) {
+                        tvMoreCount.visibility = View.VISIBLE
+                        tvMoreCount.text = "+${photos.size - 3}"
+                    } else {
+                        tvMoreCount.visibility = View.GONE
+                    }
+                }
             }
         }
     }

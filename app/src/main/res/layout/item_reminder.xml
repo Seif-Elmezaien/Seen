@@ -11,7 +11,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardDelete"
         android:layout_width="80dp"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
@@ -36,7 +36,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardReminder"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -86,18 +86,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/flIcon" />
 
+            <!-- Reminder Title -->
+            <TextView
+                android:id="@+id/tvReminderMedication"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_bold"
+                android:text="Oxycodone"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReminderTitle" />
+
             <!-- Reminder Time -->
             <TextView
                 android:id="@+id/tvReminderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:fontFamily="@font/cairo"
                 android:text="مجدول في 1:00 م"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/description"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvReminderTitle" />
+                app:layout_constraintTop_toBottomOf="@id/tvReminderMedication" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

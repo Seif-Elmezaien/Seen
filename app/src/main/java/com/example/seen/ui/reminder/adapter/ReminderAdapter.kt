@@ -1,14 +1,20 @@
 package com.example.seen.ui.reminder.adapter
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
 import com.example.seen.databinding.ItemReminderBinding
 import com.example.seen.domain.model.entites.Reminder
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -59,12 +65,15 @@ class ReminderAdapter(
         val reminderItem = differ.currentList[position]
 
         holder.binding.apply {
+
             if (reminderItem.message_type == "medication"){
-                tvReminderTitle.text = reminderItem.medication_name
-            } else {
-                tvReminderTitle.text = reminderItem.message
+                tvReminderMedication.text = reminderItem.medication_name
+            }
+            else{
+                tvReminderMedication.visibility = View.GONE
             }
 
+            tvReminderTitle.text = reminderItem.message
             ivReminderType.setImageResource(setReminderTypeImage(reminderItem.message_type))
             tvReminderTime.text = context.getString(R.string.schedule_in) + " " + SimpleDateFormat("hh:mm a").format(
                 Date(reminderItem.time)

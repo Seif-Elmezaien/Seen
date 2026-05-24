@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
     tools:context=".ui.authentication.fragments.Questionnaire3Fragment">
 
 
@@ -15,7 +16,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/cairo_black"
         android:text="@string/user_insulin_therapy"
-        android:textColor="@color/text_questionnaire"
+        android:textColor="@color/title"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
