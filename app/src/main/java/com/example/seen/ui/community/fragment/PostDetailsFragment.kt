@@ -82,6 +82,10 @@ class PostDetailsFragment : Fragment() {
 
         viewModel.getPostComments(args.post.id, token!!)
 
+        viewModel.getUserId().observe(viewLifecycleOwner) { user ->
+            commentAdapter.userId = user.id
+        }
+
         observeLikeError()
         observeGetComments()
 
@@ -183,7 +187,9 @@ class PostDetailsFragment : Fragment() {
     }
 
     private fun setCommentRecyclerView() {
-        commentAdapter = CommentAdapter(requireContext())
+        commentAdapter = CommentAdapter(
+            requireContext(),
+        )
 
         binding.rvComments.apply {
             adapter = commentAdapter
@@ -207,6 +213,14 @@ class PostDetailsFragment : Fragment() {
             }
 
             viewModel.likeComment(token!!, updatedComment.id!!)
+        }
+
+        commentAdapter.setOnEditClickListener {
+            showEditCommentDialog(it)
+        }
+
+        commentAdapter.setOnDeleteClickListener {
+            showDeleteCommentDialog(it)
         }
     }
 
@@ -274,12 +288,20 @@ class PostDetailsFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newComment ->
-                        // add the new comment at top of list
-                        commentAdapter.addComment(newComment.comment)
-                        // scroll to top so user sees it
-                        binding.rvComments.scrollToPosition(0)
 
-                        // ✅ increment the count shown on the post header
+                        // ✅ update the cache first
+                        viewModel.communityCommentResponse?.let { cached ->
+                            val updatedComments = cached.comments.toMutableList()
+                            updatedComments.add(0, newComment.comment)
+                            viewModel.communityCommentResponse = cached.copy(comments = updatedComments)
+                        }
+
+                        // add the new comment at top of list
+                        commentAdapter.addComment(newComment.comment) {
+                            binding.rvComments.scrollToPosition(0)
+                        }
+
+                        // increment the comment count
                         val current = binding.tvCommentsCount.text
                             .toString().toIntOrNull() ?: 0
                         binding.tvCommentsCount.text = (current + 1).toString()
@@ -315,6 +337,14 @@ class PostDetailsFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { updatedComment ->
+
+                        // ✅ update the cache first
+                        viewModel.communityCommentResponse?.let { cached ->
+                            val updatedComments = cached.comments.toMutableList()
+                            updatedComments.add(0, updatedComment.comment)
+                            viewModel.communityCommentResponse = cached.copy(comments = updatedComments)
+                        }
+
                         // update just that one comment in the list
                         commentAdapter.updateComment(updatedComment.comment)
                     }
@@ -337,15 +367,43 @@ class PostDetailsFragment : Fragment() {
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
+
+                    viewModel.communityCommentResponse?.let { cached ->
+                        val updatedComments = cached.comments.toMutableList()
+                        updatedComments.removeAll { it.id == selectedCommentId }
+                        viewModel.communityCommentResponse = cached.copy(comments = updatedComments)
+                    }
+
                     // remove the deleted comment from the list
                     commentAdapter.removeComment(selectedCommentId)
                     selectedCommentId = -1
+
+                    // ✅ decrement the count shown on the post header
+                    val current = binding.tvCommentsCount.text
+                        .toString().toIntOrNull() ?: 0
+                    binding.tvCommentsCount.text = (current - 1).toString()
+
+                    viewModel.communityPostsResponse?.let { postsResponse ->
+                        val updatedList = postsResponse.data.toMutableList()
+                        val index = updatedList.indexOfFirst { it.id == args.post.id }
+                        if (index != -1) {
+                            updatedList[index] = updatedList[index].copy(
+                                comments_count = updatedList[index].comments_count - 1
+                            )
+                            viewModel.communityPostsResponse = postsResponse.copy(data = updatedList)
+                        }
+                    }
+
+                    viewModel.clearDeleteCommentState()
                 }
                 is Resource.Error -> {
                     hideProgressBar()
                     Toast.makeText(activity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
                 }
+
                 is Resource.Loading -> showProgressBar()
+
+                else -> Unit
             }
         }
     }
@@ -411,7 +469,8 @@ class PostDetailsFragment : Fragment() {
             .setMessage("Are you sure you want to delete this comment?")
             .setPositiveButton("Delete") { _, _ ->
                 //!! (Non-null Assertion)
-                viewModel.deleteComment(token!!, comment.id!!)
+                selectedCommentId = comment.id!!
+                viewModel.deleteComment(token!!, selectedCommentId)
             }
             .setNegativeButton("Cancel", null)
             .show()

@@ -176,6 +176,9 @@ class LogDetailFragment : Fragment() {
         binding.mcvMedication.visibility = View.VISIBLE
 
         val chipGroup = binding.chipGroupMedications
+        chipGroup.removeAllViews()
+
+        android.util.Log.d("Medication", medication.medications.toString())
 
         medication.medications.forEach { selectedMedication ->
             val chip = createChipStyle(selectedMedication.medication_name, chipGroup)

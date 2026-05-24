@@ -46,7 +46,7 @@ class CommunityViewModel(
 
     val editCommentResult = MutableLiveData<Resource<AddCommentResponse>?>()
 
-    val deleteCommentResult = MutableLiveData<Resource<Unit>>()
+    val deleteCommentResult = MutableLiveData<Resource<Unit>?>()
 
     val likeCommentResult = MutableLiveData<Resource<Unit>>()
 
@@ -282,6 +282,10 @@ class CommunityViewModel(
         }
     }
 
+    fun clearDeleteCommentState() {
+        deleteCommentResult.value = null
+    }
+
     private suspend fun safeLikeCommentCall(token: String, commentId: Int) {
         likeCommentResult.postValue(Resource.Loading())
         try {
@@ -353,6 +357,8 @@ class CommunityViewModel(
         return false
     }
 
+    fun getUserId() =
+        userRepository.getUser()
 
 
 

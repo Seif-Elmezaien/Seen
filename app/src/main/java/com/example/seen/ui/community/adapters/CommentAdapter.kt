@@ -1,7 +1,9 @@
 package com.example.seen.ui.community.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -59,6 +61,12 @@ class CommentAdapter(
         return CommentViewHolder(binding)
     }
 
+    var userId = -1
+        set(value) {
+            field = value
+            notifyDataSetChanged() // rebinds all views with the correct userId
+        }
+
     override fun onBindViewHolder(
         holder: CommentViewHolder,
         position: Int
@@ -92,11 +100,20 @@ class CommentAdapter(
                 )
 
                 currentList[adapterPosition] = updatedComment
-
                 differ.submitList(currentList)
-
                 onLikeClickListener?.invoke(comment)
             }
+
+            if (userId == comment.user?.id){
+                Log.d("CommentAdapter", "Comment ID: ${comment.user.id} and userId: $userId")
+                editComment.visibility = View.VISIBLE
+                deleteComment.visibility = View.VISIBLE
+            } else {
+                Log.d("CommentAdapter", "Comment ID: ${comment.user?.id} and userId: $userId")
+                editComment.visibility = View.GONE
+                deleteComment.visibility = View.GONE
+            }
+
             editComment.setOnClickListener    { onEditClickListener?.invoke(comment) }
             deleteComment.setOnClickListener  { onDeleteClickListener?.invoke(comment) }
         }
@@ -117,10 +134,12 @@ class CommentAdapter(
     }
 
     // ─── New: Helper to update one comment locally after like/edit ───
-    fun addComment(comment: Comment) {
+    fun addComment(comment: Comment, onInserted: () -> Unit) {
         val newList = differ.currentList.toMutableList()
         newList.add(0, comment)
-        differ.submitList(newList.toList())  // ← toList() forces a NEW list reference
+        differ.submitList(newList.toList()) {
+            onInserted() // called after diff is done and list is applied
+        }
     }
 
     fun updateComment(comment: Comment) {

@@ -166,6 +166,12 @@ class EditLogsFragment : Fragment() {
 
         medicineList.addAll(medication.medications)
 
+        val chipGroup = binding.chipGroupMedications
+        medication.medications.forEach { selectedMedication ->
+            val chip = createChipStyle(selectedMedication.medication_name, chipGroup)
+            chipGroup.addView(chip)
+        }
+
         if (medication.notes != null){
             binding.etMedicationNotes.setText(medication.notes)
         }

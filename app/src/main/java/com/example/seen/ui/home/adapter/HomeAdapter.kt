@@ -105,7 +105,7 @@ class HomeAdapter(
                 mealParams.marginStart = 0
             }
 
-            if (logItem.medication == null && logItem.medication != null) {
+            if (logItem.meal == null && logItem.medication != null) {
                 medicineParams.marginStart = 0
             }
 
