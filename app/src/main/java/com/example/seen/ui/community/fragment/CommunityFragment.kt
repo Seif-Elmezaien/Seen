@@ -95,6 +95,13 @@ class CommunityFragment : Fragment() {
                 }
             }
         })
+
+        binding.btnAddPost.setOnClickListener {
+            findNavController().navigate(R.id.action_communityFragment_to_addPostFragment)
+        }
+        binding.btnSearchPost.setOnClickListener {
+            findNavController().navigate(R.id.action_communityFragment_to_communitySearchFragment)
+        }
     }
 
     private fun getToken() {

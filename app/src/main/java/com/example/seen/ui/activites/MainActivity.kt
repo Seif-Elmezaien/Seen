@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private val fullScreenDestinations = setOf(
         R.id.addLogsFragment,
         R.id.logDetailFragment,
+        R.id.addPostFragment,
         R.id.editLogsFragment,
         R.id.addReminderFragment,
         R.id.reminderFragment,

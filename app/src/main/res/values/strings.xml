@@ -238,6 +238,14 @@
     <string name="searchEmpty">No results were found for this search.</string>
     <string name="searchAgain">Search for something else.</string>
 
+    <!-- AddPost fragment -->
+    <string name="post_title">Post Title</string>
+    <string name="post_title_hint">Enter post title...</string>
+    <string name="post_description">Post Description</string>
+    <string name="post_description_hint">Share your experience or advice…</string>
+    <string name="post_category">Post Category</string>
+    <string name="add_image">Add Image</string>
+
     <!-- Relative Time -->
     <string name="time_just_now">Just now</string>
     <string name="time_seconds_ago">%d seconds ago</string>

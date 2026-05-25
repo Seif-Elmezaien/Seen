@@ -244,6 +244,14 @@
     <string name="searchEmpty">لا يوجد نتائج لهذا البحث</string>
     <string name="searchAgain">ابحث عن شئ اخر</string>
 
+    <!-- AddPost fragment -->
+    <string name="post_title">عنوان المنشور</string>
+    <string name="post_title_hint">أدخل عنوان المنشور…</string>
+    <string name="post_description">وصف المنشور</string>
+    <string name="post_description_hint">شارك تجربتك أو نصيحتك…</string>
+    <string name="post_category">فئة المنشور</string>
+    <string name="add_image">إضافة صورة</string>
+
 
     <!-- Relative Time -->
     <string name="time_just_now">الآن</string>

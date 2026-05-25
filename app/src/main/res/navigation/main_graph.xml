@@ -52,8 +52,8 @@
             android:id="@+id/action_communityFragment_to_communitySearchFragment"
             app:destination="@id/communitySearchFragment" />
         <action
-            android:id="@+id/action_communityFragment_to_createPostFragment"
-            app:destination="@id/createPostFragment" />
+            android:id="@+id/action_communityFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
@@ -99,11 +99,6 @@
         android:label="fragment_community_search"
         tools:layout="@layout/fragment_community_search" />
     <fragment
-        android:id="@+id/createPostFragment"
-        android:name="com.example.seen.ui.community.fragment.CreatePostFragment"
-        android:label="fragment_create_post"
-        tools:layout="@layout/fragment_create_post" />
-    <fragment
         android:id="@+id/logDetailFragment"
         android:name="com.example.seen.ui.home.fragment.LogDetailFragment"
         android:label="LogDetailFragment" >
@@ -122,4 +117,8 @@
             android:name="FullLog"
             app:argType="com.example.seen.domain.model.entites.FullLog" />
     </fragment>
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.example.seen.ui.community.fragment.AddPostFragment"
+        android:label="AddPostFragment" />
 </navigation>

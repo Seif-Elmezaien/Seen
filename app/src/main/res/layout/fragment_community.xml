@@ -43,18 +43,21 @@
             app:layout_constraintTop_toTopOf="@id/logoIv">
 
             <ImageView
+                android:id="@+id/btnChats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_chats" />
 
             <ImageView
+                android:id="@+id/btnSearchPost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="18dp"
                 android:src="@drawable/ic_search_glasses" />
 
             <ImageView
+                android:id="@+id/btnAddPost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_box_add" />
