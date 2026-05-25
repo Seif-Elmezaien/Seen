@@ -10,15 +10,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
+import com.example.seen.util.Constants.Companion.GENERAL
 import com.example.seen.util.Resource
 import com.example.seen.util.SeenApplication
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import java.io.IOException
 import java.util.Collections.emptyList
@@ -52,6 +56,7 @@ class CommunityViewModel(
 
     val commentLikesResult = MutableLiveData<Resource<PostUser>>()
 
+    val createPostResult = MutableLiveData<Resource<Data>?>()
 
     val searchResults = MutableLiveData<Resource<SearchResponse>>()
     var searchPage = 1
@@ -94,6 +99,10 @@ class CommunityViewModel(
 
     fun getCommentLikes(token: String, commentId: Int) = viewModelScope.launch {
         safeGetCommentLikesCall(token, commentId)
+    }
+
+    fun createPost(token: String, title: RequestBody, content: RequestBody, category: RequestBody, images: List<MultipartBody.Part>) = viewModelScope.launch {
+        safeCreatePostCall(token, title, content, category, images)
     }
 
     private suspend fun safePostsCall(token: String, category: String) {
@@ -330,6 +339,50 @@ class CommunityViewModel(
         }
     }
 
+    private suspend fun safeCreatePostCall(token: String, title: RequestBody, content: RequestBody, category: RequestBody, images: List<MultipartBody.Part>) {
+        createPostResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.createPost(token, title, content, category, images)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        createPostResult.postValue(Resource.Success(it))
+                    }
+                } else {
+                    createPostResult.postValue(Resource.Error(response.message()))
+                }
+            } else {
+                createPostResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> createPostResult.postValue(Resource.Error("Network Failure"))
+                else -> createPostResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
+
+    fun clearCreatePostState() {
+        createPostResult.value = null
+    }
+
+    fun insertNewPost(newPost: Data) {
+
+        communityPostsResponse?.let { currentResponse ->
+
+            val updatedPosts = mutableListOf<Data>()
+
+            updatedPosts.add(newPost)
+
+            updatedPosts.addAll(currentResponse.data)
+
+            communityPostsResponse =
+                currentResponse.copy(data = updatedPosts)
+
+            communityPosts.postValue(Resource.Success(communityPostsResponse!!))
+        }
+    }
+
     fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<SeenApplication>().getSystemService(
             Context.CONNECTIVITY_SERVICE
@@ -359,7 +412,5 @@ class CommunityViewModel(
 
     fun getUserId() =
         userRepository.getUser()
-
-
 
 }

@@ -233,6 +233,7 @@ class CommunityFragment : Fragment() {
             }
         }
     }
+
     private fun handleChips() {
         binding.chipGroupCategories.children
             .filterIsInstance<Chip>()

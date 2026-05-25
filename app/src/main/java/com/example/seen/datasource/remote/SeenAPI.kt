@@ -6,6 +6,8 @@ import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.Data
+import com.example.seen.domain.model.community.PostResponse
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.PostRequest
@@ -15,6 +17,8 @@ import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
 import com.example.seen.domain.model.logs.LogRequest
 import com.example.seen.domain.model.logs.LogResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -66,18 +70,22 @@ interface SeenAPI {
         @Query("category") category: String,
     ): Response<PostListResponse>
 
+    @Multipart
     @POST("posts")
     suspend fun createPost(
         @Header("Authorization") token: String,
-        @Body post: PostRequest,
-    ): Response<PostListResponse>
+        @Part("title")    title: RequestBody,
+        @Part("content")  content: RequestBody,
+        @Part("category") category: RequestBody,
+        @Part images: List<MultipartBody.Part>
+    ): Response<Data>
 
     @PUT("posts/{postId}")
     suspend fun editPost(
         @Header("Authorization") token: String,
         @Path("postId") postId: Int,
         @Body post: PostRequest,
-    ): Response<PostListResponse>
+    ): Response<Data>
 
     @DELETE("posts/{postId}")
     suspend fun deletePost(

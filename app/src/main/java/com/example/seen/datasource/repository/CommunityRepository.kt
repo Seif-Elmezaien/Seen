@@ -2,12 +2,15 @@ package com.example.seen.datasource.repository
 
 import com.example.seen.datasource.remote.RetrofitInstance
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class CommunityRepository {
@@ -17,10 +20,10 @@ class CommunityRepository {
     suspend fun getCommunityPosts(token: String, page: Int, category: String): Response<PostListResponse> =
         RetrofitInstance.api.getCommunityPosts(token, page, category)
 
-    suspend fun createPost(token: String, post: PostRequest): Response<PostListResponse> =
-        RetrofitInstance.api.createPost(token, post)
+    suspend fun createPost(token: String, title: RequestBody, content: RequestBody, category: RequestBody, images: List<MultipartBody.Part>): Response<Data> =
+        RetrofitInstance.api.createPost(token, title, content, category, images)
 
-    suspend fun editPost(token: String, postId: Int, post: PostRequest): Response<PostListResponse> =
+    suspend fun editPost(token: String, postId: Int, post: PostRequest): Response<Data> =
         RetrofitInstance.api.editPost(token, postId, post)
 
     suspend fun deletePost(token: String, postId: Int): Response<Unit> =

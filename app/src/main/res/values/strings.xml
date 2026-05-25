@@ -245,6 +245,9 @@
     <string name="post_description_hint">Share your experience or advice…</string>
     <string name="post_category">Post Category</string>
     <string name="add_image">Add Image</string>
+    <string name="add_more_images">Add More Images</string>
+    <string name="max_images">Maximum 10 images allowed</string>
+    <string name="image_counter">%1$d of %2$d</string>
 
     <!-- Relative Time -->
     <string name="time_just_now">Just now</string>
