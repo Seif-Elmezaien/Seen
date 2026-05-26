@@ -17,6 +17,9 @@ import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
 import com.example.seen.domain.model.logs.LogRequest
 import com.example.seen.domain.model.logs.LogResponse
+import com.example.seen.domain.model.notification.FcmTokenRequest
+import com.example.seen.domain.model.notification.MarkReadResponse
+import com.example.seen.domain.model.notification.NotificationsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -34,6 +37,30 @@ interface SeenAPI {
 
     @POST("register")
     suspend fun signup(@Body request: SignupRequest): Response<LoginAndSignupResponse>
+
+    // ─── Notification ───────────────────────────────────────────────────────
+
+    @POST("user/save-device-token")
+    suspend fun updateFcmToken(
+        @Header("Authorization") token: String,
+        @Body body: FcmTokenRequest
+    ): Response<Unit>
+
+    @GET("notifications")
+    suspend fun getNotifications(
+        @Header("Authorization") token: String
+    ): Response<NotificationsResponse>
+
+    @POST("notifications/{id}/read")
+    suspend fun markAsRead(
+        @Header("Authorization") token: String,
+        @Path("id") notificationId: Int
+    ): Response<MarkReadResponse>
+
+    @POST("notifications/read-all")
+    suspend fun markAllAsRead(
+        @Header("Authorization") token: String
+    ): Response<MarkReadResponse>
 
     // ─── Logs ───────────────────────────────────────────────────────
 

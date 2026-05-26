@@ -185,7 +185,7 @@ class AddPostFragment : Fragment() {
     private fun openViewer(position: Int) {
 
         val dialog = ImagePreviewDialogFragment(
-            images = selectedPhotos,
+            images = selectedPhotos.map { it.toString() }.toMutableList(),
             startPosition = position,
             isDeletable = true
         ) { deletedPosition ->

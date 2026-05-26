@@ -36,55 +36,29 @@ class PreviewImageAdapter(
         val binding: ItemPreviewImageBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
-    private val differCallback = object : DiffUtil.ItemCallback<Uri>() {
-
-        override fun areItemsTheSame(
-            oldItem: Uri,
-            newItem: Uri
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: Uri,
-            newItem: Uri
-        ): Boolean {
-            return oldItem == newItem
-        }
+    private val differCallback = object : DiffUtil.ItemCallback<String>() {
+        override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: String, newItem: String) = oldItem == newItem
     }
 
     val differ = AsyncListDiffer(this, differCallback)
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ImageViewHolder {
-
-        val binding = ItemPreviewImageBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val binding = ItemPreviewImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ImageViewHolder(binding)
     }
 
-    override fun onBindViewHolder(
-        holder: ImageViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        Glide.with(context).load(differ.currentList[position]).into(holder.binding.imageView)
+    }
 
-        val image = differ.currentList[position]
-
-        holder.binding.apply {
-
-            Glide.with(root)
-                .load(image)
-                .into(imageView)
+    fun removeImage(position: Int) {
+        val currentList = differ.currentList.toMutableList()
+        if (position in currentList.indices) {
+            currentList.removeAt(position)
+            differ.submitList(currentList)
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount() = differ.currentList.size
 }

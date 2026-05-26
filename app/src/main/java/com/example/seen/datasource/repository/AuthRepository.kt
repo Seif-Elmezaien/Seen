@@ -6,6 +6,7 @@ import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
+import com.example.seen.domain.model.notification.FcmTokenRequest
 import retrofit2.Response
 
 class AuthRepository {
@@ -17,5 +18,8 @@ class AuthRepository {
 
     suspend fun signup(user: SignupRequest): Response<LoginAndSignupResponse> =
         RetrofitInstance.api.signup(user)
+
+    suspend fun updateFcmToken(token: String, fcmTokenRequest: FcmTokenRequest): Response<Unit> =
+        RetrofitInstance.api.updateFcmToken(token, fcmTokenRequest)
 
 }

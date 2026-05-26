@@ -12,24 +12,17 @@ import com.example.seen.databinding.FragmentImagePreviewBinding
 import com.example.seen.ui.community.adapters.PreviewImageAdapter
 
 class ImagePreviewDialogFragment(
-    private val images: MutableList<Uri>,
+    private val images: MutableList<String>,       // 👈 String
     private val startPosition: Int,
     private val isDeletable: Boolean,
-    private val onDelete: (Int) -> Unit
+    private val onDelete: ((Int) -> Unit)? = null  // 👈 nullable for feed usage
 ) : DialogFragment() {
 
     private lateinit var binding: FragmentImagePreviewBinding
-
     private lateinit var adapter: PreviewImageAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentImagePreviewBinding.inflate(inflater)
-
         return binding.root
     }
 
@@ -39,9 +32,7 @@ class ImagePreviewDialogFragment(
         binding.viewPager.adapter = adapter
         adapter.differ.submitList(images.toList())
 
-        binding.btnDelete.visibility = if (isDeletable) View.VISIBLE else View.GONE   // 👈 renamed
-
-
+        binding.btnDelete.visibility = if (isDeletable) View.VISIBLE else View.GONE
 
         binding.viewPager.setCurrentItem(startPosition, false)
         updateCounter(startPosition, images.size)
@@ -54,52 +45,44 @@ class ImagePreviewDialogFragment(
         binding.viewPager.registerOnPageChangeCallback(pageCallback)
 
         binding.btnDelete.setOnClickListener {
-
             val currentPosition = binding.viewPager.currentItem
 
-            onDelete(currentPosition)
+            // 1. notify fragment to remove from selectedPhotos
+            onDelete?.invoke(currentPosition)
 
-            // 2. build new list locally so we control the size
-            val newList = images.toList()  // images already updated by onDelete
+            // 2. remove from local images list
+            images.removeAt(currentPosition)
 
-            if (newList.isEmpty()) {
+            if (images.isEmpty()) {
                 dismiss()
                 return@setOnClickListener
             }
 
-            val newPosition = if (currentPosition >= newList.size) newList.size - 1 else currentPosition
+            val newPosition = if (currentPosition >= images.size) images.size - 1 else currentPosition
 
+            // 3. unregister before submitList
             binding.viewPager.unregisterOnPageChangeCallback(pageCallback)
 
-            // 3. submit new list, THEN update UI after differ finishes
-            adapter.differ.submitList(newList) {
-                // this callback fires AFTER differ finishes — size is now correct ✅
+            // 4. submit updated list, update UI in callback
+            adapter.differ.submitList(images.toList()) {
                 binding.viewPager.post {
                     binding.viewPager.setCurrentItem(newPosition, false)
-                    updateCounter(newPosition, newList.size)  // 👈 pass size directly, don't read from differ
-                    // 👇 re-register after everything is done
+                    updateCounter(newPosition, images.size)
                     binding.viewPager.registerOnPageChangeCallback(pageCallback)
                 }
             }
         }
 
-
         binding.btnClose.setOnClickListener { dismiss() }
     }
 
-    // 👇 takes size as parameter instead of reading from differ (avoids async race)
     private fun updateCounter(position: Int, total: Int) {
         binding.tvIndex.text = getString(R.string.image_counter, position + 1, total)
     }
 
     override fun onStart() {
         super.onStart()
-
-        dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 }

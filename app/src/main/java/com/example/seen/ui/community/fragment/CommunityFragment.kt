@@ -128,7 +128,7 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter(requireContext())  // ✅ create a new instance
+        postAdapter = PostAdapter(requireContext(), parentFragmentManager)
         binding.rvPosts.apply {
             adapter = postAdapter
             layoutManager = LinearLayoutManager(activity)

@@ -19,6 +19,7 @@ import com.example.seen.ui.activites.MainActivity
 import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.example.seen.util.Resource
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -145,6 +146,8 @@ class LoginFragment : Fragment() {
                     val token = response.data?.token
                     if (token != null) {
                         setToken(token)
+                        sendFcmTokenToServer("Bearer $token")
+                        viewModel.resetFcmTokenState()
                     }
 
                     Toast.makeText(requireContext(),
@@ -152,6 +155,7 @@ class LoginFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     viewModel.resetLoginState()
+
                     goToMain()
                 }
                 is Resource.Error -> {
@@ -195,6 +199,17 @@ class LoginFragment : Fragment() {
             getString(R.string.loading)
         } else {
             getString(R.string.login)
+        }
+    }
+
+    // call this after successful login
+    fun sendFcmTokenToServer(token: String) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val fcmToken = task.result
+                // call your API
+                viewModel.updateFcmToken(token, fcmToken)
+            }
         }
     }
 

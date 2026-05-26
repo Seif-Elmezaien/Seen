@@ -15,6 +15,7 @@ import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
+import com.example.seen.domain.model.notification.FcmTokenRequest
 import com.example.seen.util.NetworkUtils
 import com.example.seen.util.Resource
 import kotlinx.coroutines.launch
@@ -37,6 +38,10 @@ class AuthViewModel(
     val signupState: LiveData<Resource<LoginAndSignupResponse>?> = _signupState
 
     var signUpData = SignupRequest()
+
+    private val _fcmTokenState = MutableLiveData<Resource<Unit>?>()
+    val fcmTokenState: LiveData<Resource<Unit>?> = _fcmTokenState
+
 
 
     fun login(loginRequest: LoginRequest) = viewModelScope.launch {
@@ -74,6 +79,12 @@ class AuthViewModel(
         }
     }
 
+    fun updateFcmToken(token: String, fcmToken: String) = viewModelScope.launch {
+        _fcmTokenState.postValue(Resource.Loading())
+        _fcmTokenState.postValue(safeApiCall { authRepository.updateFcmToken(token, FcmTokenRequest(fcmToken)
+        ) })
+    }
+
     fun resetLoginState() {
         _loginState.postValue(null)
     }
@@ -82,6 +93,9 @@ class AuthViewModel(
     }
     fun resetSignupState() {
         _signupState.postValue(null)
+    }
+    fun resetFcmTokenState() {
+        _fcmTokenState.postValue(null)
     }
 
     private suspend fun <T> safeApiCall(

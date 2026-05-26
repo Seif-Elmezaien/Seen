@@ -26,6 +26,7 @@ import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.ui.community.adapters.CommentAdapter
+import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.ADVICES
@@ -192,6 +193,7 @@ class PostDetailsFragment : Fragment() {
                     ivPhoto1.visibility = View.VISIBLE
                     layoutRow2.visibility = View.GONE
                     Glide.with(requireContext()).load(photos[0]).into(ivPhoto1)
+                    ivPhoto1.setOnClickListener { openViewer(photos, 0) }  // 👈
                 }
                 2 -> {
                     ivPhoto1.visibility = View.VISIBLE
@@ -199,6 +201,8 @@ class PostDetailsFragment : Fragment() {
                     flPhoto3.visibility = View.GONE
                     Glide.with(requireContext()).load(photos[0]).into(ivPhoto1)
                     Glide.with(requireContext()).load(photos[1]).into(ivPhoto2)
+                    ivPhoto1.setOnClickListener { openViewer(photos, 0) }  // 👈
+                    ivPhoto2.setOnClickListener { openViewer(photos, 1) }  // 👈
                 }
                 else -> {
                     ivPhoto1.visibility = View.VISIBLE
@@ -207,6 +211,9 @@ class PostDetailsFragment : Fragment() {
                     Glide.with(requireContext()).load(photos[0]).into(ivPhoto1)
                     Glide.with(requireContext()).load(photos[1]).into(ivPhoto2)
                     Glide.with(requireContext()).load(photos[2]).into(ivPhoto3)
+                    ivPhoto1.setOnClickListener { openViewer(photos, 0) }  // 👈
+                    ivPhoto2.setOnClickListener { openViewer(photos, 1) }  // 👈
+                    ivPhoto3.setOnClickListener { openViewer(photos, 2) }  // 👈
 
                     if (photos.size > 3) {
                         tvMoreCount.visibility = View.VISIBLE
@@ -217,6 +224,14 @@ class PostDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun openViewer(photos: List<String>, startPosition: Int) {
+        ImagePreviewDialogFragment(
+            images = photos.toMutableList(),
+            startPosition = startPosition,
+            isDeletable = false    // 👈 no delete in details screen
+        ).show(parentFragmentManager, "image_viewer")
     }
 
     private fun setCommentRecyclerView() {

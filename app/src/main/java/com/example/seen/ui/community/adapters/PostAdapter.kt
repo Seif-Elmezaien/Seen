@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityPostBinding
 import com.example.seen.domain.model.community.Data
+import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
 import com.example.seen.util.Constants.Companion.ADVICES
 import com.example.seen.util.Constants.Companion.GESTATIONAL
 import com.example.seen.util.Constants.Companion.LADA
@@ -27,7 +28,8 @@ import java.util.Locale
 import java.util.TimeZone
 
 class PostAdapter(
-    val context: Context
+    val context: Context,
+    private val fragmentManager: androidx.fragment.app.FragmentManager  // 👈 add
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(val binding: ItemCommunityPostBinding) : RecyclerView.ViewHolder(binding.root)
@@ -79,7 +81,7 @@ class PostAdapter(
             flAvatarStroke.background = ContextCompat.getDrawable(context, setProfileBackground(post.user.diabetes_type ?: ""))
             tvCategory.background = ContextCompat.getDrawable(context, bgRes)
 
-            bindPhotos(holder.binding, post.images.map { it.url })
+            bindPhotos(holder.binding, post.images.map { it.url }, fragmentManager)
 
             tvCategory.background = ContextCompat.getDrawable(context, bgRes)
             tvCategory.setTextColor(ContextCompat.getColor(context, colorRes))
@@ -189,7 +191,7 @@ class PostAdapter(
         }
     }
 
-    private fun bindPhotos(binding: ItemCommunityPostBinding, photos: List<String>) {
+    private fun bindPhotos(binding: ItemCommunityPostBinding, photos: List<String>, fragment: androidx.fragment.app.FragmentManager) {
         binding.apply {
             when (photos.size) {
                 0 -> {
@@ -200,6 +202,7 @@ class PostAdapter(
                     ivPhoto1.visibility = View.VISIBLE
                     layoutRow2.visibility = View.GONE
                     Glide.with(context).load(photos[0]).into(ivPhoto1)
+                    ivPhoto1.setOnClickListener { openViewer(photos, 0, fragment) }
                 }
                 2 -> {
                     ivPhoto1.visibility = View.VISIBLE
@@ -207,6 +210,8 @@ class PostAdapter(
                     flPhoto3.visibility = View.GONE
                     Glide.with(context).load(photos[0]).into(ivPhoto1)
                     Glide.with(context).load(photos[1]).into(ivPhoto2)
+                    ivPhoto1.setOnClickListener { openViewer(photos, 0, fragment) }
+                    ivPhoto2.setOnClickListener { openViewer(photos, 1, fragment) }
                 }
                 else -> {
                     ivPhoto1.visibility = View.VISIBLE
@@ -215,6 +220,9 @@ class PostAdapter(
                     Glide.with(context).load(photos[0]).into(ivPhoto1)
                     Glide.with(context).load(photos[1]).into(ivPhoto2)
                     Glide.with(context).load(photos[2]).into(ivPhoto3)
+                    ivPhoto1.setOnClickListener { openViewer(photos, 0, fragment) }
+                    ivPhoto2.setOnClickListener { openViewer(photos, 1, fragment) }
+                    ivPhoto3.setOnClickListener { openViewer(photos, 2, fragment) }
 
                     if (photos.size > 3) {
                         tvMoreCount.visibility = View.VISIBLE
@@ -225,6 +233,14 @@ class PostAdapter(
                 }
             }
         }
+    }
+
+    private fun openViewer(photos: List<String>, startPosition: Int, fragmentManager: androidx.fragment.app.FragmentManager) {
+        ImagePreviewDialogFragment(
+            images = photos.toMutableList(),
+            startPosition = startPosition,
+            isDeletable = false      // 👈 no delete in feed
+        ).show(fragmentManager, "image_viewer")
     }
 
     override fun getItemCount(): Int {
