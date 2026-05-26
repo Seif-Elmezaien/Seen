@@ -268,8 +268,25 @@
     <string name="time_days_ago">منذ %d أيام</string>
 
 
-
-
+    <!-- ReportFragment -->
+    <string name="analysis_report">التحليل و التقارير</string>
+    <string name="analysis_report_body">تحليل شامل لبياناتك الصحية</string>
+    <string name="a1c_text">A1C تقديري</string>
+    <string name="total_reading">قراءات</string>
+    <string name="weekly">اسبوعي</string>
+    <string name="monthly">شهري</string>
+    <string name="custom">مخصص</string>
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="highest_read">أعلى قراءة</string>
+    <string name="lowest_read">أقل قراءة</string>
+    <string name="average_read">متوسط قراءات السكر</string>
+    <string name="all">الكل</string>
+    <string name="fasting_sugar">سكر صائم</string>
+    <string name="before_meal_sugar">قبل الأكل</string>
+    <string name="after_meal_sugar">بعد الأكل</string>
+    <string name="random_sugar">عشوائي</string>
+    <string name="create_report">إنشاء تقرير</string>
 
 
 

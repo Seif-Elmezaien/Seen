@@ -43,7 +43,7 @@ interface SeenAPI {
     @POST("user/save-device-token")
     suspend fun updateFcmToken(
         @Header("Authorization") token: String,
-        @Body body: FcmTokenRequest
+        @Body device_token: FcmTokenRequest
     ): Response<Unit>
 
     @GET("notifications")

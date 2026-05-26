@@ -261,4 +261,23 @@
     <string name="time_days_ago">%d days ago</string>
 
 
+    <!-- ReportFragment -->
+    <string name="analysis_report">Analysis and Reports</string>
+    <string name="analysis_report_body">Comprehensive analysis of your health data</string>
+    <string name="a1c_text">A1C Estimate</string>
+    <string name="total_reading">Reading</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="custom">Custom</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="highest_read">Highest Read</string>
+    <string name="lowest_read">Lowest Read</string>
+    <string name="average_read">Average Glucose Read</string>
+    <string name="all">All</string>
+    <string name="fasting_sugar">Fasting</string>
+    <string name="before_meal_sugar">Before meal</string>
+    <string name="after_meal_sugar">After meal</string>
+    <string name="random_sugar">Random</string>
+    <string name="create_report">Create Report</string>
 </resources>
