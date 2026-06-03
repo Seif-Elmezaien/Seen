@@ -67,6 +67,7 @@ class CommunityFragment : Fragment() {
         setPostAdapter()
         observeLikeError()
         handleChips()
+        searchOnClick()
 
         // Only fetch if no data yet
         if (viewModel.communityPostsResponse == null) {
@@ -255,6 +256,13 @@ class CommunityFragment : Fragment() {
             selectedCategory = newCategory
 
             viewModel.getCommunityPosts(token!!, selectedCategory, true)
+        }
+    }
+
+    private fun searchOnClick() {
+        binding.btnSearchPost.setOnClickListener {
+            val action = CommunityFragmentDirections.actionCommunityFragmentToCommunitySearchFragment()
+            findNavController().navigate(action)
         }
     }
 

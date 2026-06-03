@@ -26,6 +26,7 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import java.io.IOException
 import java.util.Collections.emptyList
+import kotlin.collections.mutableListOf
 
 class CommunityViewModel(
     app: Application,
@@ -269,6 +270,64 @@ class CommunityViewModel(
         editCommentResult.value = null
     }
 
+    private suspend fun safeSearchCall(token: String, query: String) {
+        searchResults.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.searchPostAndUser(token, query, searchPage)
+                searchResults.postValue(handleSearchResponse(response))
+            } else {
+                searchResults.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> searchResults.postValue(Resource.Error("Network Failure"))
+                else -> searchResults.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
+
+    private fun handleSearchResponse(response: Response<SearchResponse>): Resource<SearchResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+
+                searchPage++
+
+                if (searchResponse == null) {
+                    searchResponse = resultResponse
+                } else {
+                    // posts is PostListResponse, so merge its inner data list
+                    val mergedData = (
+                            (searchResponse?.posts?.data ?: mutableListOf<Data>()) + resultResponse.posts.data
+                            ).toMutableList()
+
+                    // users is List<PostUser>
+                    val mergedUsers = (
+                            (searchResponse?.users ?: emptyList<PostUser>()) + resultResponse.users
+                            ).toMutableList()
+
+                    searchResponse = resultResponse.copy(
+                        posts = PostListResponse(data = mergedData),
+                        users = mergedUsers
+                    )
+                }
+
+                return Resource.Success(searchResponse ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+    fun clearSearchState() {
+        searchPage = 1
+        searchResponse = null
+        lastSearchQuery = ""
+        searchResults.value = Resource.Success(
+            SearchResponse(
+                posts = PostListResponse(data = mutableListOf()),
+                users = emptyList<PostUser>()
+            )
+        )
+    }
 
     private suspend fun safeDeleteCommentCall(token: String, commentId: Int) {
         deleteCommentResult.postValue(Resource.Loading())
@@ -410,7 +469,15 @@ class CommunityViewModel(
         return false
     }
 
-    fun getUserId() =
-        userRepository.getUser()
+    fun getUserId() = userRepository.getUser()
+
+    fun searchPostAndUser(token: String, query: String, isNewQuery: Boolean = false) = viewModelScope.launch {
+        if (isNewQuery) {
+            searchPage = 1
+            searchResponse = null
+            lastSearchQuery = query
+        }
+        safeSearchCall(token, query)
+    }
 
 }

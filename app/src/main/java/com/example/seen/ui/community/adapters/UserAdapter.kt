@@ -11,23 +11,24 @@ import com.example.seen.R
 import com.example.seen.databinding.ItemAccountSearchBinding
 import com.example.seen.databinding.ItemCommunityCommentBinding
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.entites.User
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
 
     inner class UserViewHolder(val binding: ItemAccountSearchBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private val differCallback = object : DiffUtil.ItemCallback<User>(){
+    private val differCallback = object : DiffUtil.ItemCallback<PostUser>(){
         override fun areItemsTheSame(
-            oldItem: User,
-            newItem: User
+            oldItem: PostUser,
+            newItem: PostUser
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: User,
-            newItem: User
+            oldItem: PostUser,
+            newItem: PostUser
         ): Boolean {
             return oldItem == newItem
         }
@@ -57,7 +58,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
                 .load(account?.profile_picture?.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivAccount)
-            tvUserAccounttName.text = account.first_name + account.last_name
+            tvUserAccounttName.text = "${account.first_name} ${account.last_name}"
         }
     }
 
