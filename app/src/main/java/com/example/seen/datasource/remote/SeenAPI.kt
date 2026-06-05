@@ -5,6 +5,8 @@ import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
+import com.example.seen.domain.model.chatbot.AskChatbotRequest
+import com.example.seen.domain.model.chatbot.GetChatbotHistoryResponse
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostResponse
@@ -22,6 +24,7 @@ import com.example.seen.domain.model.notification.MarkReadResponse
 import com.example.seen.domain.model.notification.NotificationsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -181,5 +184,27 @@ interface SeenAPI {
         @Query("q") query: String,
         @Query("page") page: Int = 1,
     ): Response<SearchResponse>
+
+
+    // ─── Report ───────────────────────────────────────────────────────────────
+    @GET("/reports/glucose/pdf")
+    suspend fun generateReport(
+        @Header("Authorization") token: String,
+        @Query("start_date")     startDate: String,
+        @Query("end_date")       endDate: String
+    ): Response<ResponseBody>
+
+    // ─── Chatbot ───────────────────────────────────────────────────────────────
+
+    @POST("/chatbot/ask")
+    suspend fun askChatbot(
+        @Header("Authorization") token: String,
+        @Body message: AskChatbotRequest
+    ): Response<ResponseBody>
+
+    @GET("/chatbot/history")
+    suspend fun getChatbotHistory(
+        @Header("Authorization") token: String
+    ) : Response<GetChatbotHistoryResponse>
 
 }

@@ -19,6 +19,7 @@ import com.example.seen.domain.model.logs.MealRequest
 import com.example.seen.domain.model.logs.MedicationRequest
 import com.example.seen.util.toFormattedDate
 import com.example.seen.util.toTimestamp
+import okhttp3.ResponseBody
 
 class LogRepository(
     val db : SeenDatabase,
@@ -73,6 +74,9 @@ class LogRepository(
 
     fun getGraphData(startDate: Long, endDate: Long, readingType: String?): LiveData<List<GraphPoint>> =
         db.logDao.getGraphData(startDate, endDate, readingType)
+
+    suspend fun generateReport(token: String, startDate: Long, endDate: Long) =
+        RetrofitInstance.api.generateReport(token, startDate.toFormattedDate(), endDate.toFormattedDate())
 
     // ↓ Sync
     suspend fun syncToServer(token : String) {

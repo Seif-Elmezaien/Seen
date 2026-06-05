@@ -36,7 +36,6 @@ class ReportViewModel(
         fromDate= reportFilter.fromDate
         toDate = reportFilter.toDate
         selectedPeriod = reportFilter.period
-
         filter.value = reportFilter
         loadStatistics(reportFilter)
     }
