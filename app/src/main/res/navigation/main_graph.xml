@@ -73,7 +73,11 @@
         android:id="@+id/reportFragment"
         android:name="com.example.seen.ui.report.fragment.ReportFragment"
         android:label="fragment_report"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_report" >
+        <action
+            android:id="@+id/action_reportFragment_to_logDetailFragment"
+            app:destination="@id/logDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addLogsFragment"
         android:name="com.example.seen.ui.home.fragment.AddLogsFragment"

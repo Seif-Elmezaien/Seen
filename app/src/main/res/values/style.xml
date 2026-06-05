@@ -55,4 +55,10 @@
         <item name="checkedIconVisible">false</item>
     </style>
 
+    <style name="GraphCardStyle">
+        <item name="cardElevation">10dp</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="cardCornerRadius">16dp</item>
+    </style>
+
 </resources>

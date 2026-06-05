@@ -31,6 +31,21 @@ class Constants {
         const val TYPE1_LADA = "Type1 / LADA"
         const val ADVICES = "Advices"
 
+        const val BREAKFAST = "Breakfast"
+        const val LUNCH = "Lunch"
+        const val DINNER = "Dinner"
+        const val SNACK = "Snack"
+
+        const val AFTER_MEAL = "After Meal"
+        const val BEFORE_MEAL = "Before Meal"
+        const val FASTING = "Fasting"
+        const val RANDOM = "Random"
+
+        const val WEEKLY = "Weekly"
+        const val MONTHLY = "Monthly"
+        const val CUSTOM = "Custom"
+        const val DAY_MS = 24 * 60 * 60 * 1000L
+
         const val POST_PAGE_SIZE = 10
         const val COMMENT_PAGE_SIZE = 20
 

@@ -25,6 +25,7 @@
     <color name="primary_10">#1A6976EB</color>
     <color name="good_sugar_reading_10">#1A17CE92</color>
     <color name="bad_sugar_reading_10">#1AFB2C36</color>
+    <color name="report_graph_bg">#FFFFFF</color>
 
 
     <color name="alert_streak">#F65629</color>
@@ -53,6 +54,11 @@
     <color name="profile_mody_stroke">#F97316</color>
     <color name="profile_lada_stroke">#22C55E</color>
     <color name="profile_gestational_stroke">#A855F7</color>
+
+    <color name="fasting_color">#17CE92</color>
+    <color name="before_meal_color">#FB2C36</color>
+    <color name="after_meal_color">#6976EB</color>
+    <color name="random_color">#FFB703</color>
 
     <color name="post_likes">#DC2626</color>
     <color name="Type1_lada_red">#EF4444</color>

@@ -30,8 +30,16 @@ import com.example.seen.domain.model.entites.RecordMedication
 import com.example.seen.domain.model.entites.SelectedMedication
 import com.example.seen.ui.home.viewmodel.AddLogsViewModel
 import com.example.seen.ui.home.viewmodel.AddLogsViewModelProviderFactory
+import com.example.seen.util.Constants.Companion.AFTER_MEAL
+import com.example.seen.util.Constants.Companion.BEFORE_MEAL
+import com.example.seen.util.Constants.Companion.BREAKFAST
+import com.example.seen.util.Constants.Companion.DINNER
+import com.example.seen.util.Constants.Companion.FASTING
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
+import com.example.seen.util.Constants.Companion.LUNCH
+import com.example.seen.util.Constants.Companion.RANDOM
+import com.example.seen.util.Constants.Companion.SNACK
 import com.example.seen.util.isOnline
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -223,10 +231,10 @@ class AddLogsFragment : Fragment() {
 
     private fun setupGlucoseTypeSelection() {
         val buttons = mapOf(
-            binding.tvGlucoseRandom to "Random",
-            binding.tvGlucoseBeforeMeal to "Before Meal",
-            binding.tvGlucoseAfterMeal to "After Meal",
-            binding.tvGlucoseFasting to "Fasting"
+            binding.tvGlucoseRandom to RANDOM,
+            binding.tvGlucoseBeforeMeal to BEFORE_MEAL,
+            binding.tvGlucoseAfterMeal to AFTER_MEAL,
+            binding.tvGlucoseFasting to FASTING
         )
 
         buttons.forEach { (button, englishValue) ->
@@ -247,10 +255,10 @@ class AddLogsFragment : Fragment() {
 
     private fun setupMealTypeSelection() {
         val buttons = mapOf(
-            binding.tvBreakfast to "Breakfast",
-            binding.tvLunch to "Lunch",
-            binding.tvDinner to "Dinner",
-            binding.tvSnack to "Snack"
+            binding.tvBreakfast to BREAKFAST,
+            binding.tvLunch to LUNCH,
+            binding.tvDinner to DINNER,
+            binding.tvSnack to SNACK
         )
 
         buttons.forEach { (button, englishValue) ->

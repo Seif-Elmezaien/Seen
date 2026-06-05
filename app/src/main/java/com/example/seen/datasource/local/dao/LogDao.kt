@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.domain.model.entites.GraphPoint
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
@@ -50,6 +51,75 @@ interface LogDao {
     @Transaction
     @Query("SELECT * FROM logs WHERE log_id = :logId")
     fun getLogById(logId: String): LiveData<FullLog>
+
+    // Analysis
+
+    @Query("""
+        SELECT COUNT(*)
+        FROM logs l
+        INNER JOIN RecordGlucose rg ON l.log_id = rg.log_id
+        WHERE l.logged_at BETWEEN :startDate AND :endDate
+""")
+    suspend fun getGlucoseLogsCount(
+        startDate: Long,
+        endDate: Long,
+    ): Int
+
+    @Query("""
+    SELECT AVG(rg.glucose_level)
+    FROM logs l
+    INNER JOIN RecordGlucose rg ON l.log_id = rg.log_id
+    WHERE l.logged_at BETWEEN :startDate AND :endDate
+""")
+    suspend fun getAverageGlucose(startDate: Long, endDate: Long): Float?
+
+    @Transaction
+    @Query("""
+    SELECT * FROM logs
+    WHERE log_id = (
+        SELECT rg.log_id
+        FROM RecordGlucose rg
+        INNER JOIN logs l ON l.log_id = rg.log_id
+        WHERE l.logged_at BETWEEN :startDate AND :endDate
+        ORDER BY rg.glucose_level ASC
+        LIMIT 1
+    )
+""")
+    suspend fun getLowestGlucoseLog(startDate: Long, endDate: Long): FullLog?
+
+    @Transaction
+    @Query("""
+    SELECT * FROM logs
+    WHERE log_id = (
+        SELECT rg.log_id
+        FROM RecordGlucose rg
+        INNER JOIN logs l ON l.log_id = rg.log_id
+        WHERE l.logged_at BETWEEN :startDate AND :endDate
+        ORDER BY rg.glucose_level DESC
+        LIMIT 1
+    )
+   """)
+    suspend fun getHighestGlucoseLog(startDate: Long, endDate: Long): FullLog?
+
+    @Query("""
+    SELECT
+        rg.glucose_level as glucoseValue,
+        rg.reading_type as readingType,
+        l.logged_at as loggedAt,
+        l.log_id as logId
+    FROM logs l
+    INNER JOIN RecordGlucose rg
+        ON l.log_id = rg.log_id
+    WHERE l.logged_at BETWEEN :startDate AND :endDate
+    AND (:readingType IS NULL OR rg.reading_type = :readingType)
+    ORDER BY l.logged_at ASC
+""")
+    fun getGraphData(
+        startDate: Long,
+        endDate: Long,
+        readingType: String?
+    ): LiveData<List<GraphPoint>>
+
 
     @Transaction
     @Query("SELECT * FROM logs WHERE is_synced = 0")

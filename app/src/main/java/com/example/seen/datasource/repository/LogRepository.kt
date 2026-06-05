@@ -2,9 +2,12 @@ package com.example.seen.datasource.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.lifecycle.LiveData
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.remote.RetrofitInstance
 import com.example.seen.domain.model.entites.DeletedLog
+import com.example.seen.domain.model.entites.FullLog
+import com.example.seen.domain.model.entites.GraphPoint
 import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
@@ -54,6 +57,22 @@ class LogRepository(
 
     fun getLogById(logId: String) =
         db.logDao.getLogById(logId)
+
+
+    suspend fun getGlucoseLogsCount(startDate: Long, endDate: Long): Int =
+        db.logDao.getGlucoseLogsCount(startDate, endDate)
+
+    suspend fun getAverageGlucose(startDate: Long, endDate: Long): Float? =
+        db.logDao.getAverageGlucose(startDate, endDate)
+
+    suspend fun getLowestGlucoseLog(startDate: Long, endDate: Long): FullLog? =
+        db.logDao.getLowestGlucoseLog(startDate, endDate)
+
+    suspend fun getHighestGlucoseLog(startDate: Long, endDate: Long): FullLog? =
+        db.logDao.getHighestGlucoseLog(startDate, endDate)
+
+    fun getGraphData(startDate: Long, endDate: Long, readingType: String?): LiveData<List<GraphPoint>> =
+        db.logDao.getGraphData(startDate, endDate, readingType)
 
     // ↓ Sync
     suspend fun syncToServer(token : String) {

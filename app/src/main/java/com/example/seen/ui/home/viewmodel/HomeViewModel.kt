@@ -24,6 +24,7 @@ class HomeViewModel(
 
     val selectedDate = MutableLiveData(System.currentTimeMillis())
 
+
     val logs: LiveData<List<FullLog>> = selectedDate.switchMap { date ->
         val calendar = Calendar.getInstance().apply {
             timeInMillis = date
