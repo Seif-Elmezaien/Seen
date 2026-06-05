@@ -243,6 +243,7 @@
     <string name="make_comment">اكتب تعليقاً...</string>
     <string name="searchEmpty">لا يوجد نتائج لهذا البحث</string>
     <string name="searchAgain">ابحث عن شئ اخر</string>
+    <string name="likes">إعجابات</string>
 
     <!-- AddPost fragment -->
     <string name="post_title">عنوان المنشور</string>
