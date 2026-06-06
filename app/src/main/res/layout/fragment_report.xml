@@ -776,7 +776,7 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddNewLog"
+                android:id="@+id/btnGenerateReport"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="25dp"

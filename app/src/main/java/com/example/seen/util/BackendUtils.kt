@@ -13,6 +13,11 @@ fun Long.toFormattedDate(): String {
     return sdf.format(Date(this))
 }
 
+fun Long.toReportFormattedDate(): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    return sdf.format(Date(this))
+}
+
 // Converts a date string from the server back to a Long timestamp (milliseconds)
 // handles two formats:
 // 1. ISO 8601 from Laravel: "2026-05-21T04:30:00.000000Z"

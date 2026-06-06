@@ -1,7 +1,13 @@
 package com.example.seen.ui.report.fragment
 
+import android.content.ContentValues
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +34,7 @@ import com.example.seen.util.Constants.Companion.FASTING
 import com.example.seen.util.Constants.Companion.MONTHLY
 import com.example.seen.util.Constants.Companion.RANDOM
 import com.example.seen.util.Constants.Companion.WEEKLY
+import com.example.seen.util.Resource
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -36,6 +43,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import okhttp3.ResponseBody
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -51,6 +59,9 @@ class ReportFragment : Fragment() {
     private var fromDate: Long? = null
     private var toDate: Long? = null
 
+    private var token : String? = null
+    lateinit var sharedPref : SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,6 +74,7 @@ class ReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeViewModel()
+        getToken()
         setupListeners()
 
         if (viewModel.fromDate == 0L) {
@@ -77,9 +89,14 @@ class ReportFragment : Fragment() {
     private fun initializeViewModel() {
         val db            = SeenDatabase(requireContext().applicationContext)
         val logRepository = LogRepository(db)
-        val factory       = ReportViewModelProviderFactory(logRepository)
+        val factory       = ReportViewModelProviderFactory(requireActivity().application, logRepository)
 
         viewModel = ViewModelProvider(this, factory)[ReportViewModel::class.java]
+    }
+
+    private fun getToken() {
+        sharedPref = requireActivity().getSharedPreferences("Auth", Context.MODE_PRIVATE)
+        token = "Bearer " + sharedPref.getString("token", null)
     }
 
     private fun setupListeners(){
@@ -140,6 +157,8 @@ class ReportFragment : Fragment() {
             selectReadingType(binding.tvRandom)
             updateReportFilter(RANDOM)
         }
+
+        binding.btnGenerateReport.setOnClickListener { viewModel.generateReport(token = token!!) }
 
     }
 
@@ -340,6 +359,50 @@ class ReportFragment : Fragment() {
 
         viewModel.graphData.observe(viewLifecycleOwner) { graphData ->
             setUpLineChart(graphData)
+        }
+
+        viewModel.downloadReportState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is Resource.Loading -> Unit
+                is Resource.Success -> {
+
+                    state.data?.let {
+                        savePdf(it)
+                    }
+
+                    viewModel.clearDownloadReportState()
+                }
+                is Resource.Error -> {
+                    Log.d("report",state.message ?: "Unknown error")
+                }
+                null -> Unit
+            }
+        }
+    }
+
+    private fun savePdf(body: ResponseBody) {
+
+        val fileName =
+            "seen_report_${System.currentTimeMillis()}.pdf"
+
+        val values = ContentValues().apply {
+            put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+            put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
+            put(
+                MediaStore.Downloads.RELATIVE_PATH,
+                Environment.DIRECTORY_DOWNLOADS
+            )
+        }
+
+        val uri = requireContext().contentResolver.insert(
+            MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+            values
+        ) ?: return
+
+        requireContext().contentResolver.openOutputStream(uri)?.use { output ->
+            body.byteStream().use { input ->
+                input.copyTo(output)
+            }
         }
     }
 

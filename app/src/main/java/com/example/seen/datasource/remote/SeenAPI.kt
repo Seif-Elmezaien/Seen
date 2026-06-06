@@ -7,9 +7,7 @@ import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
 import com.example.seen.domain.model.chatbot.AskChatbotRequest
 import com.example.seen.domain.model.chatbot.GetChatbotHistoryResponse
-import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
-import com.example.seen.domain.model.community.PostResponse
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.PostRequest
@@ -17,8 +15,8 @@ import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
-import com.example.seen.domain.model.logs.LogRequest
 import com.example.seen.domain.model.logs.LogResponse
+import com.example.seen.domain.model.logs.LogRequest
 import com.example.seen.domain.model.notification.FcmTokenRequest
 import com.example.seen.domain.model.notification.MarkReadResponse
 import com.example.seen.domain.model.notification.NotificationsResponse
@@ -187,9 +185,10 @@ interface SeenAPI {
 
 
     // ─── Report ───────────────────────────────────────────────────────────────
-    @GET("/reports/glucose/pdf")
+    @GET("reports/glucose/pdf")
     suspend fun generateReport(
         @Header("Authorization") token: String,
+
         @Query("start_date")     startDate: String,
         @Query("end_date")       endDate: String
     ): Response<ResponseBody>

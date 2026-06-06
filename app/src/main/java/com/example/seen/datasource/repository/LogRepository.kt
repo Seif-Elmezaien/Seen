@@ -18,6 +18,7 @@ import com.example.seen.domain.model.logs.GlucoseRequest
 import com.example.seen.domain.model.logs.MealRequest
 import com.example.seen.domain.model.logs.MedicationRequest
 import com.example.seen.util.toFormattedDate
+import com.example.seen.util.toReportFormattedDate
 import com.example.seen.util.toTimestamp
 import okhttp3.ResponseBody
 
@@ -76,7 +77,7 @@ class LogRepository(
         db.logDao.getGraphData(startDate, endDate, readingType)
 
     suspend fun generateReport(token: String, startDate: Long, endDate: Long) =
-        RetrofitInstance.api.generateReport(token, startDate.toFormattedDate(), endDate.toFormattedDate())
+        RetrofitInstance.api.generateReport(token, startDate.toReportFormattedDate(), endDate.toReportFormattedDate())
 
     // ↓ Sync
     suspend fun syncToServer(token : String) {
@@ -146,8 +147,8 @@ class LogRepository(
             val response = RetrofitInstance.api.syncLogs(token, updatedSince)
             if (response.isSuccessful) {
 
-                val newLogs = response.body()?.data?.upserted_logs ?: return
-                val deletedLogs = response.body()?.data?.deleted_log_ids ?: emptyList()
+                val newLogs = response.body()?.upserted_logs ?: return
+                val deletedLogs = response.body()?.deleted_log_ids ?: emptyList()
 
                 newLogs.forEach { serverLog ->
 

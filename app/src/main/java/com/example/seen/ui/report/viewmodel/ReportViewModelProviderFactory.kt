@@ -11,9 +11,10 @@ import com.example.seen.ui.authentication.viewmodel.AuthViewModel
 import com.example.seen.ui.home.viewmodel.AddLogsViewModel
 
 class ReportViewModelProviderFactory(
+    val application: Application,
     val logRepository: LogRepository,
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ReportViewModel( logRepository) as T
+        return ReportViewModel( application, logRepository) as T
     }
 }
