@@ -1,6 +1,7 @@
 package com.example.seen.ui.home.viewmodel
 
 import android.app.Application
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +14,10 @@ import com.example.seen.domain.model.entites.Log
 import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.domain.model.entites.RecordMedication
+import com.example.seen.util.isOnline
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class HomeViewModel(
@@ -47,8 +51,10 @@ class HomeViewModel(
     fun getUser() =
         userRepository.getUser()
 
-    fun deleteLog(log: Log) = viewModelScope.launch {
-        logRepository.deleteLog(log)
+    suspend fun deleteLog(log: Log) {
+        withContext(Dispatchers.IO) {
+            logRepository.deleteLog(log)
+        }
     }
 
     fun insertLog(log: Log) = viewModelScope.launch {
@@ -70,7 +76,9 @@ class HomeViewModel(
     fun getLogById(logId: String) =
         logRepository.getLogById(logId)
 
-    fun syncToServer(token: String) = viewModelScope.launch {
-        logRepository.syncToServer(token)
+    suspend fun syncToServer(token: String) {
+        withContext(Dispatchers.IO) {
+            logRepository.syncToServer(token)
+        }
     }
 }

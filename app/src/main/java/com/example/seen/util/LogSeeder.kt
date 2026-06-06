@@ -6,8 +6,12 @@ import com.example.seen.domain.model.entites.RecordGlucose
 import com.example.seen.domain.model.entites.RecordMeal
 import com.example.seen.util.Constants.Companion.AFTER_MEAL
 import com.example.seen.util.Constants.Companion.BEFORE_MEAL
+import com.example.seen.util.Constants.Companion.BREAKFAST
+import com.example.seen.util.Constants.Companion.DINNER
 import com.example.seen.util.Constants.Companion.FASTING
+import com.example.seen.util.Constants.Companion.LUNCH
 import com.example.seen.util.Constants.Companion.RANDOM
+import com.example.seen.util.Constants.Companion.SNACK
 import java.util.Calendar
 import java.util.UUID
 import kotlin.random.Random
@@ -17,7 +21,7 @@ class LogSeeder {
 
         private val readingTypes = listOf(FASTING, BEFORE_MEAL, AFTER_MEAL, RANDOM)
 
-        private val mealTypes = listOf("BREAKFAST", "LUNCH", "DINNER", "SNACK")
+        private val mealTypes = listOf(BREAKFAST, LUNCH ,DINNER, SNACK)
 
         private val logTitles = mapOf(
             FASTING     to "Fasting Reading",

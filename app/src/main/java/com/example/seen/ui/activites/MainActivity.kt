@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -98,6 +99,9 @@ class MainActivity : AppCompatActivity() {
         window.statusBarColor = Color.TRANSPARENT
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        val params = binding.fabAddLogs.layoutParams as CoordinatorLayout.LayoutParams
+        params.behavior = null
+        binding.fabAddLogs.layoutParams = params
     }
 
     private fun setUpBottomMenuNavController(){

@@ -34,8 +34,8 @@ class LogRepository(
     }
 
     suspend fun deleteLog(log: Log) {
-        db.logDao.deleteLog(log)                          // delete locally
         db.deletedLogDao.insert(DeletedLog(log.log_id))   // queue for server
+        db.logDao.deleteLog(log)                          // delete locally
     }
 
     // RecordGlucose

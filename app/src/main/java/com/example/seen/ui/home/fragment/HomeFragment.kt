@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +41,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -160,9 +162,7 @@ class HomeFragment : Fragment() {
 
         setUpLineChart(logs)
 
-        if (!isEmptyLogs){
-            homeAdapter.differ.submitList(logs)
-        }
+        homeAdapter.differ.submitList(logs)
     }
 
     private fun updateSelectedDateText(timestamp: Long) {
@@ -398,7 +398,10 @@ class HomeFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
                 val fullLog = homeAdapter.differ.currentList[position]
-                viewModel.deleteLog(fullLog.log)
+
+                lifecycleScope.launch {
+                    viewModel.deleteLog(fullLog.log)
+                }
 
                 Snackbar.make(binding.root, "deleted", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo"){
@@ -409,8 +412,9 @@ class HomeFragment : Fragment() {
                         override fun onDismissed(snackbar: Snackbar?, event: Int)
                         {
                             if (!undoClicked && requireContext().isOnline()) {
-                                android.util.Log.d("Home", "undo not clicked")
-                                viewModel.syncToServer(token!!)
+                                lifecycleScope.launch {
+                                    viewModel.syncToServer(token!!)
+                                }
                             }
                             undoClicked = false
                         }

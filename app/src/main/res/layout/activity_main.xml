@@ -46,6 +46,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
         app:tint="@null"
+        app:layout_behavior="@null"
         android:backgroundTint="@color/primary"
         app:layout_anchor="@id/bottomAppBar"
         android:visibility="visible"/>

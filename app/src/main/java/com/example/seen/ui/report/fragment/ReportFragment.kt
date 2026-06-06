@@ -2,8 +2,10 @@ package com.example.seen.ui.report.fragment
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -12,9 +14,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.seen.R
 import com.example.seen.databinding.FragmentReportBinding
@@ -34,6 +39,7 @@ import com.example.seen.util.Constants.Companion.FASTING
 import com.example.seen.util.Constants.Companion.MONTHLY
 import com.example.seen.util.Constants.Companion.RANDOM
 import com.example.seen.util.Constants.Companion.WEEKLY
+import com.example.seen.util.LogSeeder
 import com.example.seen.util.Resource
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -43,6 +49,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -56,6 +66,7 @@ class ReportFragment : Fragment() {
 
     private lateinit var viewModel: ReportViewModel
 
+    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var fromDate: Long? = null
     private var toDate: Long? = null
 
@@ -248,7 +259,6 @@ class ReportFragment : Fragment() {
     }
 
     private fun updateDateText() {
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         binding.etDateFrom.setText(
             formatter.format(Date(fromDate!!))
@@ -295,7 +305,7 @@ class ReportFragment : Fragment() {
             .build()
 
         val picker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Select report period")
+            .setTitleText(getString(R.string.select_report_period))
             .setCalendarConstraints(constraints)
             .build()
 
@@ -303,8 +313,6 @@ class ReportFragment : Fragment() {
 
             fromDate = selection.first
             toDate = selection.second
-
-            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
             binding.etDateFrom.setText(
                 formatter.format(Date(selection.first))
@@ -363,56 +371,38 @@ class ReportFragment : Fragment() {
 
         viewModel.downloadReportState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is Resource.Loading -> Unit
+                is Resource.Loading -> {
+                    binding.btnGenerateReport.isEnabled = false
+                    binding.btnGenerateReport.text = getString(R.string.generating_report)
+                }
                 is Resource.Success -> {
 
                     state.data?.let {
                         savePdf(it)
                     }
 
+                    binding.btnGenerateReport.isEnabled = true
+                    binding.btnGenerateReport.text = getString(R.string.create_report)
                     viewModel.clearDownloadReportState()
                 }
                 is Resource.Error -> {
-                    Log.d("report",state.message ?: "Unknown error")
+                    binding.btnGenerateReport.isEnabled = true
+                    binding.btnGenerateReport.text = getString(R.string.create_report)
+                    Toast.makeText(requireContext(), state.message ?: "Unknown error", Toast.LENGTH_LONG).show()
                 }
                 null -> Unit
             }
         }
     }
 
-    private fun savePdf(body: ResponseBody) {
-
-        val fileName =
-            "seen_report_${System.currentTimeMillis()}.pdf"
-
-        val values = ContentValues().apply {
-            put(MediaStore.Downloads.DISPLAY_NAME, fileName)
-            put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
-            put(
-                MediaStore.Downloads.RELATIVE_PATH,
-                Environment.DIRECTORY_DOWNLOADS
-            )
-        }
-
-        val uri = requireContext().contentResolver.insert(
-            MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-            values
-        ) ?: return
-
-        requireContext().contentResolver.openOutputStream(uri)?.use { output ->
-            body.byteStream().use { input ->
-                input.copyTo(output)
-            }
-        }
-    }
-
     private fun setupStatsUi(stats : ReportStatistics){
 
-        binding.tvA1vValue.text =
-            stats.estimatedA1C?.let { "%.1f%%".format(it) } ?: "-"
+        val logsCount = stats.logsCount
 
         binding.tvTotalLogsValue.text =
-            stats.logsCount.toString()
+            logsCount.toString()
+
+        binding.tvA1vValue.text = if (logsCount < 20 || stats.estimatedA1C == null) "-" else "%.1f%%".format(stats.estimatedA1C)
 
         binding.tvLowestReadValue.text =
             stats.lowestLog?.glucose?.glucose_level?.toString() ?: "-"
@@ -425,6 +415,9 @@ class ReportFragment : Fragment() {
 
         binding.cdHighestRead.alpha = if (stats.highestLog != null) 1f else 0.5f
         binding.cdLowestRead.alpha = if (stats.lowestLog != null) 1f else 0.5f
+
+        binding.cdHighestRead.isEnabled = if (stats.highestLog != null) true else false
+        binding.cdLowestRead.isEnabled = if (stats.lowestLog != null) true else false
     }
 
     private fun setUpLineChart(points: List<GraphPoint>) {
@@ -544,8 +537,6 @@ class ReportFragment : Fragment() {
             setScaleEnabled(true)
             setPinchZoom(true)
             setBackgroundColor(Color.TRANSPARENT)
-            animateX(400) // Animate on load
-
             marker = GlucoseMarkerView(
                 requireContext(),
                 R.layout.item_marker_glucose,
@@ -563,6 +554,63 @@ class ReportFragment : Fragment() {
         binding.tvLegendBeforeMeal.visibility = if (showAll || activeTypes.contains(BEFORE_MEAL)) View.VISIBLE else View.GONE
         binding.tvLegendAfterMeal.visibility  = if (showAll || activeTypes.contains(AFTER_MEAL))  View.VISIBLE else View.GONE
         binding.tvLegendRandom.visibility     = if (showAll || activeTypes.contains(RANDOM))      View.VISIBLE else View.GONE
+    }
+
+    private fun savePdf(body: ResponseBody) {
+        val period = "${formatter.format(Date(fromDate!!))}_${formatter.format(Date(toDate!!))}"
+        val fileName = "seen_report_$period.pdf"
+
+        val values = ContentValues().apply {
+            put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+            put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
+            put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+        }
+
+        val uri = requireContext().contentResolver.insert(
+            MediaStore.Downloads.EXTERNAL_CONTENT_URI, values
+        ) ?: return
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val totalBytes = body.contentLength()  // -1 if unknown
+
+            requireContext().contentResolver.openOutputStream(uri)?.use { output ->
+                body.byteStream().use { input ->
+                    val buffer = ByteArray(8 * 1024)
+                    var downloaded = 0L
+                    var bytes: Int
+
+                    while (input.read(buffer).also { bytes = it } != -1) {
+                        output.write(buffer, 0, bytes)
+                        downloaded += bytes
+
+                        if (totalBytes > 0) {
+                            val progress = (downloaded * 100 / totalBytes).toInt()
+                            withContext(Dispatchers.Main) {
+                                binding.downloadProgress.progress = progress
+                                binding.downloadProgress.isVisible = true
+                            }
+                        }
+                    }
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                binding.downloadProgress.isVisible = false
+                showDownloadSuccess(uri)
+            }
+        }
+    }
+
+    private fun showDownloadSuccess(uri: Uri) {
+        Snackbar.make(binding.root, getString(R.string.report_saved), Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.open)) {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "application/pdf")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                startActivity(Intent.createChooser(intent, getString(R.string.open_with)))
+            }
+            .show()
     }
 
     override fun onDestroyView() {

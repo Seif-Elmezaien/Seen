@@ -273,7 +273,7 @@
     <string name="analysis_report">التحليل و التقارير</string>
     <string name="analysis_report_body">تحليل شامل لبياناتك الصحية</string>
     <string name="a1c_text">A1C تقديري</string>
-    <string name="total_reading">قراءات</string>
+    <string name="total_reading">قراءات السكر</string>
     <string name="weekly">اسبوعي</string>
     <string name="monthly">شهري</string>
     <string name="custom">مخصص</string>
@@ -289,8 +289,11 @@
     <string name="random_sugar">عشوائي</string>
     <string name="create_report">إنشاء تقرير</string>
 
-
-
+    <string name="select_report_period">حدد فترة التقرير</string>
+    <string name="generating_report">جارٍ إنشاء التقرير...</string>
+    <string name="report_saved">تم حفظ التقرير في قسم التنزيلات</string>
+    <string name="open">فتح</string>
+    <string name="open_with">فتح مع</string>
 
 
 </resources>

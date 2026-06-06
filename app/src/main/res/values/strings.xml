@@ -266,7 +266,7 @@
     <string name="analysis_report">Analysis and Reports</string>
     <string name="analysis_report_body">Comprehensive analysis of your health data</string>
     <string name="a1c_text">A1C Estimate</string>
-    <string name="total_reading">Reading</string>
+    <string name="total_reading">Glucose Readings</string>
     <string name="weekly">Weekly</string>
     <string name="monthly">Monthly</string>
     <string name="custom">Custom</string>
@@ -281,4 +281,10 @@
     <string name="after_meal_sugar">After meal</string>
     <string name="random_sugar">Random</string>
     <string name="create_report">Generate Report</string>
+
+    <string name="select_report_period">Select report period</string>
+    <string name="generating_report">Generating report...</string>
+    <string name="report_saved">Report saved to Downloads</string>
+    <string name="open">Open</string>
+    <string name="open_with">Open with</string>
 </resources>

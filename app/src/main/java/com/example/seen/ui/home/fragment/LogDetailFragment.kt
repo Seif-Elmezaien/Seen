@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.seen.R
@@ -30,6 +31,7 @@ import com.example.seen.util.Constants.Companion.LOW_GLUCOSE_VALUE
 import com.example.seen.util.isOnline
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -257,13 +259,15 @@ class LogDetailFragment : Fragment() {
             .setTitle(getString(R.string.alert_dialog_title_log))
             .setMessage(getString(R.string.alert_dialog_message_log))
             .setPositiveButton(getString(R.string.alert_dialog_positive_button_log)) { _, _ ->
-                viewModel.deleteLog(fullLog.log)
+                lifecycleScope.launch {
+                    viewModel.deleteLog(fullLog.log)
 
-                if (requireContext().isOnline()){
-                    viewModel.syncToServer(token!!)
+                    if (requireContext().isOnline()) {
+                        viewModel.syncToServer(token!!)
+                    }
+
+                    findNavController().popBackStack()
                 }
-
-                findNavController().popBackStack()
             }
             .setNegativeButton(getString(R.string.alert_dialog_negative_button_log), null)
             .show()
