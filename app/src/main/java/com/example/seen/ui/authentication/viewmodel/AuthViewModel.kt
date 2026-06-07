@@ -105,17 +105,14 @@ class AuthViewModel(
             if (NetworkUtils.hasInternetConnection(getApplication())) {
                 val response = call()
                 if (response.isSuccessful) {
-                    Log.d("AuthViewModel", "safeApiCall: ${response.body()}")
                     response.body()?.let { return Resource.Success(it) }
                 }
                 val errorBody = response.errorBody()?.string()
-                Log.d("AuthViewModel", "safeApiCall: ${errorBody}")
                 Resource.Error(errorBody ?: response.message())
             } else {
                 Resource.Error(getStringFromR(R.string.error_internet_connection))
             }
         } catch (t: Throwable) {
-            Log.d("AuthViewModel", "safeApiCall: ${t.message}")
             when (t) {
                 is IOException -> Resource.Error(getStringFromR(R.string.error_io_dispatcher))
                 else -> Resource.Error(getStringFromR(R.string.error_conversion))

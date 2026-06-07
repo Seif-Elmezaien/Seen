@@ -122,9 +122,7 @@ class ReportViewModel(
                         return Resource.Success(it)
                     }
                 }
-
                 val errorBody = response.errorBody()?.string()
-
                 Resource.Error(errorBody ?: response.message())
             } else {
                 Resource.Error(getStringFromR(R.string.error_internet_connection))

@@ -103,4 +103,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
 
+    // Markdown
+    implementation("io.noties.markwon:core:4.6.2")
+
 }

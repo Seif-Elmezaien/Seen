@@ -6,6 +6,7 @@ import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
 import com.example.seen.domain.model.chatbot.AskChatbotRequest
+import com.example.seen.domain.model.chatbot.AskChatbotResponse
 import com.example.seen.domain.model.chatbot.GetChatbotHistoryResponse
 import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostUser
@@ -195,13 +196,13 @@ interface SeenAPI {
 
     // ─── Chatbot ───────────────────────────────────────────────────────────────
 
-    @POST("/chatbot/ask")
+    @POST("chatbot/ask")
     suspend fun askChatbot(
         @Header("Authorization") token: String,
         @Body message: AskChatbotRequest
-    ): Response<ResponseBody>
+    ): Response<AskChatbotResponse>
 
-    @GET("/chatbot/history")
+    @GET("chatbot/history")
     suspend fun getChatbotHistory(
         @Header("Authorization") token: String
     ) : Response<GetChatbotHistoryResponse>

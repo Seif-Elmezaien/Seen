@@ -204,6 +204,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_reminderFragment)
         }
 
+        binding.cdChatbot.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_chatbotFragment)
+        }
+
         binding.tvToday.setOnClickListener {
             selectDate(System.currentTimeMillis(), binding.tvToday)
         }

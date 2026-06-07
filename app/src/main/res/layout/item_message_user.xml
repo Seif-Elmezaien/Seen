@@ -11,14 +11,13 @@
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="260dp"
+        android:layout_marginStart="36dp"
         android:background="@drawable/bg_bubble_user"
         android:paddingHorizontal="14dp"
         android:paddingVertical="10dp"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:fontFamily="@font/cairo"
-        android:layoutDirection="rtl"
-        android:textAlignment="textEnd" />
+        android:textAlignment="textStart" />
 
 </LinearLayout>

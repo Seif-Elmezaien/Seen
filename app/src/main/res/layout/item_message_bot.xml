@@ -12,21 +12,18 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:src="@drawable/ic_chatbot_header"
-        android:layout_gravity="bottom"
-        android:layout_marginEnd="8dp" />
+        android:layout_gravity="top"
+        android:layout_marginEnd="3dp" />
 
     <TextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="260dp"
-        android:background="@drawable/bg_bubble_bot"
-        android:paddingHorizontal="14dp"
+        android:paddingHorizontal="8dp"
         android:paddingVertical="10dp"
         android:textColor="@color/title"
         android:textSize="14sp"
         android:fontFamily="@font/cairo"
-        android:layoutDirection="rtl"
-        android:textAlignment="textEnd" />
+        android:textAlignment="textStart" />
 
 </LinearLayout>

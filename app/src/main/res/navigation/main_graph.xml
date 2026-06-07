@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_homeFragment_to_logDetailFragment"
             app:destination="@id/logDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatbotFragment"
+            app:destination="@id/chatbotFragment" />
     </fragment>
     <fragment
         android:id="@+id/communityFragment"
@@ -125,4 +128,8 @@
         android:id="@+id/addPostFragment"
         android:name="com.example.seen.ui.community.fragment.AddPostFragment"
         android:label="AddPostFragment" />
+    <fragment
+        android:id="@+id/chatbotFragment"
+        android:name="com.example.seen.ui.home.fragment.ChatbotFragment"
+        android:label="ChatbotFragment" />
 </navigation>

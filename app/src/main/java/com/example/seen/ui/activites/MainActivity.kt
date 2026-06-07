@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         R.id.logDetailFragment,
         R.id.addPostFragment,
         R.id.editLogsFragment,
+        R.id.chatbotFragment,
         R.id.addReminderFragment,
         R.id.reminderFragment,
         R.id.homeEntryFragment,
