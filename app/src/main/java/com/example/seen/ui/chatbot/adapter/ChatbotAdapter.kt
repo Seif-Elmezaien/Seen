@@ -1,4 +1,4 @@
-package com.example.seen.ui.home.adapter
+package com.example.seen.ui.chatbot.adapter
 
 import android.text.style.LeadingMarginSpan
 import android.view.LayoutInflater
@@ -12,7 +12,6 @@ import com.example.seen.domain.model.chatbot.ChatMessage
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory
-import io.noties.markwon.RenderProps
 import org.commonmark.node.Paragraph
 
 class ChatbotAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

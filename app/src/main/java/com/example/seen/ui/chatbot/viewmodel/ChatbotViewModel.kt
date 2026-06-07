@@ -1,18 +1,11 @@
-package com.example.seen.ui.home.viewmodel
+package com.example.seen.ui.chatbot.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seen.R
 import com.example.seen.datasource.repository.ChatbotRepository
-import com.example.seen.datasource.repository.LogRepository
-import com.example.seen.datasource.repository.MedicineRepository
 import com.example.seen.domain.model.chatbot.ChatMessage
-import com.example.seen.domain.model.entites.Log
-import com.example.seen.domain.model.entites.Medicine
-import com.example.seen.domain.model.entites.RecordGlucose
-import com.example.seen.domain.model.entites.RecordMeal
-import com.example.seen.domain.model.entites.RecordMedication
 import com.example.seen.util.SeenApplication
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -130,6 +130,6 @@
         android:label="AddPostFragment" />
     <fragment
         android:id="@+id/chatbotFragment"
-        android:name="com.example.seen.ui.home.fragment.ChatbotFragment"
+        android:name="com.example.seen.ui.chatbot.fragment.ChatbotFragment"
         android:label="ChatbotFragment" />
 </navigation>
