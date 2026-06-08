@@ -56,8 +56,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.math.roundToInt
 
 class ReportFragment : Fragment() {
@@ -311,16 +313,29 @@ class ReportFragment : Fragment() {
 
         picker.addOnPositiveButtonClickListener { selection ->
 
-            fromDate = selection.first
-            toDate = selection.second
+            // Start of day: 00:00:00.000
+            val fromCalendar = Calendar.getInstance().apply {
+                timeInMillis = selection.first
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
 
-            binding.etDateFrom.setText(
-                formatter.format(Date(selection.first))
-            )
+            // End of day: 23:59:59.999
+            val toCalendar = Calendar.getInstance().apply {
+                timeInMillis = selection.second
+                set(Calendar.HOUR_OF_DAY, 23)
+                set(Calendar.MINUTE, 59)
+                set(Calendar.SECOND, 59)
+                set(Calendar.MILLISECOND, 999)
+            }
 
-            binding.etDateTo.setText(
-                formatter.format(Date(selection.second))
-            )
+            fromDate = fromCalendar.timeInMillis
+            toDate = toCalendar.timeInMillis
+
+            binding.etDateFrom.setText(formatter.format(Date(fromDate!!)))
+            binding.etDateTo.setText(formatter.format(Date(toDate!!)))
 
             viewModel.setFilter(
                 ReportFilter(

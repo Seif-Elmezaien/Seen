@@ -150,20 +150,21 @@ class PostAdapter(
     }
 
 
-    fun getRelativeTime(isoTimestamp: String): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
+    fun getRelativeTime(timestamp: String): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a", Locale.ENGLISH)
+        sdf.timeZone = TimeZone.getTimeZone("Africa/Cairo")
 
-        val date = sdf.parse(isoTimestamp) ?: return ""
-        val now = Date()
-        val diffMillis = now.time - date.time
+        val date = try { sdf.parse(timestamp) } catch (e: Exception) { return "" } ?: return ""
+
+        val now = Calendar.getInstance(TimeZone.getTimeZone("Africa/Cairo"))
+        val diffMillis = now.timeInMillis - date.time
 
         val seconds = diffMillis / 1000
         val minutes = seconds / 60
         val hours   = minutes / 60
 
-        val calNow = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        val calDate = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { time = date }
+        val calNow = Calendar.getInstance(TimeZone.getTimeZone("Africa/Cairo"))
+        val calDate = Calendar.getInstance(TimeZone.getTimeZone("Africa/Cairo")).apply { time = date }
 
         calNow.set(Calendar.HOUR_OF_DAY, 0); calNow.set(Calendar.MINUTE, 0)
         calNow.set(Calendar.SECOND, 0);      calNow.set(Calendar.MILLISECOND, 0)
@@ -185,7 +186,7 @@ class PostAdapter(
             calendarDays < 7  -> context.getString(R.string.time_days_ago, calendarDays)
             else              -> {
                 val displayFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
-                displayFormat.timeZone = TimeZone.getTimeZone("UTC")
+                displayFormat.timeZone = TimeZone.getTimeZone("Africa/Cairo")
                 displayFormat.format(date)
             }
         }

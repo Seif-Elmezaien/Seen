@@ -1,14 +1,14 @@
-package com.example.seen.ui.chatbot.fragment
+package com.example.seen.ui.home.fragment
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +21,7 @@ import com.example.seen.ui.chatbot.adapter.ChatbotAdapter
 import com.example.seen.ui.chatbot.viewmodel.ChatbotViewModel
 import com.example.seen.ui.chatbot.viewmodel.ChatbotViewModelProviderFactory
 import kotlinx.coroutines.launch
+
 
 class ChatbotFragment : Fragment() {
     var _binding: FragmentChatbotBinding? = null
@@ -57,8 +58,7 @@ class ChatbotFragment : Fragment() {
 
     private fun initializeViewModel() {
         val chatbotRepository = ChatbotRepository()
-        val factory       =
-            ChatbotViewModelProviderFactory(requireActivity().application, chatbotRepository)
+        val factory       = ChatbotViewModelProviderFactory(requireActivity().application, chatbotRepository)
 
         viewModel = ViewModelProvider(this, factory)[ChatbotViewModel::class.java]
     }

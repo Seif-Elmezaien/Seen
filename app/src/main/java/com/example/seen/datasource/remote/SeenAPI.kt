@@ -90,6 +90,8 @@ interface SeenAPI {
         @Query("last_sync") updatedSince: String?= null
     ): Response<LogResponse>
 
+    // ─── Reminders ────────────────────────────────────────────────────────────────
+
     // ─── Posts ────────────────────────────────────────────────────────────────
 
     @GET("posts")
