@@ -295,5 +295,11 @@
     <string name="open">فتح</string>
     <string name="open_with">فتح مع</string>
 
+    <!-- Notification fragment -->
+    <string name="notification_header">الإشعارات</string>
+    <string name="no_notification_header">لا توجد إشعارات</string>
+    <string name="no_notification_body">سنقوم بإعلامك فور وصول أي تحديثات أو تنبيهات جديدة</string>
+    <string name="delete">حذف</string>
+
 
 </resources>

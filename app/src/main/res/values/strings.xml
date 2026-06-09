@@ -287,6 +287,11 @@
     <string name="report_saved">Report saved to Downloads</string>
     <string name="open">Open</string>
     <string name="open_with">Open with</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- NotificationFragment -->
+    <string name="notification_header">Notifications</string>
+    <string name="no_notification_header">No notifications</string>
+    <string name="no_notification_body">We will notify you as soon as any new updates or alerts become available.</string>
+    <string name="delete">delete</string>
+
 </resources>
