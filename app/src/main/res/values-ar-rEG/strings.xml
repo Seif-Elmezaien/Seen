@@ -245,6 +245,9 @@
     <string name="searchAgain">ابحث عن شئ اخر</string>
     <string name="likes">إعجابات</string>
 
+    <!-- search fragment -->
+    <string name="search_hint">ابحث هنا...</string>
+
     <!-- AddPost fragment -->
     <string name="post_title">عنوان المنشور</string>
     <string name="post_title_hint">أدخل عنوان المنشور…</string>
