@@ -299,5 +299,9 @@
     <string name="accept">accept</string>
     <string name="reject">reject</string>
 
+    <!-- ProfileFragment -->
+    <string name="edit_account">Edit Profile</string>
+    <string name="settings">Settings</string>
+
 
 </resources>

@@ -26,6 +26,8 @@
     <color name="good_sugar_reading_10">#1A17CE92</color>
     <color name="bad_sugar_reading_10">#1AFB2C36</color>
     <color name="report_graph_bg">#FFFFFF</color>
+    <color name="setting_profile_btn">#1A808080</color>
+    <color name="setting_profile_txt">#808080</color>
 
 
     <color name="alert_streak">#F65629</color>

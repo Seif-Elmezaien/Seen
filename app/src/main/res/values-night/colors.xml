@@ -15,6 +15,8 @@
     <color name="card_title">#FFFFFF</color>
     <color name="links">#ADB4F3</color>
     <color name="report_graph_bg">#1AFFFFFF</color>
+    <color name="setting_profile_btn">#1AFFFFFF</color>
+    <color name="setting_profile_txt">#FFFFFF</color>
 
 
 

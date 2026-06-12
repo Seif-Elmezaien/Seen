@@ -306,5 +306,8 @@
     <string name="accept">قبول</string>
     <string name="reject">رفض</string>
 
+    <!-- ProfileFragment -->
+    <string name="edit_account">تعديل الحساب</string>
+    <string name="settings">الاعدادات</string>
 
 </resources>
