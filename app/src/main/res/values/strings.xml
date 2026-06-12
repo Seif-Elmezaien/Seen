@@ -293,5 +293,8 @@
     <string name="no_notification_header">No notifications</string>
     <string name="no_notification_body">We will notify you as soon as any new updates or alerts become available.</string>
     <string name="delete">delete</string>
+    <string name="accept">accept</string>
+    <string name="reject">reject</string>
+
 
 </resources>

@@ -300,6 +300,8 @@
     <string name="no_notification_header">لا توجد إشعارات</string>
     <string name="no_notification_body">سنقوم بإعلامك فور وصول أي تحديثات أو تنبيهات جديدة</string>
     <string name="delete">حذف</string>
+    <string name="accept">قبول</string>
+    <string name="reject">رفض</string>
 
 
 </resources>
