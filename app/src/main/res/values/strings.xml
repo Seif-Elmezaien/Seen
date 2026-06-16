@@ -311,5 +311,30 @@
     <string name="reject_request">Reject</string>
     <string name="remove">Remove</string>
 
+    <!-- More -->
+    <string name="account_and_settings">Account and Settings</string>
+    <string name="Account">Account</string>
+    <string name="personal_info_title">Personal Information</string>
+    <string name="personal_info_body">Update your personal information and preferences.</string>
+    <string name="security_privacy_title">Security and Privacy</string>
+    <string name="security_privacy_body">Manage your security settings and privacy preferences.</string>
+    <string name="blocked_users_title">Blocked Users</string>
+    <string name="blocked_users_body">Here you can view and manage the users you've blocked. Unblocking a user will allow them to interact with you again.</string>
+    <string name="preferences">Preferences</string>
+    <string name="display_theme_title">Display Theme</string>
+    <string name="display_theme_body">Switch between light and dark mode appearance.</string>
+    <string name="display_theme_btn_dark">Dark Mode</string>
+    <string name="display_theme_btn_light">Light Mode</string>
+    <string name="language_title">Language</string>
+    <string name="language_body">Choose your preferred language for the interface.</string>
+    <string name="language_btn">العربية</string>
+    <string name="danger_zone">Danger Zone</string>
+    <string name="logout_title">Logout Account</string>
+    <string name="logout_body">Sign out of your current session.</string>
+    <string name="delete_account_title">Delete Account</string>
+    <string name="delete_account_body">Permanently delete your account and all data.</string>
+
+
+
 
 </resources>

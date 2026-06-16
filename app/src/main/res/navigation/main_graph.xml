@@ -62,7 +62,7 @@
         android:id="@+id/moreFragment"
         android:name="com.example.seen.ui.more.fragment.MoreFragment"
         android:label="fragment_more"
-        tools:layout="@layout/fragment_more" />
+        tools:layout="@layout/fragment_account_and_settings" />
     <fragment
         android:id="@+id/reminderFragment"
         android:name="com.example.seen.ui.reminder.fragment.ReminderFragment"

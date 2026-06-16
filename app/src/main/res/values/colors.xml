@@ -6,6 +6,7 @@
     <color name="secondary_2">#D7DAF3</color>
     <color name="background">#FFFFFF</color>
     <color name="background_card_log_display">#FFFFFF</color>
+    <color name="background_card_settings_header">#80F9FAFB</color>
 
     <color name="analysis_text">#6976EB</color>
 
@@ -24,7 +25,10 @@
     <color name="primary_20">#406976EB</color>
     <color name="primary_10">#1A6976EB</color>
     <color name="good_sugar_reading_10">#1A17CE92</color>
+    <color name="bad_sugar_reading_5">#0DFB2C36</color>
     <color name="bad_sugar_reading_10">#1AFB2C36</color>
+    <color name="bad_sugar_reading_20">#40FB2C36</color>
+    <color name="bad_sugar_reading_30">#4DFB2C36</color>
     <color name="report_graph_bg">#FFFFFF</color>
     <color name="setting_profile_btn">#1A808080</color>
     <color name="setting_profile_txt">#808080</color>

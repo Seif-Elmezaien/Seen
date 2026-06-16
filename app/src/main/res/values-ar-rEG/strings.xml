@@ -317,5 +317,27 @@
     <string name="accept_request">قبول</string>
     <string name="reject_request">رفض</string>
     <string name="remove">حذف</string>
+    <string name="account_and_settings">الحساب و الإعدادات</string>
+    <string name="Account">الحساب</string>
+    <string name="personal_info_title">المعلومات الشخصية</string>
+    <string name="personal_info_body">قم بتحديث معلوماتك الشخصية وتفضيلاتك.</string>
+    <string name="security_privacy_title">الأمان والخصوصية</string>
+    <string name="security_privacy_body">إدارة إعدادات الأمان وتفضيلات الخصوصية الخاصة بك.</string>
+    <string name="blocked_users_title">المستخدمون المحظورون</string>
+    <string name="blocked_users_body">يمكنك هنا عرض وإدارة المستخدمين الذين قمت بحظرهم. إلغاء الحظر سيسمح لهم بالتفاعل معك مرة أخرى.</string>
+    <string name="preferences">التفضيلات</string>
+    <string name="display_theme_title">مظهر التطبيق</string>
+    <string name="display_theme_body">التبديل بين الوضع الفاتح والوضع الداكن.</string>
+    <string name="display_theme_btn_dark">الوضع الداكن</string>
+    <string name="display_theme_btn_light">الوضع الفاتح</string>
+    <string name="language_title">اللغة</string>
+    <string name="language_body">اختر اللغة المفضلة لديك لواجهة التطبيق.</string>
+    <string name="language_btn">English</string>
+    <string name="danger_zone">منطقة الخطر</string>
+    <string name="logout_title">تسجيل الخروج</string>
+    <string name="logout_body">تسجيل الخروج من جلستك الحالية.</string>
+    <string name="delete_account_title">حذف الحساب</string>
+    <string name="delete_account_body">حذف حسابك وجميع بياناتك بشكل نهائي.</string>
+
 
 </resources>

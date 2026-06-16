@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.seen.databinding.FragmentAccountAndSettingsBinding
 
 
-class MoreFragment : Fragment() {
+class AccountAndSettingsFragment : Fragment() {
     var _binding: FragmentAccountAndSettingsBinding? = null
     val binding get() = _binding!!
 

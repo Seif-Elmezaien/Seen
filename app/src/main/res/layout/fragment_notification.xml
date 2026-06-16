@@ -7,8 +7,6 @@
     android:background="@color/background"
     tools:context=".ui.reminder.fragment.AddReminderFragment">
 
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clHeader"
                 android:layout_width="match_parent"
