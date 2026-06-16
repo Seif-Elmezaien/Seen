@@ -309,5 +309,13 @@
     <!-- ProfileFragment -->
     <string name="edit_account">تعديل الحساب</string>
     <string name="settings">الاعدادات</string>
+    <string name="friends">أصدقاء</string>
+    <string name="add_friend">اضافة صداقة</string>
+    <string name="block">حظر</string>
+    <string name="pending">معلق</string>
+    <string name="cancel">إلغاء</string>
+    <string name="accept_request">قبول</string>
+    <string name="reject_request">رفض</string>
+    <string name="remove">حذف</string>
 
 </resources>

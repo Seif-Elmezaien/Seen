@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import kotlin.collections.emptyList
 
 
-class CommunitySearchFragment : Fragment(R.layout.fragment_community_search) {
+class CommunitySearchFragment : Fragment() {
 
     private var _binding: FragmentCommunitySearchBinding? = null
     private val binding get() = _binding!!
@@ -46,10 +46,10 @@ class CommunitySearchFragment : Fragment(R.layout.fragment_community_search) {
 
         getToken()
         setupAdapters()
-        setupChips()
+//        setupChips()
         setupSearchInput()
         setupScrollListeners()
-        observeSearchResults()
+//        observeSearchResults()
 
         // Start in empty state
         showEmptyState()
@@ -72,19 +72,6 @@ class CommunitySearchFragment : Fragment(R.layout.fragment_community_search) {
     }
 
     // ─── Chips ───────────────────────────────────────────────────────────────
-
-    private fun setupChips() {
-        binding.searchChipGroupCategories.setOnCheckedStateChangeListener { _, checkedIds ->
-            val query = binding.etSearch.text.toString().trim()
-            if (query.isEmpty()) return@setOnCheckedStateChangeListener
-
-            // Switch visible RecyclerView based on selected chip
-            when {
-                checkedIds.contains(R.id.chipPosts) -> showPosts()
-                checkedIds.contains(R.id.chipAccounts) -> showAccounts()
-            }
-        }
-    }
 
     // ─── Search Input ────────────────────────────────────────────────────────
 
@@ -153,40 +140,40 @@ class CommunitySearchFragment : Fragment(R.layout.fragment_community_search) {
 
     // ─── Observe ─────────────────────────────────────────────────────────────
 
-    private fun observeSearchResults() {
-        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Loading -> showLoading(true)
-
-                is Resource.Success -> {
-                    showLoading(false)
-                    val data = resource.data
-
-                    val posts = data?.posts?.data ?: emptyList()
-                    val users = data?.users ?: emptyList()
-
-                    postsAdapter.differ.submitList(posts)
-                    accountsAdapter.differ.submitList(users)
-
-                    // Decide what to show based on selected chip + result emptiness
-                    val isPostsSelected = binding.chipPosts.isChecked
-                    // If both are empty, show empty state
-                    val activeListEmpty = if (isPostsSelected) posts.isEmpty() else users.isEmpty()
-
-                    if (activeListEmpty) {
-                        showEmptyState()
-                    } else {
-                        if (isPostsSelected) showPosts() else showAccounts()
-                    }
-                }
-
-                is Resource.Error -> {
-                    showLoading(false)
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
+//    private fun observeSearchResults() {
+//        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+//            when (resource) {
+//                is Resource.Loading -> showLoading(true)
+//
+//                is Resource.Success -> {
+//                    showLoading(false)
+//                    val data = resource.data
+//
+//                    val posts = data?.posts?.data ?: emptyList()
+//                    val users = data?.users ?: emptyList()
+//
+//                    postsAdapter.differ.submitList(posts)
+//                    accountsAdapter.differ.submitList(users)
+//
+//                    // Decide what to show based on selected chip + result emptiness
+//                    val isPostsSelected = binding.chipPosts.isChecked
+//                    // If both are empty, show empty state
+//                    val activeListEmpty = if (isPostsSelected) posts.isEmpty() else users.isEmpty()
+//
+//                    if (activeListEmpty) {
+//                        showEmptyState()
+//                    } else {
+//                        if (isPostsSelected) showPosts() else showAccounts()
+//                    }
+//                }
+//
+//                is Resource.Error -> {
+//                    showLoading(false)
+//                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+//    }
 
     // ─── UI State Helpers ────────────────────────────────────────────────────
 

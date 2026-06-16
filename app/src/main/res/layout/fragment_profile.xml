@@ -62,7 +62,7 @@
 
             <TextView
                 android:id="@+id/tvCategory"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_diabetes_gestational"
@@ -72,91 +72,399 @@
                 android:paddingVertical="5dp"
                 android:text="@string/category_gestational"
                 android:textColor="@color/gestational_purple"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/tvUserName"
                 app:layout_constraintStart_toStartOf="@+id/tvUserName"
                 app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
 
             <LinearLayout
-                android:id="@+id/llChallengesAndStreak"
+                android:id="@+id/llFriendsAndPosts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="@+id/tvCategory"
                 app:layout_constraintStart_toStartOf="@+id/tvCategory"
                 app:layout_constraintTop_toBottomOf="@+id/tvCategory">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="125 Day" />
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:minWidth="60dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_flame" />
+                    <TextView
+                        android:id="@+id/tvFriendsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_bold"
+                        android:gravity="center"
+                        android:text="122"
+                        android:textColor="@color/title"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5 Points" />
+                    <TextView
+                        android:id="@+id/tvFriends"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_bold"
+                        android:gravity="center"
+                        android:text="@string/friends"
+                        android:textColor="@color/description"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_cup" />
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:minWidth="60dp">
+
+                    <TextView
+                        android:id="@+id/tvPostsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_bold"
+                        android:gravity="center"
+                        android:text="8"
+                        android:textColor="@color/title"
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvPostsFriends"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_bold"
+                        android:gravity="center"
+                        android:text="@string/posts"
+                        android:textColor="@color/description"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditProfile"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clMyProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/bg_display_log_button_gradient"
-                android:elevation="4dp"
-                android:fontFamily="@font/cairo_bold"
-                android:letterSpacing="0"
-                android:text="@string/edit_account"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:backgroundTint="@null"
-                app:icon="@drawable/ic_edit_log"
-                app:iconGravity="textStart"
-                app:iconPadding="10dp"
-                app:iconSize="18dp"
-                app:iconTint="@color/white"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/llChallengesAndStreak" />
+                app:layout_constraintTop_toBottomOf="@+id/llFriendsAndPosts">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSettings"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_profile_settings"
-                android:elevation="4dp"
-                android:fontFamily="@font/cairo_bold"
-                android:letterSpacing="0"
-                android:text="@string/settings"
-                android:textAllCaps="false"
-                android:textColor="@color/setting_profile_txt"
-                android:textSize="14sp"
-                app:backgroundTint="@null"
-                app:icon="@drawable/ic_settings"
-                app:iconGravity="textStart"
-                app:iconPadding="10dp"
-                app:iconTint="@color/setting_profile_txt"
-                app:layout_constraintBottom_toBottomOf="parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/bg_display_log_button_gradient"
+                    android:elevation="4dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/edit_account"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:backgroundTint="@null"
+                    app:icon="@drawable/ic_edit_log"
+                    app:iconGravity="textStart"
+                    app:iconPadding="10dp"
+                    app:iconSize="18dp"
+                    app:iconTint="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_profile_settings"
+                    android:elevation="4dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/settings"
+                    android:textAllCaps="false"
+                    android:textColor="@color/setting_profile_txt"
+                    android:textSize="14sp"
+                    app:backgroundTint="@null"
+                    app:icon="@drawable/ic_settings"
+                    app:iconGravity="textStart"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/setting_profile_txt"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnEditProfile" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clNotUserProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnEditProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/llFriendsAndPosts">
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddFriend"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:visibility="visible"
+                    android:background="@drawable/bg_display_log_button_gradient"
+                    android:elevation="4dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/add_friend"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:backgroundTint="@null"
+                    app:icon="@drawable/ic_add_friend"
+                    app:iconGravity="textStart"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clPendingSent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_v50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent=".5" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPending"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_profile_settings"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/pending"
+                        android:textAllCaps="false"
+                        android:textColor="@color/setting_profile_txt"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_pending"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/setting_profile_txt"
+                        app:layout_constraintEnd_toStartOf="@id/guideline_v50"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCancel"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_profile_block"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/cancel"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bad_sugar_reading"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_cancel_request"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/bad_sugar_reading"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_v50"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clPendingReceived"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_v50_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent=".5" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAccept"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_display_log_button_gradient"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/accept_request"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_accept_add_request"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/white"
+                        app:layout_constraintEnd_toStartOf="@id/guideline_v50_2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnReject"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_profile_block"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/reject_request"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bad_sugar_reading"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_reject_add_request"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/bad_sugar_reading"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_v50_2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clFriends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_v50_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent=".5" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFriends"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_profile_settings"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/friends"
+                        android:textAllCaps="false"
+                        android:textColor="@color/setting_profile_txt"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_accept_add_request"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/setting_profile_txt"
+                        app:layout_constraintEnd_toStartOf="@id/guideline_v50_3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRemove"
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_profile_block"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/remove"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bad_sugar_reading"
+                        android:textSize="14sp"
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_cancel_request"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/bad_sugar_reading"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/guideline_v50_3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrierSections"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="btnAddFriend,clPendingSent,clPendingReceived,clFriends"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBlock"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_profile_block"
+                    android:elevation="4dp"
+                    android:fontFamily="@font/cairo_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/block"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bad_sugar_reading"
+                    android:textSize="14sp"
+                    app:backgroundTint="@null"
+                    app:icon="@drawable/ic_block"
+                    app:iconGravity="textStart"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/bad_sugar_reading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/barrierSections" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
