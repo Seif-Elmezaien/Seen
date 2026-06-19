@@ -321,6 +321,18 @@ class CommunitySearchFragment : Fragment() {
         token = "Bearer " + sharedPref.getString("token", null)
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        val cached = viewModel.searchResponse ?: return
+        val posts = cached.data.posts.data
+        val users = cached.data.users
+        postsAdapter.differ.submitList(null)
+        postsAdapter.differ.submitList(posts)
+        accountsAdapter.differ.submitList(null)
+        accountsAdapter.differ.submitList(users)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

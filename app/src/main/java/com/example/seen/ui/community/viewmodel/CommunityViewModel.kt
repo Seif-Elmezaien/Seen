@@ -312,18 +312,13 @@ class CommunityViewModel(
                             (searchResponse?.data?.posts?.data ?: mutableListOf<Data>()) + resultResponse.data.posts.data
                             ).toMutableList()
 
-                    // users is List<PostUser>
-                    val mergedUsers = (
-                            (searchResponse?.data?.users ?: emptyList<PostUser>()) + resultResponse.data.users
-                            ).toMutableList()
-
                     searchResponse = resultResponse.copy(
                         data = SearchResult(
                             posts = PostListResponse(
                                 data = mergedData,
                                 meta = resultResponse.data.posts.meta  // ✅ always use latest page's meta
                             ),
-                            users = mergedUsers
+                            users = resultResponse.data.users
                         )
                     )
                 }
