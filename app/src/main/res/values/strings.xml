@@ -319,7 +319,7 @@
     <string name="security_privacy_title">Security and Privacy</string>
     <string name="security_privacy_body">Manage your security settings and privacy preferences.</string>
     <string name="blocked_users_title">Blocked Users</string>
-    <string name="blocked_users_body">Here you can view and manage the users you've blocked. Unblocking a user will allow them to interact with you again.</string>
+    <string name="blocked_users_body">Here you can view and manage the users you\'ve blocked. Unblocking a user will allow them to interact with you again.</string>
     <string name="preferences">Preferences</string>
     <string name="display_theme_title">Display Theme</string>
     <string name="display_theme_body">Switch between light and dark mode appearance.</string>

@@ -20,16 +20,21 @@ import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Data
+import com.example.seen.domain.model.entites.ReportFilter
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.ADVICES
+import com.example.seen.util.Constants.Companion.CUSTOM
 import com.example.seen.util.Constants.Companion.GENERAL
 import com.example.seen.util.Constants.Companion.GESTATIONAL
+import com.example.seen.util.Constants.Companion.LADA
 import com.example.seen.util.Constants.Companion.MODY
+import com.example.seen.util.Constants.Companion.MONTHLY
 import com.example.seen.util.Constants.Companion.POST_PAGE_SIZE
 import com.example.seen.util.Constants.Companion.TYPE1_LADA
 import com.example.seen.util.Constants.Companion.TYPE_2
+import com.example.seen.util.Constants.Companion.WEEKLY
 import com.example.seen.util.Resource
 import com.google.android.material.chip.Chip
 
@@ -68,6 +73,12 @@ class CommunityFragment : Fragment() {
         observeLikeError()
         handleChips()
         searchOnClick()
+
+
+        // Sync local field from ViewModel (survives navigation)
+        selectedCategory = viewModel.selectedCategory
+
+        restoreChipSelection()
 
         // Only fetch if no data yet
         if (viewModel.communityPostsResponse == null) {
@@ -150,6 +161,23 @@ class CommunityFragment : Fragment() {
         postAdapter.setOnLikeClickListener { updatedPost ->
             likePost(updatedPost)
         }
+    }
+
+    private fun restoreChipSelection() {
+        val chipId = when (viewModel.selectedCategory) {
+            GENERAL     -> R.id.chipGeneral
+            TYPE1_LADA  -> R.id.chipType1Lada
+            TYPE_2      -> R.id.chipType2
+            MODY        -> R.id.chipMonogenic
+            GESTATIONAL -> R.id.chipGestational
+            ADVICES     -> R.id.chipAdvise
+            else        -> R.id.chipGeneral
+        }
+
+        // Temporarily remove listener to avoid triggering a new API call
+        binding.chipGroupCategories.setOnCheckedStateChangeListener(null)
+        binding.chipGroupCategories.check(chipId)
+        handleChips() // re-attach the listener after
     }
 
     private fun likePost(updatedPost: Data) {
@@ -261,8 +289,7 @@ class CommunityFragment : Fragment() {
 
     private fun searchOnClick() {
         binding.btnSearchPost.setOnClickListener {
-            val action = CommunityFragmentDirections.actionCommunityFragmentToCommunitySearchFragment()
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_communityFragment_to_communitySearchFragment)
         }
     }
 

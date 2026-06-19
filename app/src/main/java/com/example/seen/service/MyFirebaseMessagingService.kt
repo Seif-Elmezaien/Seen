@@ -22,8 +22,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // send new token to your Laravel backend
-        sendTokenToServer(token)
+        // Just save it — user may not be logged in yet
+        getSharedPreferences("Auth", Context.MODE_PRIVATE)
+            .edit()
+            .putString("fcm_token", token)
+            .apply()
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -55,7 +58,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
             .build()
 
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         // create channel for Android 8+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -70,21 +73,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         manager.notify(System.currentTimeMillis().toInt(), notification)
     }
 
-    private fun sendTokenToServer(fcmToken: String) {
-        // call your API to save the token
-        // you can use your existing Retrofit here
 
-        val sharedPref = getSharedPreferences("Auth", Context.MODE_PRIVATE)
-        val authToken = "Bearer " + sharedPref.getString("token", null) ?: return
-
-        val api = RetrofitInstance.api  // 👈 your existing Retrofit instance
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                api.updateFcmToken(authToken, FcmTokenRequest(fcmToken))
-            } catch (e: Exception) {
-                Log.e("FCM", "Failed to send token: ${e.message}")
-            }
-        }
-    }
 }

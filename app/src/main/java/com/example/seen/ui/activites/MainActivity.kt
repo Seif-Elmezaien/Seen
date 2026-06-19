@@ -9,6 +9,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -21,9 +22,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.seen.R
 import com.example.seen.databinding.ActivityMainBinding
 import com.example.seen.datasource.local.SeenDatabase
+import com.example.seen.datasource.remote.RetrofitInstance
 import com.example.seen.datasource.repository.LogRepository
+import com.example.seen.domain.model.notification.FcmTokenRequest
 import com.example.seen.ui.activites.AuthActivity
 import com.example.seen.util.Constants.Companion.NAV_ANIM_DURATION
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         R.id.reminderFragment,
         R.id.homeEntryFragment,
         R.id.onboardingContainerFragment,
-        R.id.postDetailsFragment
+        R.id.postDetailsFragment,
+        R.id.communitySearchFragment,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         setUpSystemSettings()
         setUpBottomMenuNavController()
         observeConnectivity()
+        sendTokenToServer()
 
         binding.fabAddLogs.setOnClickListener {
 //            onClickFabLogic()
@@ -151,4 +159,20 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun sendTokenToServer() {
+
+        val fcmToken = sharedPref.getString("fcm_token", null)
+        val api = RetrofitInstance.api  // 👈 your existing Retrofit instance
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                api.updateFcmToken("Bearer $token", FcmTokenRequest(fcmToken!!))
+            } catch (e: Exception) {
+                Log.e("FCM", "Failed to send token: ${e.message}")
+            }
+        }
+    }
+
+
 }

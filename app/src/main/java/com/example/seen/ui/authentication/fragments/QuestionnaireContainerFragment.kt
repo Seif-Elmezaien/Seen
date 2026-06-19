@@ -110,8 +110,6 @@ class QuestionnaireContainerFragment : Fragment() {
 
                     if (token != null) {
                         setToken(token)
-                        sendFcmTokenToServer("Bearer $token")
-                        viewModel.resetFcmTokenState()
                     }
 
                     Toast.makeText(
@@ -144,16 +142,24 @@ class QuestionnaireContainerFragment : Fragment() {
     }
 
     private fun goToAccountMade() {
-        findNavController().navigate(R.id.action_questionnaireContainerFragment_to_accountMadeFragment)
+        if (findNavController().currentDestination?.id == R.id.questionnaireContainerFragment) {
+            findNavController().navigate(
+                R.id.action_questionnaireContainerFragment_to_accountMadeFragment
+            )
+        }
     }
 
     // call this after successful login
-    fun sendFcmTokenToServer(token: String) {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val fcmToken = task.result
-                // call your API
-                viewModel.updateFcmToken(token, fcmToken)
+    private fun sendFcmTokenToServer(authToken: String) {
+        val fcmToken = sharedPref.getString("fcm_token", null)
+        if (fcmToken != null) {
+            viewModel.updateFcmToken(authToken, fcmToken)
+        } else {
+            // Token not cached yet, fetch it as fallback
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    viewModel.updateFcmToken(authToken, task.result)
+                }
             }
         }
     }

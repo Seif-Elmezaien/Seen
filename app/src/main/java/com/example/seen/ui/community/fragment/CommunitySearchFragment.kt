@@ -4,14 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
+import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.databinding.FragmentCommunitySearchBinding
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.adapters.UserAdapter
@@ -40,16 +43,22 @@ class CommunitySearchFragment : Fragment() {
     // Debounce: wait 500ms after user stops typing before calling API
     private var debounceJob: Job? = null
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentCommunitySearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentCommunitySearchBinding.bind(view)
 
         getToken()
         setupAdapters()
-//        setupChips()
         setupSearchInput()
         setupScrollListeners()
-//        observeSearchResults()
+        observeSearchResults()
 
         // Start in empty state
         showEmptyState()
@@ -140,40 +149,40 @@ class CommunitySearchFragment : Fragment() {
 
     // ─── Observe ─────────────────────────────────────────────────────────────
 
-//    private fun observeSearchResults() {
-//        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
-//            when (resource) {
-//                is Resource.Loading -> showLoading(true)
-//
-//                is Resource.Success -> {
-//                    showLoading(false)
-//                    val data = resource.data
-//
-//                    val posts = data?.posts?.data ?: emptyList()
-//                    val users = data?.users ?: emptyList()
-//
-//                    postsAdapter.differ.submitList(posts)
-//                    accountsAdapter.differ.submitList(users)
-//
-//                    // Decide what to show based on selected chip + result emptiness
-//                    val isPostsSelected = binding.chipPosts.isChecked
-//                    // If both are empty, show empty state
-//                    val activeListEmpty = if (isPostsSelected) posts.isEmpty() else users.isEmpty()
-//
-//                    if (activeListEmpty) {
-//                        showEmptyState()
-//                    } else {
-//                        if (isPostsSelected) showPosts() else showAccounts()
-//                    }
-//                }
-//
-//                is Resource.Error -> {
-//                    showLoading(false)
-//                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
+    private fun observeSearchResults() {
+        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> showLoading(true)
+
+                is Resource.Success -> {
+                    showLoading(false)
+                    val data = resource.data
+
+                    val posts = data?.posts?.data ?: emptyList()
+                    val users = data?.users ?: emptyList()
+
+                    postsAdapter.differ.submitList(posts)
+                    accountsAdapter.differ.submitList(users)
+
+                    // Decide what to show based on selected chip + result emptiness
+                    val isPostsSelected = true
+                    // If both are empty, show empty state
+                    val activeListEmpty = if (isPostsSelected) posts.isEmpty() else users.isEmpty()
+
+                    if (activeListEmpty) {
+                        showEmptyState()
+                    } else {
+                        if (isPostsSelected) showPosts() else showAccounts()
+                    }
+                }
+
+                is Resource.Error -> {
+                    showLoading(false)
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     // ─── UI State Helpers ────────────────────────────────────────────────────
 

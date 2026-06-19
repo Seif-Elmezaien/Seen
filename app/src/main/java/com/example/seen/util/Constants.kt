@@ -1,15 +1,9 @@
 package com.example.seen.util
 
-import android.content.Context
-import android.net.ConnectivityManager
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
 class Constants {
     companion object{
-        const val BASE_URL2 = "https://ollie-wroth-tributarily.ngrok-free.dev/api/" // Loay
-        const val BASE_URL = "https://inquisitorial-elba-undistractedly.ngrok-free.dev/api/" // Ziad
+        const val BASE_URL = "https://ollie-wroth-tributarily.ngrok-free.dev/api/" // Loay
+        const val BASE_URL2 = "https://inquisitorial-elba-undistractedly.ngrok-free.dev/api/" // Ziad
         const val SEARCH_POST_TIME_DELAY = 500L
 
         const val LOW_GLUCOSE_VALUE = 70
@@ -44,7 +38,6 @@ class Constants {
         const val WEEKLY = "Weekly"
         const val MONTHLY = "Monthly"
         const val CUSTOM = "Custom"
-        const val DAY_MS = 24 * 60 * 60 * 1000L
 
         const val POST_PAGE_SIZE = 10
         const val COMMENT_PAGE_SIZE = 20

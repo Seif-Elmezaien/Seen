@@ -21,6 +21,7 @@ import com.example.seen.domain.model.logs.LogRequest
 import com.example.seen.domain.model.notification.FcmTokenRequest
 import com.example.seen.domain.model.notification.MarkReadResponse
 import com.example.seen.domain.model.notification.NotificationsResponse
+import com.example.seen.domain.model.profile.response.ProfileResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -101,6 +102,19 @@ interface SeenAPI {
         @Query("category") category: String,
     ): Response<PostListResponse>
 
+    @GET("my-posts")
+    suspend fun getMyPosts(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1,
+    ): Response<PostListResponse>
+
+    @GET("users/{user}/posts")
+    suspend fun getUserPosts(
+        @Header("Authorization") token: String,
+        @Path("user") userId: Int,
+        @Query("page") page: Int = 1,
+    ): Response<PostListResponse>
+
     @Multipart
     @POST("posts")
     suspend fun createPost(
@@ -134,7 +148,7 @@ interface SeenAPI {
     suspend fun getPostLikes(
         @Header("Authorization") token: String,
         @Path("postId") postId: Int,
-    ): PostUser
+    ): Response<List<PostUser>>
 
     // ─── Comments ─────────────────────────────────────────────────────────────
 
@@ -175,7 +189,7 @@ interface SeenAPI {
     suspend fun getCommentLikes(
         @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int,
-    ): Response<PostUser>
+    ): Response<List<PostUser>>
 
     // ─── Search ───────────────────────────────────────────────────────────────
 
@@ -186,6 +200,60 @@ interface SeenAPI {
         @Query("page") page: Int = 1,
     ): Response<SearchResponse>
 
+    // ─── Profile ────────────────────────────────────────────────────────────────
+
+    @GET("user/profile")
+    suspend fun getProfile(
+        @Header("Authorization") token: String,
+    ) : Response<ProfileResponse>
+
+    // ─── Friendship ────────────────────────────────────────────────────────────────
+
+    @POST("friends/{id}/request")
+    suspend fun sendFriendRequest(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int,
+    )
+
+    @POST("friends/{id}/accept")
+    suspend fun acceptFriendRequest(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int,
+    )
+
+    @DELETE("friends/{id}/cancel")
+    suspend fun cancelFriendRequest(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int,
+    )
+
+    @DELETE("friends/{id}")
+    suspend fun removeFriend(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int,
+    )
+
+    @POST("friends/{id}/block")
+    suspend fun blockFriend(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int,
+    )
+
+    @DELETE("friends/{id}/unblock")
+    suspend fun unblockFriend(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int,
+    )
+
+    @GET("friends/blocks")
+    suspend fun getBlockedUsers(
+        @Header("Authorization") token: String,
+    ): Response<List<PostUser>>
+
+    @POST("friends/profile")
+    suspend fun getFriendsProfile(
+        @Header("Authorization") token: String,
+    ): Response<List<PostUser>>
 
     // ─── Report ───────────────────────────────────────────────────────────────
     @GET("reports/glucose/pdf")
