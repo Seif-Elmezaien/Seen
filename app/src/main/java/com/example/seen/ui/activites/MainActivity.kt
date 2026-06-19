@@ -161,15 +161,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendTokenToServer() {
+        val api = RetrofitInstance.api
 
-        val fcmToken = sharedPref.getString("fcm_token", null)
-        val api = RetrofitInstance.api  // 👈 your existing Retrofit instance
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.e("FCM", "Failed to get token: ${task.exception}")
+                return@addOnCompleteListener
+            }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                api.updateFcmToken("Bearer $token", FcmTokenRequest(fcmToken!!))
-            } catch (e: Exception) {
-                Log.e("FCM", "Failed to send token: ${e.message}")
+            val fcmToken = task.result
+
+            // Always save the latest token
+            sharedPref.edit().putString("fcm_token", fcmToken).apply()
+
+            Log.d("FCM", "Sending token to server: $fcmToken")
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    api.updateFcmToken("Bearer $token", FcmTokenRequest(fcmToken))
+                } catch (e: Exception) {
+                    Log.e("FCM", "Failed to send token: ${e.message}")
+                }
             }
         }
     }

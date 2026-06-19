@@ -19,7 +19,6 @@ import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
-import com.example.seen.domain.model.entites.ReportFilter
 import com.example.seen.util.Constants.Companion.GENERAL
 import com.example.seen.util.Resource
 import com.example.seen.util.SeenApplication
@@ -105,13 +104,13 @@ class CommunityViewModel(
         safeLikeCommentCall(token, commentId)
     }
 
-//    fun getCommentLikes(token: String, commentId: Int) = viewModelScope.launch {
-//        safeGetCommentLikesCall(token, commentId)
-//    }
-//
-//    fun getPostLikes(token: String, postId: Int) = viewModelScope.launch {
-//        safeGetPostLikesCall(token, postId)
-//    }
+    fun getCommentLikes(token: String, commentId: Int) = viewModelScope.launch {
+        safeGetCommentLikesCall(token, commentId)
+    }
+
+    fun getPostLikes(token: String, postId: Int) = viewModelScope.launch {
+        safeGetPostLikesCall(token, postId)
+    }
 
     fun createPost(token: String, title: RequestBody, content: RequestBody, category: RequestBody, images: List<MultipartBody.Part>) = viewModelScope.launch {
         safeCreatePostCall(token, title, content, category, images)
@@ -281,6 +280,15 @@ class CommunityViewModel(
         editCommentResult.value = null
     }
 
+    fun searchPostAndUser(token: String, query: String, isNewQuery: Boolean = false) = viewModelScope.launch {
+        if (isNewQuery) {
+            searchPage = 1
+            searchResponse = null
+            lastSearchQuery = query
+        }
+        safeSearchCall(token, query)
+    }
+
     private suspend fun safeSearchCall(token: String, query: String) {
         searchResults.postValue(Resource.Loading())
         try {
@@ -391,56 +399,56 @@ class CommunityViewModel(
             }
         }
     }
-//
-//    private suspend fun safeGetCommentLikesCall(token: String, commentId: Int) {
-//        commentLikesResult.postValue(Resource.Loading())
-//        try {
-//            if (hasInternetConnection()) {
-//                val response = communityRepository.getCommentLikes(token, commentId)
-//                if (response.isSuccessful) {
-//                    response.body()?.let {
-//                        commentLikesResult.postValue(Resource.Success(it))
-//                    }
-//                } else {
-//                    commentLikesResult.postValue(Resource.Error(response.message()))
-//                }
-//            } else{
-//                commentLikesResult.postValue(Resource.Error("No internet connection"))
-//            }
-//        } catch (t: Throwable) {
-//            when (t) {
-//                is IOException -> commentLikesResult.postValue(Resource.Error("Network Failure"))
-//                else -> commentLikesResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
-//            }
-//        }
-//    }
+
+    private suspend fun safeGetCommentLikesCall(token: String, commentId: Int) {
+        commentLikesResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.getCommentLikes(token, commentId)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        commentLikesResult.postValue(Resource.Success(response.body()!!.users))
+                    }
+                } else {
+                    commentLikesResult.postValue(Resource.Error(response.message()))
+                }
+            } else{
+                commentLikesResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> commentLikesResult.postValue(Resource.Error("Network Failure"))
+                else -> commentLikesResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
 
     fun clearCommentLikesResultState() {
         commentLikesResult.value = null
     }
 
-//    private suspend fun safeGetPostLikesCall(token: String, postId: Int) {
-//        postLikesResult.postValue(Resource.Loading())
-//        try {
-//            if (hasInternetConnection()) {
-//                val response = communityRepository.getPostLikes(token, postId)
-//                if (response.isSuccessful) {
-//                    response.body()?.let {
-//                        postLikesResult.postValue(Resource.Success(it))
-//                    }
-//                } else {
-//                    postLikesResult.postValue(Resource.Error(response.message()))
-//                }
-//            } else{
-//                postLikesResult.postValue(Resource.Error("No internet connection"))
-//            }
-//        } catch (t: Throwable) {
-//            when (t) {
-//                is IOException -> postLikesResult.postValue(Resource.Error("Network Failure"))
-//                else -> postLikesResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
-//            }
-//        }
-//    }
+    private suspend fun safeGetPostLikesCall(token: String, postId: Int) {
+        postLikesResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.getPostLikes(token, postId)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        postLikesResult.postValue(Resource.Success(response.body()!!.users))
+                    }
+                } else {
+                    postLikesResult.postValue(Resource.Error(response.message()))
+                }
+            } else{
+                postLikesResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> postLikesResult.postValue(Resource.Error("Network Failure"))
+                else -> postLikesResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
 
     fun clearPostLikesResultState() {
         postLikesResult.value = null
@@ -518,14 +526,5 @@ class CommunityViewModel(
     }
 
     fun getUserId() = userRepository.getUser()
-
-    fun searchPostAndUser(token: String, query: String, isNewQuery: Boolean = false) = viewModelScope.launch {
-        if (isNewQuery) {
-            searchPage = 1
-            searchResponse = null
-            lastSearchQuery = query
-        }
-        safeSearchCall(token, query)
-    }
 
 }

@@ -58,7 +58,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
                 .load(account?.profile_picture?.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivAccount)
-            tvUserAccounttName.text = "${account.first_name} ${account.last_name}"
+            tvUserAccountName.text = "${account.first_name} ${account.last_name}"
         }
     }
 

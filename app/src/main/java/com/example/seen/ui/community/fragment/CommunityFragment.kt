@@ -72,7 +72,6 @@ class CommunityFragment : Fragment() {
         setPostAdapter()
         observeLikeError()
         handleChips()
-        searchOnClick()
 
 
         // Sync local field from ViewModel (survives navigation)
@@ -284,12 +283,6 @@ class CommunityFragment : Fragment() {
             selectedCategory = newCategory
 
             viewModel.getCommunityPosts(token!!, selectedCategory, true)
-        }
-    }
-
-    private fun searchOnClick() {
-        binding.btnSearchPost.setOnClickListener {
-            findNavController().navigate(R.id.action_communityFragment_to_communitySearchFragment)
         }
     }
 

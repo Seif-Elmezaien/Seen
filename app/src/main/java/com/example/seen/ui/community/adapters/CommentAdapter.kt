@@ -116,6 +116,10 @@ class CommentAdapter(
 
             editComment.setOnClickListener    { onEditClickListener?.invoke(comment) }
             deleteComment.setOnClickListener  { onDeleteClickListener?.invoke(comment) }
+
+            tvCommentsLikesCount.setOnClickListener {
+                onLikeCountClickListener?.invoke(comment)
+            }
         }
     }
 
@@ -131,6 +135,12 @@ class CommentAdapter(
     }
     fun setOnDeleteClickListener(listener: (Comment) -> Unit) {
         onDeleteClickListener = listener
+    }
+
+    private var onLikeCountClickListener: ((Comment) -> Unit)? = null
+
+    fun setOnLikeCountClickListener(listener: (Comment) -> Unit) {
+        onLikeCountClickListener = listener
     }
 
     // ─── New: Helper to update one comment locally after like/edit ───

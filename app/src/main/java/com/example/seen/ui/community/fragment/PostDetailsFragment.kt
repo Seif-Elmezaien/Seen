@@ -27,6 +27,7 @@ import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.ui.community.adapters.CommentAdapter
 import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
+import com.example.seen.ui.community.dialog.LikesBottomSheetFragment
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.ADVICES
@@ -197,6 +198,11 @@ class PostDetailsFragment : Fragment() {
                 // 3. fire API
                 viewModel.likePost(token!!, args.post.id)
             }
+
+            tvLikesCount.setOnClickListener {
+                LikesBottomSheetFragment(token = token!!, postId = args.post.id)
+                    .show(parentFragmentManager, "post_likes")
+            }
         }
     }
 
@@ -287,6 +293,11 @@ class PostDetailsFragment : Fragment() {
 
         commentAdapter.setOnDeleteClickListener {
             showDeleteCommentDialog(it)
+        }
+
+        commentAdapter.setOnLikeCountClickListener { comment ->
+            LikesBottomSheetFragment(token = token!!, commentId = comment.id)
+                .show(parentFragmentManager, "comment_likes")
         }
     }
 

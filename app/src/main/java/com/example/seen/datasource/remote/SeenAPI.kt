@@ -14,6 +14,7 @@ import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
+import com.example.seen.domain.model.community.response.PostCommentLikesResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
 import com.example.seen.domain.model.logs.LogResponse
@@ -144,11 +145,11 @@ interface SeenAPI {
         @Path("postId") postId: Int,
     ): Response<Unit>
 
-    @GET("posts/{post_id}/likes")
+    @GET("posts/{postId}/likes")
     suspend fun getPostLikes(
         @Header("Authorization") token: String,
         @Path("postId") postId: Int,
-    ): Response<List<PostUser>>
+    ): Response<PostCommentLikesResponse>
 
     // ─── Comments ─────────────────────────────────────────────────────────────
 
@@ -189,7 +190,7 @@ interface SeenAPI {
     suspend fun getCommentLikes(
         @Header("Authorization") token: String,
         @Path("comment_id") commentId: Int,
-    ): Response<List<PostUser>>
+    ): Response<PostCommentLikesResponse>
 
     // ─── Search ───────────────────────────────────────────────────────────────
 
