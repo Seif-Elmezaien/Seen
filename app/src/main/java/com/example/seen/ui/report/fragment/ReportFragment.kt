@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -89,6 +91,7 @@ class ReportFragment : Fragment() {
         initializeViewModel()
         getToken()
         setupListeners()
+
 
         if (viewModel.fromDate == 0L) {
             setWeeklyPeriod()
@@ -571,6 +574,7 @@ class ReportFragment : Fragment() {
         binding.tvLegendRandom.visibility     = if (showAll || activeTypes.contains(RANDOM))      View.VISIBLE else View.GONE
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun savePdf(body: ResponseBody) {
         val period = "${formatter.format(Date(fromDate!!))}_${formatter.format(Date(toDate!!))}"
         val fileName = "seen_report_$period.pdf"

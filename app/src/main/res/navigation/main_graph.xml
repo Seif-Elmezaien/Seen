@@ -104,7 +104,11 @@
         android:id="@+id/communitySearchFragment"
         android:name="com.example.seen.ui.community.fragment.CommunitySearchFragment"
         android:label="fragment_community_search"
-        tools:layout="@layout/fragment_community_search" />
+        tools:layout="@layout/fragment_community_search" >
+        <action
+            android:id="@+id/action_communitySearchFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/logDetailFragment"
         android:name="com.example.seen.ui.home.fragment.LogDetailFragment"

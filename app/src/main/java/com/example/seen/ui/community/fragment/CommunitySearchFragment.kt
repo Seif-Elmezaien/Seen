@@ -2,26 +2,28 @@ package com.example.seen.ui.community.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
-import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.databinding.FragmentCommunitySearchBinding
+import com.example.seen.domain.model.community.Data
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.adapters.UserAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
+import com.example.seen.util.Constants.Companion.SEARCH_POST_USER_TIME_DELAY
 import com.example.seen.util.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,35 +35,62 @@ class CommunitySearchFragment : Fragment() {
     private var _binding: FragmentCommunitySearchBinding? = null
     private val binding get() = _binding!!
 
+    private enum class SearchTab { POSTS, PROFILES }
+
+    private var selectedTab = SearchTab.POSTS
     private val viewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postsAdapter: PostAdapter
     private lateinit var accountsAdapter: UserAdapter
-
     private lateinit var token: String
 
-    // Debounce: wait 500ms after user stops typing before calling API
+    private var isLoading = false
+    private var isLastPage = false
+    private var isScrolling = false
+
     private var debounceJob: Job? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    // Keep a single scroll listener instance so we can remove/re-add it
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            if (newState == RecyclerView.SCROLL_STATE_DRAGGING) isScrolling = true
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            val lm = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisible = lm.findFirstVisibleItemPosition()
+            val visibleCount = lm.childCount
+            val totalCount = lm.itemCount
+            val hasValidQuery = binding.etSearch.text.toString().isNotBlank()
+
+            val shouldLoadMore = !isLoading && !isLastPage && isScrolling
+                    && (firstVisible + visibleCount >= totalCount)
+                    && hasValidQuery
+
+            if (shouldLoadMore) {
+                isScrolling = false
+                isLoading = true
+                viewModel.searchPostAndUser(token, binding.etSearch.text.toString(), isNewQuery = false)
+            }
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCommunitySearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getToken()
         setupAdapters()
         setupSearchInput()
-        setupScrollListeners()
         observeSearchResults()
-
-        // Start in empty state
+        setupListeners()
         showEmptyState()
+        attachScrollListener() // attach to default tab's RV
+
+        observeLikeError()
     }
 
     // ─── Adapters ────────────────────────────────────────────────────────────
@@ -72,79 +101,84 @@ class CommunitySearchFragment : Fragment() {
             adapter = postsAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-
         accountsAdapter = UserAdapter()
         binding.rvAccounts.apply {
             adapter = accountsAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        postsAdapter.setOnLikeClickListener { updatedPost ->
+            likePost(updatedPost)
+        }
+
+        postsAdapter.setOnCommentClickListener {
+            viewModel.communityCommentPage = 1
+            viewModel.communityCommentResponse = null
+            val action =
+                CommunitySearchFragmentDirections
+                    .actionCommunitySearchFragmentToPostDetailsFragment(it)
+            findNavController().navigate(action)
+        }
     }
 
-    // ─── Chips ───────────────────────────────────────────────────────────────
+    private fun observeLikeError(){
+        viewModel.likeError.observe(viewLifecycleOwner) { postId ->
+
+            val currentList = postsAdapter.differ.currentList.toMutableList()
+
+            val position = currentList.indexOfFirst { it.id == postId }
+
+            if (position != -1) {
+
+                val post = currentList[position]
+                val revertedPost = post.copy(
+                    is_liked = !(post.is_liked ?: false),
+                    likes_count = post.likes_count + if (post.is_liked == true) -1 else 1
+                )
+
+                currentList[position] = revertedPost
+                postsAdapter.differ.submitList(currentList)
+
+                viewModel.communityPostsResponse =
+                    viewModel.communityPostsResponse?.copy(
+                        data = currentList
+                    )
+            }
+        }
+    }
+
+    // ─── Scroll Listener ─────────────────────────────────────────────────────
+
+    private fun attachScrollListener() {
+        // Remove from both first to avoid duplicates
+        binding.rvPosts.removeOnScrollListener(scrollListener)
+        binding.rvAccounts.removeOnScrollListener(scrollListener)
+
+        val activeRv = if (selectedTab == SearchTab.POSTS) binding.rvPosts else binding.rvAccounts
+        activeRv.addOnScrollListener(scrollListener)
+    }
 
     // ─── Search Input ────────────────────────────────────────────────────────
 
     private fun setupSearchInput() {
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        binding.etSearch.addTextChangedListener { editable ->
+            val query = editable?.toString()?.trim().orEmpty()
+            debounceJob?.cancel()
 
-            override fun afterTextChanged(s: Editable?) {
-                val query = s?.toString()?.trim() ?: ""
+            if (query.isBlank()) {
+                viewModel.clearSearchState()
+                showEmptyState()
+                return@addTextChangedListener
+            }
 
-                debounceJob?.cancel()
-
-                if (query.isEmpty()) {
-                    viewModel.clearSearchState()
-                    showEmptyState()
-                    return
-                }
-
-                debounceJob = viewLifecycleOwner.lifecycleScope.launch {
-                    delay(500)
-                    viewModel.searchPostAndUser(token, query, isNewQuery = true)
+            debounceJob = viewLifecycleOwner.lifecycleScope.launch {
+                delay(SEARCH_POST_USER_TIME_DELAY)
+                if (query == binding.etSearch.text.toString().trim()) {
+                    resetPaginationState() // reset before new query
+                    viewModel.searchPostAndUser(token = token, query = query, isNewQuery = true)
                 }
             }
-        })
-    }
-
-    // ─── Pagination on Scroll ────────────────────────────────────────────────
-
-    private fun setupScrollListeners() {
-        // Posts pagination
-        binding.rvPosts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisible = layoutManager.findLastVisibleItemPosition()
-                val total = layoutManager.itemCount
-
-                if (dy > 0 && lastVisible >= total - 2) {
-                    val query = binding.etSearch.text.toString().trim()
-                    if (query.isNotEmpty()) {
-                        // isNewQuery = false → append next page
-                        viewModel.searchPostAndUser(token, query, isNewQuery = false)
-                    }
-                }
-            }
-        })
-
-        // Accounts pagination
-        binding.rvAccounts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisible = layoutManager.findLastVisibleItemPosition()
-                val total = layoutManager.itemCount
-
-                if (dy > 0 && lastVisible >= total - 2) {
-                    val query = binding.etSearch.text.toString().trim()
-                    if (query.isNotEmpty()) {
-                        viewModel.searchPostAndUser(token, query, isNewQuery = false)
-                    }
-                }
-            }
-        })
+        }
     }
 
     // ─── Observe ─────────────────────────────────────────────────────────────
@@ -156,35 +190,94 @@ class CommunitySearchFragment : Fragment() {
 
                 is Resource.Success -> {
                     showLoading(false)
-                    val data = resource.data
+                    isLoading = false // ✅ unlock pagination
 
-                    val posts = data?.posts?.data ?: emptyList()
-                    val users = data?.users ?: emptyList()
+                    val data = resource.data
+                    val posts = data?.data?.posts?.data ?: emptyList()
+                    val users = data?.data?.users ?: emptyList()
+
+                    // ✅ Update isLastPage based on whether the backend has more pages
+                    val currentPage = data?.data?.posts?.meta?.current_page ?: 1
+                    val lastPage = data?.data?.posts?.meta?.last_page ?: 1
+                    isLastPage = currentPage >= lastPage
 
                     postsAdapter.differ.submitList(posts)
                     accountsAdapter.differ.submitList(users)
-
-                    // Decide what to show based on selected chip + result emptiness
-                    val isPostsSelected = true
-                    // If both are empty, show empty state
-                    val activeListEmpty = if (isPostsSelected) posts.isEmpty() else users.isEmpty()
-
-                    if (activeListEmpty) {
-                        showEmptyState()
-                    } else {
-                        if (isPostsSelected) showPosts() else showAccounts()
-                    }
+                    updateVisibleContent()
                 }
 
                 is Resource.Error -> {
                     showLoading(false)
+                    isLoading = false // ✅ unlock pagination on error too
+                    showEmptyState()
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    // ─── UI State Helpers ────────────────────────────────────────────────────
+    private fun setupListeners() {
+        binding.tvPosts.setOnClickListener {
+            selectedTab = SearchTab.POSTS
+            selectReadingType(binding.tvPosts)
+            attachScrollListener() // ✅ re-attach to the correct RV
+            updateVisibleContent()
+        }
+
+        binding.tvProfiles.setOnClickListener {
+            selectedTab = SearchTab.PROFILES
+            selectReadingType(binding.tvProfiles)
+            attachScrollListener() // ✅ re-attach to the correct RV
+            updateVisibleContent()
+        }
+
+        selectReadingType(binding.tvPosts)
+
+        binding.ivBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
+    private fun updateVisibleContent() {
+        val resource = viewModel.searchResults.value
+        if (resource !is Resource.Success) return
+
+        val posts = resource.data?.data?.posts?.data ?: emptyList()
+        val users = resource.data?.data?.users ?: emptyList()
+
+        when (selectedTab) {
+            SearchTab.POSTS -> if (posts.isEmpty()) showEmptyState() else showPosts()
+            SearchTab.PROFILES -> if (users.isEmpty()) showEmptyState() else showAccounts()
+        }
+    }
+
+    private fun likePost(updatedPost: Data) {
+        viewModel.communityPostsResponse?.let { response ->
+
+            val updatedList = response.data.toMutableList()
+
+            val index = updatedList.indexOfFirst { it.id == updatedPost.id }
+
+            if (index != -1) {
+                updatedList[index] = updatedPost
+
+                viewModel.communityPostsResponse =
+                    response.copy(data = updatedList)
+            }
+        }
+
+        viewModel.likePost(token!!, updatedPost.id)
+    }
+
+    // ─── Pagination Helpers ──────────────────────────────────────────────────
+
+    private fun resetPaginationState() {
+        isLoading = false
+        isLastPage = false
+        isScrolling = false
+    }
+
+    // ─── UI State ────────────────────────────────────────────────────────────
 
     private fun showEmptyState() {
         binding.layoutEmptyState.visibility = View.VISIBLE
@@ -204,9 +297,23 @@ class CommunitySearchFragment : Fragment() {
         binding.rvAccounts.visibility = View.VISIBLE
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        // Optional: show/hide a ProgressBar if you have one
-        // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    private fun selectReadingType(selectedView: TextView) {
+        resetReadingType()
+        selectedView.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_search_selected)
+        selectedView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        selectedView.isEnabled = false
+    }
+
+    private fun resetReadingType() {
+        listOf(binding.tvPosts, binding.tvProfiles).forEach {
+            it.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_search_unselected)
+            it.setTextColor(requireContext().getColor(R.color.primary))
+            it.isEnabled = true
+        }
+    }
+
+    private fun showLoading(show: Boolean) {
+        // binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun getToken() {

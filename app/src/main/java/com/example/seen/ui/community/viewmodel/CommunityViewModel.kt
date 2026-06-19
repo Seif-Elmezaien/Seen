@@ -11,7 +11,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Data
+import com.example.seen.domain.model.community.Meta
 import com.example.seen.domain.model.community.PostUser
+import com.example.seen.domain.model.community.SearchResult
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
@@ -307,17 +309,22 @@ class CommunityViewModel(
                 } else {
                     // posts is PostListResponse, so merge its inner data list
                     val mergedData = (
-                            (searchResponse?.posts?.data ?: mutableListOf<Data>()) + resultResponse.posts.data
+                            (searchResponse?.data?.posts?.data ?: mutableListOf<Data>()) + resultResponse.data.posts.data
                             ).toMutableList()
 
                     // users is List<PostUser>
                     val mergedUsers = (
-                            (searchResponse?.users ?: emptyList<PostUser>()) + resultResponse.users
+                            (searchResponse?.data?.users ?: emptyList<PostUser>()) + resultResponse.data.users
                             ).toMutableList()
 
                     searchResponse = resultResponse.copy(
-                        posts = PostListResponse(data = mergedData),
-                        users = mergedUsers
+                        data = SearchResult(
+                            posts = PostListResponse(
+                                data = mergedData,
+                                meta = resultResponse.data.posts.meta  // ✅ always use latest page's meta
+                            ),
+                            users = mergedUsers
+                        )
                     )
                 }
 
@@ -326,14 +333,20 @@ class CommunityViewModel(
         }
         return Resource.Error(response.message())
     }
+
     fun clearSearchState() {
         searchPage = 1
         searchResponse = null
         lastSearchQuery = ""
         searchResults.value = Resource.Success(
             SearchResponse(
-                posts = PostListResponse(data = mutableListOf()),
-                users = emptyList<PostUser>()
+                SearchResult(
+                    posts = PostListResponse(
+                        data = mutableListOf(),
+                        meta = Meta(current_page = 1, last_page = 1, per_page = 10, total = 0)
+                    ),
+                    users = emptyList<PostUser>()
+                )
             )
         )
     }

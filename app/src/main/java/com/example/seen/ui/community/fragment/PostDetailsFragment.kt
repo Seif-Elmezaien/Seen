@@ -176,6 +176,24 @@ class PostDetailsFragment : Fragment() {
                         viewModel.communityPostsResponse = response.copy(data = updatedList)
                     }
                 }
+
+                // ✅ also update searchResponse
+                viewModel.searchResponse?.let { response ->
+                    val updatedPosts = response.data.posts.data.toMutableList()
+                    val index = updatedPosts.indexOfFirst { it.id == args.post.id }
+                    if (index != -1) {
+                        updatedPosts[index] = updatedPosts[index].copy(
+                            is_liked = isLiked,
+                            likes_count = likesCount
+                        )
+                        viewModel.searchResponse = response.copy(
+                            data = response.data.copy(
+                                posts = response.data.posts.copy(data = updatedPosts)
+                            )
+                        )
+                    }
+                }
+
                 // 3. fire API
                 viewModel.likePost(token!!, args.post.id)
             }

@@ -196,7 +196,7 @@ interface SeenAPI {
     @GET("search")
     suspend fun searchPostAndUser(
         @Header("Authorization") token: String,
-        @Query("q") query: String,
+        @Query("query") query: String,
         @Query("page") page: Int = 1,
     ): Response<SearchResponse>
 
