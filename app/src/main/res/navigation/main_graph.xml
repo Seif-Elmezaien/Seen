@@ -152,5 +152,9 @@
         android:id="@+id/profileFragment"
         android:name="com.example.seen.ui.community.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <argument
+            android:name="user_id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

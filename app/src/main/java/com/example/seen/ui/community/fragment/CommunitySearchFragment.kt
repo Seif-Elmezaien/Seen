@@ -145,6 +145,16 @@ class CommunitySearchFragment : Fragment() {
         postsAdapter.setOnDeleteClickListener {
             showDeletePostDialog(it)
         }
+
+        postsAdapter.setOnProfileClickListener {
+            val action = CommunitySearchFragmentDirections.actionCommunitySearchFragmentToProfileFragment(it.id!!)
+            findNavController().navigate(action)
+        }
+
+        accountsAdapter.setOnSearchResultClickListener {
+            val action = CommunitySearchFragmentDirections.actionCommunitySearchFragmentToProfileFragment(it.id!!)
+            findNavController().navigate(action)
+        }
     }
 
     private fun observeLikeError(){

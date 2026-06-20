@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityCommentBinding
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.util.Constants.Companion.HIGH_GLUCOSE_VALUE
 import com.example.seen.util.Constants.Companion.LADA
@@ -79,7 +80,7 @@ class CommentAdapter(
             Glide.with(root)
                 .load(comment.user?.profile_picture?.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
-                .into(ivCommentProfile)
+                .into(ivProfile)
             tvCommentText.text = comment.comment_text
             ivCommentsLike.isSelected = comment.is_liked ?: false
             tvCommentsLikesCount.text = comment.likes_count.toString()
@@ -120,12 +121,18 @@ class CommentAdapter(
             tvCommentsLikesCount.setOnClickListener {
                 onLikeCountClickListener?.invoke(comment)
             }
+
+            ivProfile.setOnClickListener {
+                onProfileClickListener?.invoke(comment.user!!)
+            }
         }
     }
 
     private var onLikeClickListener: ((Comment) -> Unit)? = null
     private var onEditClickListener: ((Comment) -> Unit)? = null
     private var onDeleteClickListener: ((Comment) -> Unit)? = null
+    private var onProfileClickListener: ((PostUser) -> Unit)? = null
+
 
     fun setOnLikeClickListener(listener: (Comment) -> Unit) {
         onLikeClickListener = listener
@@ -135,6 +142,9 @@ class CommentAdapter(
     }
     fun setOnDeleteClickListener(listener: (Comment) -> Unit) {
         onDeleteClickListener = listener
+    }
+    fun setOnProfileClickListener(listener: (PostUser) -> Unit) {
+        onProfileClickListener = listener
     }
 
     private var onLikeCountClickListener: ((Comment) -> Unit)? = null

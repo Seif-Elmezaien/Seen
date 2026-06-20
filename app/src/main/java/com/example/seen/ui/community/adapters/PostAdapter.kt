@@ -14,6 +14,7 @@ import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityPostBinding
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
+import com.example.seen.domain.model.community.PostUser
 import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
 import com.example.seen.util.Constants.Companion.ADVICES
 import com.example.seen.util.Constants.Companion.GESTATIONAL
@@ -97,6 +98,7 @@ class PostAdapter(
             tvCommentsCount.text = post.comments_count.toString()
             Glide.with(root)
                 .load(post.user.profile_picture.takeIf { it.isNotEmpty() })
+                .centerCrop()
                 .placeholder(R.drawable.ic_profile)
                 .into(ivProfile)
 
@@ -139,6 +141,10 @@ class PostAdapter(
 
                 onLikeClickListener?.invoke(updatedPost)
             }
+
+            ivProfile.setOnClickListener {
+                onProfileClickListener?.invoke(post.user)
+            }
         }
     }
 
@@ -146,6 +152,7 @@ class PostAdapter(
     private var onLikeClickListener: ((Data) -> Unit)? = null
     private var onEditClickListener: ((Data) -> Unit)? = null
     private var onDeleteClickListener: ((Data) -> Unit)? = null
+    private var onProfileClickListener: ((PostUser) -> Unit)? = null
 
     fun setOnCommentClickListener(listener: (Data) -> Unit){
         onCommentClickListener = listener
@@ -160,6 +167,9 @@ class PostAdapter(
     }
     fun setOnDeleteClickListener(listener: (Data) -> Unit) {
         onDeleteClickListener = listener
+    }
+    fun setOnProfileClickListener(listener: (PostUser) -> Unit) {
+        onProfileClickListener = listener
     }
 
     fun updatePost(post: Data) {

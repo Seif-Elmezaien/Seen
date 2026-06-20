@@ -52,14 +52,24 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
         holder: UserViewHolder,
         position: Int
     ) {
-        val account = differ.currentList[position]
+        val user = differ.currentList[position]
         holder.binding.apply {
             Glide.with(root)
-                .load(account?.profile_picture?.takeIf { it.isNotEmpty() })
+                .load(user?.profile_picture?.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
-                .into(ivAccount)
-            tvUserAccountName.text = "${account.first_name} ${account.last_name}"
+                .into(ivProfile)
+            tvUserAccountName.text = "${user.first_name} ${user.last_name}"
+
+            clSearchResult.setOnClickListener {
+                onSearchResultClickListener?.invoke(user)
+            }
         }
+    }
+
+    private var onSearchResultClickListener: ((PostUser) -> Unit)? = null
+
+    fun setOnSearchResultClickListener(listener: (PostUser) -> Unit) {
+        onSearchResultClickListener = listener
     }
 
     override fun getItemCount(): Int {

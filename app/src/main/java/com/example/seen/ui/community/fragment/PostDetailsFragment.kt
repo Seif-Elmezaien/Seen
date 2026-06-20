@@ -222,8 +222,13 @@ class PostDetailsFragment : Fragment() {
                     .show(parentFragmentManager, "post_likes")
             }
 
-            binding.editPost.setOnClickListener { showEditPostDialog(args.post) }
-            binding.deletePost.setOnClickListener { showDeletePostDialog(args.post) }
+            editPost.setOnClickListener { showEditPostDialog(args.post) }
+            deletePost.setOnClickListener { showDeletePostDialog(args.post) }
+
+            ivProfile.setOnClickListener {
+                val action = CommunitySearchFragmentDirections.actionCommunitySearchFragmentToProfileFragment(args.post.user.id!!)
+                findNavController().navigate(action)
+            }
         }
     }
 
@@ -319,6 +324,11 @@ class PostDetailsFragment : Fragment() {
         commentAdapter.setOnLikeCountClickListener { comment ->
             LikesBottomSheetFragment(token = token!!, commentId = comment.id)
                 .show(parentFragmentManager, "comment_likes")
+        }
+
+        commentAdapter.setOnProfileClickListener {
+            val action = PostDetailsFragmentDirections.actionPostDetailsFragmentToProfileFragment(it.id!!)
+            findNavController().navigate(action)
         }
     }
 

@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         R.id.onboardingContainerFragment,
         R.id.postDetailsFragment,
         R.id.communitySearchFragment,
+        R.id.profileFragment
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -41,15 +41,25 @@ class LikesAdapter(val context: Context) : RecyclerView.Adapter<LikesAdapter.Lik
     override fun onBindViewHolder(holder: LikesViewHolder, position: Int) {
         val user = differ.currentList[position]
         holder.binding.apply {
-            tvUserAccountName.text = user.first_name + user.last_name
+            tvUserAccountName.text = user.first_name + " " + user.last_name
             flAccountAvatarStroke.background = ContextCompat.getDrawable(
                 context, setProfileBackground(user.diabetes_type ?: "")
             )
             Glide.with(context)
                 .load(user.profile_picture.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
-                .into(ivAccount)
+                .into(ivProfile)
+
+            clSearchResult.setOnClickListener {
+                onSearchResultClickListener?.invoke(user)
+            }
         }
+    }
+
+    private var onSearchResultClickListener: ((PostUser) -> Unit)? = null
+
+    fun setOnSearchResultClickListener(listener: (PostUser) -> Unit) {
+        onSearchResultClickListener = listener
     }
 
     private fun setProfileBackground(diabetesType: String) = when (diabetesType) {

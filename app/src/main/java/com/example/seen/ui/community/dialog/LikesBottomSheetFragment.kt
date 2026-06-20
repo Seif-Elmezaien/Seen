@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.seen.databinding.ItemPostCommentLikesBinding
 import com.example.seen.ui.community.adapters.LikesAdapter
+import com.example.seen.ui.community.fragment.PostDetailsFragmentDirections
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.util.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -47,6 +49,12 @@ class LikesBottomSheetFragment(
         binding.rvLikes.apply {
             adapter = likesAdapter
             layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        likesAdapter.setOnSearchResultClickListener {
+            dismiss()
+            val action = PostDetailsFragmentDirections.actionPostDetailsFragmentToProfileFragment(it.id!!)
+            findNavController().navigate(action)
         }
     }
 

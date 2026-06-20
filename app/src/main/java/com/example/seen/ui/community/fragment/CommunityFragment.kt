@@ -181,6 +181,11 @@ class CommunityFragment : Fragment() {
         postAdapter.setOnDeleteClickListener {
             showDeletePostDialog(it)
         }
+
+        postAdapter.setOnProfileClickListener {
+            val action = CommunityFragmentDirections.actionCommunityFragmentToProfileFragment(it.id!!)
+            findNavController().navigate(action)
+        }
     }
 
     private fun showEditPostDialog(post: Data) {

@@ -20,8 +20,10 @@ import com.example.seen.databinding.FragmentHomeBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.LogRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.entites.FullLog
 import com.example.seen.domain.model.entites.Log
+import com.example.seen.ui.community.fragment.CommunityFragmentDirections
 import com.example.seen.ui.home.adapter.HomeAdapter
 import com.example.seen.ui.home.viewmodel.HomeViewModel
 import com.example.seen.ui.home.viewmodel.HomeViewModelProviderFactory
@@ -199,6 +201,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupListeners() {
+
+        binding.ivProfile.setOnClickListener {
+
+            viewModel.getUser().observe(viewLifecycleOwner) { user ->
+                if (user != null) {
+                    val action = HomeFragmentDirections.actionHomeFragmentToProfileFragment(it.id)
+                    findNavController().navigate(action)
+                }
+            }
+        }
 
         binding.cdReminder.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_reminderFragment)
