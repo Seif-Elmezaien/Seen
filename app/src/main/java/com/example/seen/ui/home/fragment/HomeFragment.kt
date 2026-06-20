@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.FragmentHomeBinding
 import com.example.seen.datasource.local.SeenDatabase
@@ -128,6 +129,12 @@ class HomeFragment : Fragment() {
                 binding.tvUserName.text = getString(R.string.hello_username) + " " + user.first_name
                 binding.tvUserDiabetesType.text = getString(setUserDiabetesType(user.diabetes_type))
                 binding.tvAlertTitle.text = getString(R.string.alert_title) + " " + user.first_name
+
+                Glide.with(binding.root)
+                    .load(user.profile_picture.takeIf { it!!.isNotEmpty() })
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_profile)
+                    .into(binding.ivProfile)
             }
         }
     }
