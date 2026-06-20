@@ -37,6 +37,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra("navigate_to", "notifications") // ✅ flag for MainActivity
         }
 
         val pendingIntent = PendingIntent.getActivity(
@@ -66,6 +67,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         manager.notify(System.currentTimeMillis().toInt(), notification)
     }
-
-
 }

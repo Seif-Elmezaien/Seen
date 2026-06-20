@@ -12,11 +12,11 @@ import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
 import com.example.seen.domain.model.community.request.EditPostRequest
-import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostCommentLikesResponse
 import com.example.seen.domain.model.community.response.PostListResponse
+import com.example.seen.domain.model.community.response.PostResponse
 import com.example.seen.domain.model.community.response.SearchResponse
 import com.example.seen.domain.model.logs.LogResponse
 import com.example.seen.domain.model.logs.LogRequest
@@ -53,10 +53,11 @@ interface SeenAPI {
 
     @GET("notifications")
     suspend fun getNotifications(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1
     ): Response<NotificationsResponse>
 
-    @POST("notifications/{id}/read")
+    @PATCH("notifications/{id}/read")
     suspend fun markAsRead(
         @Header("Authorization") token: String,
         @Path("id") notificationId: Int
@@ -67,6 +68,12 @@ interface SeenAPI {
         @Header("Authorization") token: String
     ): Response<MarkReadResponse>
 
+    @DELETE("notifications/{id}")
+    suspend fun deleteNotification(
+        @Header("Authorization") token: String,
+        @Path("id") notificationId: Int
+    ): Response<Unit>
+
     // ─── Logs ───────────────────────────────────────────────────────
 
     @POST("logs/android")
@@ -74,12 +81,6 @@ interface SeenAPI {
         @Header("Authorization") token: String,
         @Body log: LogRequest)
     : Response<Unit>
-
-    @PUT("logs")
-    suspend fun updateLog(
-        @Header("Authorization") token: String,
-        @Body log: LogRequest
-    ): Response<Unit>
 
     @DELETE("logs/{logId}")
     suspend fun deleteLog(
@@ -110,6 +111,12 @@ interface SeenAPI {
         @Path("user") userId: Int,
         @Query("page") page: Int = 1,
     ): Response<PostListResponse>
+
+    @GET("posts/{post}")
+    suspend fun getPost(
+        @Header("Authorization") token: String,
+        @Path("post") postId: Int,
+    ): Response<PostResponse>
 
     @Multipart
     @POST("posts")

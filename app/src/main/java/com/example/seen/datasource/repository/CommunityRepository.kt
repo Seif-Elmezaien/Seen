@@ -24,6 +24,9 @@ class CommunityRepository {
     suspend fun getUserPosts(token: String, userId: Int, page: Int) =
         RetrofitInstance.api.getUserPosts(token, userId, page)
 
+    suspend fun getPost(token: String, postId: Int) =
+        RetrofitInstance.api.getPost(token, postId)
+
     suspend fun createPost(token: String, title: RequestBody, content: RequestBody, category: RequestBody, images: List<MultipartBody.Part>): Response<Data> =
         RetrofitInstance.api.createPost(token, title, content, category, images)
 

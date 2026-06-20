@@ -26,7 +26,7 @@
         app:fabCradleVerticalOffset="10dp"
         app:fabCradleRoundedCornerRadius="0dp"
         android:layout_gravity="bottom"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -49,6 +49,6 @@
         app:layout_behavior="@null"
         android:backgroundTint="@color/primary"
         app:layout_anchor="@id/bottomAppBar"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

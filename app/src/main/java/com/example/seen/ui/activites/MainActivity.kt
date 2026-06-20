@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpSystemSettings()
         setUpBottomMenuNavController()
+        handleNotificationIntent(intent)
         observeConnectivity()
         sendTokenToServer()
 
@@ -118,8 +119,6 @@ class MainActivity : AppCompatActivity() {
 
         // bottomNavBar background error
         binding.bottomNavigationView.background = null
-
-
 
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
@@ -187,5 +186,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNotificationIntent(intent)
+    }
 
+    private fun handleNotificationIntent(intent: Intent?) {
+        if (intent?.getStringExtra("navigate_to") == "notifications") {
+            // wait for nav controller to be ready
+            binding.root.post {
+                navController.navigate(R.id.notificationFragment)
+            }
+        }
+    }
 }

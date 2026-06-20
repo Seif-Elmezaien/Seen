@@ -305,6 +305,22 @@
     <string name="delete">حذف</string>
     <string name="accept">قبول</string>
     <string name="reject">رفض</string>
+    <string name="notification_friend_request_title">طلب صداقة</string>
+    <string name="notification_friend_request_description">أرسل %1$s لك طلب صداقة.</string>
+    <string name="notification_accept_request_title">تم قبول طلب الصداقة</string>
+    <string name="notification_accept_request_description">قبل %1$s طلب الصداقة الذي أرسلته.</string>
+    <string name="notification_message_title">رسالة جديدة</string>
+    <string name="notification_message_description">أرسل %1$s لك رسالة جديدة.</string>
+    <string name="notification_like_title">إعجاب جديد</string>
+    <string name="notification_like_description_single">أعجب %1$s بمنشورك.</string>
+    <string name="notification_like_description_multiple">أعجب %1$s و %2$d آخرون بمنشورك.</string>
+    <string name="notification_comment_title">تعليق جديد</string>
+    <string name="notification_comment_description_single">علق %1$s على منشورك.</string>
+    <string name="notification_reminder_title">تذكير %1$s</string>
+    <string name="notification_reminder_description">لديك تذكير جديد من نوع %1$s: %2$s.</string>
+    <string name="notification_system_title">إشعار من النظام</string>
+    <string name="notification_system_description">لديك إشعار جديد من النظام.</string>
+
 
     <!-- ProfileFragment -->
     <string name="edit_account">تعديل الحساب</string>

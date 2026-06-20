@@ -67,7 +67,7 @@
         <TextView
             android:id="@+id/tvDeleteNotification"
             android:visibility="gone"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_delete_notification"

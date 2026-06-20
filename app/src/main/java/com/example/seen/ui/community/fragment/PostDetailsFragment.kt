@@ -230,7 +230,7 @@ class PostDetailsFragment : Fragment() {
             deletePost.setOnClickListener { showDeletePostDialog(args.post) }
 
             ivProfile.setOnClickListener {
-                val action = CommunitySearchFragmentDirections.actionCommunitySearchFragmentToProfileFragment(args.post.user.id!!)
+                val action = PostDetailsFragmentDirections.actionPostDetailsFragmentToProfileFragment(args.post.user.id!!)
                 findNavController().navigate(action)
             }
         }

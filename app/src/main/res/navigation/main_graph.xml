@@ -166,5 +166,12 @@
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.example.seen.ui.notification.fragment.NotificationFragment"
-        android:label="NotificationFragment" />
+        android:label="NotificationFragment" >
+        <action
+            android:id="@+id/action_notificationFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
 </navigation>

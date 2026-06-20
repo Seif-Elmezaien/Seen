@@ -43,5 +43,10 @@ class Constants {
         const val COMMENT_PAGE_SIZE = 20
 
         const val NAV_ANIM_DURATION = 220L
+
+
+        //Notification
+
+
     }
 }
