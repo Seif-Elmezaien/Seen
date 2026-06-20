@@ -1,12 +1,18 @@
 package com.example.seen.ui.community.fragment
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.view.children
 import androidx.lifecycle.Observer
@@ -19,7 +25,9 @@ import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
+import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
+import com.example.seen.domain.model.community.request.EditPostRequest
 import com.example.seen.domain.model.entites.ReportFilter
 import com.example.seen.ui.community.adapters.PostAdapter
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
@@ -72,6 +80,7 @@ class CommunityFragment : Fragment() {
         setPostAdapter()
         observeLikeError()
         handleChips()
+        observeEditDeletePost()
 
 
         // Sync local field from ViewModel (survives navigation)
@@ -106,6 +115,10 @@ class CommunityFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.getUserId().observe(viewLifecycleOwner) { user ->
+            postAdapter.userId = user.id
+        }
 
         binding.btnAddPost.setOnClickListener {
             findNavController().navigate(R.id.action_communityFragment_to_addPostFragment)
@@ -159,6 +172,104 @@ class CommunityFragment : Fragment() {
 
         postAdapter.setOnLikeClickListener { updatedPost ->
             likePost(updatedPost)
+        }
+
+        postAdapter.setOnEditClickListener {
+            showEditPostDialog(it)
+        }
+
+        postAdapter.setOnDeleteClickListener {
+            showDeletePostDialog(it)
+        }
+    }
+
+    private fun showEditPostDialog(post: Data) {
+        val view = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
+
+        val etTitle = EditText(requireContext()).apply {
+            setText(post.title)
+            hint = "Title"
+        }
+
+        val etContent = EditText(requireContext()).apply {
+            setText(post.content)
+            hint = "Content"
+            minLines = 3
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        }
+
+        val categories = listOf(GENERAL, TYPE1_LADA, TYPE_2, MODY, GESTATIONAL, ADVICES)
+        val spinner = Spinner(requireContext()).apply {
+            adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                categories
+            )
+            setSelection(categories.indexOf(post.category).takeIf { it >= 0 } ?: 0)
+        }
+
+        view.addView(etTitle)
+        view.addView(etContent)
+        view.addView(spinner)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Edit Post")
+            .setView(view)
+            .setPositiveButton("Save") { _, _ ->
+                val title = etTitle.text.toString().trim()
+                val content = etContent.text.toString().trim()
+                val category = categories[spinner.selectedItemPosition]
+                if (title.isNotEmpty() && content.isNotEmpty()) {
+                    viewModel.editPost(token!!, post.id, EditPostRequest(title, content, category))
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showDeletePostDialog(post: Data) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Post")
+            .setMessage("Are you sure you want to delete this post?")
+            .setPositiveButton("Delete") { _, _ ->
+                viewModel.deletePostFromCache(post.id)
+                val newList = postAdapter.differ.currentList.toMutableList()
+                newList.removeAll { it.id == post.id }
+                postAdapter.differ.submitList(newList)
+                viewModel.deletePost(token!!, post.id)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun observeEditDeletePost() {
+        viewModel.editPostResult.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    resource.data?.let { updatedPost ->
+                        viewModel.updatePostInCache(updatedPost)
+                        // resubmit the relevant adapter
+                        postAdapter.differ.submitList(null)
+                        postAdapter.differ.submitList(viewModel.communityPostsResponse?.data?.toList())
+                    }
+                    viewModel.clearEditPostState()
+                }
+                is Resource.Error -> Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                else -> Unit
+            }
+        }
+
+        viewModel.deletePostResult.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    viewModel.clearDeletePostState()
+                }
+                is Resource.Error -> Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                else -> Unit
+            }
         }
     }
 

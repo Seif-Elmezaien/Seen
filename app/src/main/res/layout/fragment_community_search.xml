@@ -45,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back_arrow_left"
-            android:rotation="180"
             android:layout_marginTop="40dp"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +79,7 @@
     <LinearLayout
         android:id="@+id/llSearchType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
@@ -91,7 +90,7 @@
 
         <TextView
             android:id="@+id/tvPosts"
-            android:layout_width="111dp"
+            android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:background="@drawable/bg_search_selected"
             android:paddingHorizontal="16dp"
@@ -99,13 +98,14 @@
             android:gravity="center"
             app:drawableStartCompat="@drawable/ic_post"
             app:drawableTint="@color/white"
+            android:drawablePadding="10dp"
             android:text="@string/posts"
             android:textColor="@color/white"
             android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/tvProfiles"
-            android:layout_width="94dp"
+            android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_marginStart="16dp"
             android:paddingHorizontal="16dp"
@@ -115,6 +115,7 @@
             app:drawableStartCompat="@drawable/ic_search_profile_notification"
             app:drawableTint="@color/primary"
             android:text="@string/accounts"
+            android:drawablePadding="10dp"
             android:textColor="@color/primary"
             android:textSize="12sp" />
 

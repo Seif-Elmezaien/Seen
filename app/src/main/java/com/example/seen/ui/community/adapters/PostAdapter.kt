@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.seen.R
 import com.example.seen.databinding.ItemCommunityPostBinding
+import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
 import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
 import com.example.seen.util.Constants.Companion.ADVICES
@@ -51,6 +52,12 @@ class PostAdapter(
     }
 
     val differ = AsyncListDiffer(this, differCallback)
+
+    var userId = -1
+        set(value) {
+            field = value
+            notifyDataSetChanged() // rebinds all views with the correct userId
+        }
 
 
     override fun onCreateViewHolder(
@@ -92,6 +99,20 @@ class PostAdapter(
                 .load(post.user.profile_picture.takeIf { it.isNotEmpty() })
                 .placeholder(R.drawable.ic_profile)
                 .into(ivProfile)
+
+
+            if (userId == post.user.id){
+                editPost.visibility = View.VISIBLE
+                deletePost.visibility = View.VISIBLE
+            } else {
+                editPost.visibility = View.GONE
+                deletePost.visibility = View.GONE
+            }
+
+            editPost.setOnClickListener    { onEditClickListener?.invoke(post) }
+            deletePost.setOnClickListener  { onDeleteClickListener?.invoke(post) }
+
+
             ivComment.setOnClickListener {
                 onCommentClickListener?.invoke(post)
             }
@@ -123,6 +144,8 @@ class PostAdapter(
 
     private var onCommentClickListener: ((Data) -> Unit)? = null
     private var onLikeClickListener: ((Data) -> Unit)? = null
+    private var onEditClickListener: ((Data) -> Unit)? = null
+    private var onDeleteClickListener: ((Data) -> Unit)? = null
 
     fun setOnCommentClickListener(listener: (Data) -> Unit){
         onCommentClickListener = listener
@@ -130,6 +153,28 @@ class PostAdapter(
 
     fun setOnLikeClickListener(listener: (Data) -> Unit){
         onLikeClickListener = listener
+    }
+
+    fun setOnEditClickListener(listener: (Data) -> Unit) {
+        onEditClickListener = listener
+    }
+    fun setOnDeleteClickListener(listener: (Data) -> Unit) {
+        onDeleteClickListener = listener
+    }
+
+    fun updatePost(post: Data) {
+        val newList = differ.currentList.toMutableList()
+        val index = newList.indexOfFirst { it.id == post.id }
+        if (index != -1) {
+            newList[index] = post
+            differ.submitList(newList.toList())
+        }
+    }
+
+    fun removePost(postId: Int) {
+        val newList = differ.currentList.toMutableList()
+        newList.removeAll { it.id == postId }
+        differ.submitList(newList.toList())
     }
 
     private fun setProfileBackground(messageType : String) = when (messageType) {

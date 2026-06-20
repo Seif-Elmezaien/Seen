@@ -4,6 +4,7 @@ import com.example.seen.datasource.remote.RetrofitInstance
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.request.CommentRequest
+import com.example.seen.domain.model.community.request.EditPostRequest
 import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
@@ -23,7 +24,7 @@ class CommunityRepository {
     suspend fun createPost(token: String, title: RequestBody, content: RequestBody, category: RequestBody, images: List<MultipartBody.Part>): Response<Data> =
         RetrofitInstance.api.createPost(token, title, content, category, images)
 
-    suspend fun editPost(token: String, postId: Int, post: PostRequest): Response<Data> =
+    suspend fun editPost(token: String, postId: Int, post: EditPostRequest): Response<Data> =
         RetrofitInstance.api.editPost(token, postId, post)
 
     suspend fun deletePost(token: String, postId: Int): Response<Unit> =

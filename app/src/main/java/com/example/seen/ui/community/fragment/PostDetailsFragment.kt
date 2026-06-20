@@ -1,12 +1,18 @@
 package com.example.seen.ui.community.fragment
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -25,6 +31,8 @@ import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Comment
+import com.example.seen.domain.model.community.Data
+import com.example.seen.domain.model.community.request.EditPostRequest
 import com.example.seen.ui.community.adapters.CommentAdapter
 import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
 import com.example.seen.ui.community.dialog.LikesBottomSheetFragment
@@ -32,6 +40,7 @@ import com.example.seen.ui.community.viewmodel.CommunityViewModel
 import com.example.seen.ui.community.viewmodel.CommunityViewModelProviderFactory
 import com.example.seen.util.Constants.Companion.ADVICES
 import com.example.seen.util.Constants.Companion.COMMENT_PAGE_SIZE
+import com.example.seen.util.Constants.Companion.GENERAL
 import com.example.seen.util.Constants.Companion.GESTATIONAL
 import com.example.seen.util.Constants.Companion.LADA
 import com.example.seen.util.Constants.Companion.MODY
@@ -82,11 +91,20 @@ class PostDetailsFragment : Fragment() {
         initializeViewModel()
         setPostItem()
         setCommentRecyclerView()
+        observeEditDeletePost()
 
         viewModel.getPostComments(args.post.id, token!!)
 
         viewModel.getUserId().observe(viewLifecycleOwner) { user ->
             commentAdapter.userId = user.id
+
+            if (user.id == args.post.user.id){
+                binding.editPost.visibility = View.VISIBLE
+                binding.deletePost.visibility = View.VISIBLE
+            } else {
+                binding.editPost.visibility = View.GONE
+                binding.deletePost.visibility = View.GONE
+            }
         }
 
         observeLikeError()
@@ -203,6 +221,9 @@ class PostDetailsFragment : Fragment() {
                 LikesBottomSheetFragment(token = token!!, postId = args.post.id)
                     .show(parentFragmentManager, "post_likes")
             }
+
+            binding.editPost.setOnClickListener { showEditPostDialog(args.post) }
+            binding.deletePost.setOnClickListener { showDeletePostDialog(args.post) }
         }
     }
 
@@ -298,6 +319,104 @@ class PostDetailsFragment : Fragment() {
         commentAdapter.setOnLikeCountClickListener { comment ->
             LikesBottomSheetFragment(token = token!!, commentId = comment.id)
                 .show(parentFragmentManager, "comment_likes")
+        }
+    }
+
+    private fun showEditPostDialog(post: Data) {
+        val view = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
+
+        val etTitle = EditText(requireContext()).apply {
+            setText(post.title)
+            hint = "Title"
+        }
+
+        val etContent = EditText(requireContext()).apply {
+            setText(post.content)
+            hint = "Content"
+            minLines = 3
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        }
+
+        val categories = listOf(GENERAL, TYPE1_LADA, TYPE_2, MODY, GESTATIONAL, ADVICES)
+        val spinner = Spinner(requireContext()).apply {
+            adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                categories
+            )
+            setSelection(categories.indexOf(post.category).takeIf { it >= 0 } ?: 0)
+        }
+
+        view.addView(etTitle)
+        view.addView(etContent)
+        view.addView(spinner)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Edit Post")
+            .setView(view)
+            .setPositiveButton("Save") { _, _ ->
+                val title = etTitle.text.toString().trim()
+                val content = etContent.text.toString().trim()
+                val category = categories[spinner.selectedItemPosition]
+                if (title.isNotEmpty() && content.isNotEmpty()) {
+                    viewModel.editPost(token!!, post.id, EditPostRequest(title, content, category))
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showDeletePostDialog(post: Data) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Post")
+            .setMessage("Are you sure you want to delete this post?")
+            .setPositiveButton("Delete") { _, _ ->
+                viewModel.deletePostFromCache(post.id)
+                viewModel.deletePost(token!!, post.id)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun observeEditDeletePost() {
+        viewModel.editPostResult.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    resource.data?.let { updatedPost ->
+                        viewModel.updatePostInCache(updatedPost)
+                        // update UI fields directly since we're already on the details screen
+                        binding.tvPostTitle.text = updatedPost.title
+                        binding.tvPostContent.text = updatedPost.content
+                        val (bgRes, colorRes, categoryRes) = setCategoryBackground(updatedPost.category ?: "")
+                        binding.tvCategory.text = getString(categoryRes)
+                        binding.tvCategory.background = ContextCompat.getDrawable(requireContext(), bgRes)
+                        binding.tvCategory.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
+                    }
+                    viewModel.clearEditPostState()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    viewModel.clearEditPostState()
+                }
+                else -> Unit
+            }
+        }
+
+        viewModel.deletePostResult.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    viewModel.clearDeletePostState()
+                    findNavController().navigateUp()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    viewModel.clearDeletePostState()
+                }
+                else -> Unit
+            }
         }
     }
 

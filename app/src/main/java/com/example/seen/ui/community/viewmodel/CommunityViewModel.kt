@@ -15,6 +15,7 @@ import com.example.seen.domain.model.community.Meta
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.SearchResult
 import com.example.seen.domain.model.community.request.CommentRequest
+import com.example.seen.domain.model.community.request.EditPostRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
@@ -52,18 +53,15 @@ class CommunityViewModel(
     var communityCommentResponse: CommentResponse? = null
 
     val addCommentResult = MutableLiveData<Resource<AddCommentResponse>?>()
-
     val editCommentResult = MutableLiveData<Resource<AddCommentResponse>?>()
-
     val deleteCommentResult = MutableLiveData<Resource<Unit>?>()
-
     val likeCommentResult = MutableLiveData<Resource<Unit>>()
-
     val commentLikesResult = MutableLiveData<Resource<List<PostUser>>?>()
 
     val postLikesResult = MutableLiveData<Resource<List<PostUser>>?>()
-
     val createPostResult = MutableLiveData<Resource<Data>?>()
+    val editPostResult = MutableLiveData<Resource<Data>?>()
+    val deletePostResult = MutableLiveData<Resource<Unit>?>()
 
     val searchResults = MutableLiveData<Resource<SearchResponse>>()
     var searchPage = 1
@@ -495,6 +493,103 @@ class CommunityViewModel(
                 currentResponse.copy(data = updatedPosts)
 
             communityPosts.postValue(Resource.Success(communityPostsResponse!!))
+        }
+    }
+
+    fun editPost(token: String, postId: Int, post: EditPostRequest) = viewModelScope.launch {
+        safeEditPostCall(token, postId, post)
+    }
+
+    fun deletePost(token: String, postId: Int) = viewModelScope.launch {
+        safeDeletePostCall(token, postId)
+    }
+
+    private suspend fun safeEditPostCall(token: String, postId: Int, post: EditPostRequest) {
+        editPostResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.editPost(token, postId, post)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        editPostResult.postValue(Resource.Success(it))
+                    }
+                } else {
+                    editPostResult.postValue(Resource.Error(response.message()))
+                }
+            } else {
+                editPostResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> editPostResult.postValue(Resource.Error("Network Failure"))
+                else -> editPostResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
+
+    private suspend fun safeDeletePostCall(token: String, postId: Int) {
+        deletePostResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.deletePost(token, postId)
+                if (response.isSuccessful) {
+                    deletePostResult.postValue(Resource.Success(Unit))
+                } else {
+                    deletePostResult.postValue(Resource.Error(response.message()))
+                }
+            } else {
+                deletePostResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> deletePostResult.postValue(Resource.Error("Network Failure"))
+                else -> deletePostResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
+
+    fun clearEditPostState() { editPostResult.value = null }
+    fun clearDeletePostState() { deletePostResult.value = null }
+
+    fun updatePostInCache(updatedPost: Data) {
+        // update community feed cache
+        communityPostsResponse?.let { response ->
+            val list = response.data.toMutableList()
+            val index = list.indexOfFirst { it.id == updatedPost.id }
+            if (index != -1) {
+                list[index] = updatedPost
+                communityPostsResponse = response.copy(data = list)
+            }
+        }
+        // update search cache
+        searchResponse?.let { response ->
+            val list = response.data.posts.data.toMutableList()
+            val index = list.indexOfFirst { it.id == updatedPost.id }
+            if (index != -1) {
+                list[index] = updatedPost
+                searchResponse = response.copy(
+                    data = response.data.copy(
+                        posts = response.data.posts.copy(data = list)
+                    )
+                )
+            }
+        }
+    }
+
+    fun deletePostFromCache(postId: Int) {
+        communityPostsResponse?.let { response ->
+            val list = response.data.toMutableList()
+            list.removeAll { it.id == postId }
+            communityPostsResponse = response.copy(data = list)
+        }
+        searchResponse?.let { response ->
+            val list = response.data.posts.data.toMutableList()
+            list.removeAll { it.id == postId }
+            searchResponse = response.copy(
+                data = response.data.copy(
+                    posts = response.data.posts.copy(data = list)
+                )
+            )
         }
     }
 

@@ -11,6 +11,7 @@ import com.example.seen.domain.model.chatbot.GetChatbotHistoryResponse
 import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.PostUser
 import com.example.seen.domain.model.community.request.CommentRequest
+import com.example.seen.domain.model.community.request.EditPostRequest
 import com.example.seen.domain.model.community.request.PostRequest
 import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
@@ -130,7 +131,7 @@ interface SeenAPI {
     suspend fun editPost(
         @Header("Authorization") token: String,
         @Path("postId") postId: Int,
-        @Body post: PostRequest,
+        @Body post: EditPostRequest,
     ): Response<Data>
 
     @DELETE("posts/{postId}")
