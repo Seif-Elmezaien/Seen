@@ -20,6 +20,7 @@ import com.example.seen.R
 import com.example.seen.databinding.FragmentAddPostBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
+import com.example.seen.datasource.repository.ProfileRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.community.dialog.ImagePreviewDialogFragment
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
@@ -105,12 +106,15 @@ class AddPostFragment : Fragment() {
         val db = SeenDatabase(requireContext().applicationContext)
         val userRepository = UserRepository(db)
         val communityRepository = CommunityRepository()
+        val profileRepository = ProfileRepository()
+
 
         // create factory
         val factory = CommunityViewModelProviderFactory(
             requireActivity().application,
             userRepository,
-            communityRepository
+            communityRepository,
+            profileRepository
         )
 
         // initialize ViewModel by activity

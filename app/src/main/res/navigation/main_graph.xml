@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/communityFragment"
@@ -156,5 +159,12 @@
         <argument
             android:name="user_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_profileFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.seen.ui.notification.fragment.NotificationFragment"
+        android:label="NotificationFragment" />
 </navigation>

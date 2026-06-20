@@ -317,6 +317,17 @@
     <string name="accept_request">قبول</string>
     <string name="reject_request">رفض</string>
     <string name="remove">حذف</string>
+    <string name="unblock">الغاء الحظر</string>
+
+    <string name="sending">جاري الإرسال…</string>
+    <string name="canceling">جاري الإلغاء…</string>
+    <string name="accepting">جاري القبول…</string>
+    <string name="rejecting">جاري الرفض…</string>
+    <string name="removing">جاري الإزالة…</string>
+    <string name="blocking">جاري الحظر…</string>
+    <string name="unblocking">جاري إلغاء الحظر…</string>
+
+    <!-- More -->
     <string name="account_and_settings">الحساب و الإعدادات</string>
     <string name="Account">الحساب</string>
     <string name="personal_info_title">المعلومات الشخصية</string>

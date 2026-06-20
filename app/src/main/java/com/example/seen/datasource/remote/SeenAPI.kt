@@ -104,12 +104,6 @@ interface SeenAPI {
         @Query("category") category: String,
     ): Response<PostListResponse>
 
-    @GET("my-posts")
-    suspend fun getMyPosts(
-        @Header("Authorization") token: String,
-        @Query("page") page: Int = 1,
-    ): Response<PostListResponse>
-
     @GET("users/{user}/posts")
     suspend fun getUserPosts(
         @Header("Authorization") token: String,
@@ -204,10 +198,11 @@ interface SeenAPI {
 
     // ─── Profile ────────────────────────────────────────────────────────────────
 
-    @GET("user/profile")
-    suspend fun getProfile(
+    @GET("user/profile/{id}")
+    suspend fun getUserProfile(
         @Header("Authorization") token: String,
-    ) : Response<ProfileResponse>
+        @Path("id") userId: Int,
+    ): Response<ProfileResponse>
 
     // ─── Friendship ────────────────────────────────────────────────────────────────
 

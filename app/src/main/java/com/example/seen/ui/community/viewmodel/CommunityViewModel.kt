@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.seen.datasource.repository.CommunityRepository
+import com.example.seen.datasource.repository.ProfileRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Data
 import com.example.seen.domain.model.community.Meta
@@ -20,6 +21,9 @@ import com.example.seen.domain.model.community.response.AddCommentResponse
 import com.example.seen.domain.model.community.response.CommentResponse
 import com.example.seen.domain.model.community.response.PostListResponse
 import com.example.seen.domain.model.community.response.SearchResponse
+import com.example.seen.domain.model.profile.ProfileData
+import com.example.seen.domain.model.profile.response.ProfileResponse
+import com.example.seen.ui.community.fragment.ProfileFragment
 import com.example.seen.util.Constants.Companion.GENERAL
 import com.example.seen.util.Resource
 import com.example.seen.util.SeenApplication
@@ -35,7 +39,8 @@ import kotlin.collections.mutableListOf
 class CommunityViewModel(
     app: Application,
     private val userRepository: UserRepository,
-    private val communityRepository: CommunityRepository
+    private val communityRepository: CommunityRepository,
+    private val profileRepository: ProfileRepository
 ) : AndroidViewModel(app) {
 
     var selectedCategory = GENERAL
@@ -67,6 +72,13 @@ class CommunityViewModel(
     var searchPage = 1
     var searchResponse: SearchResponse? = null
     var lastSearchQuery: String = ""
+
+    val profileResult = MutableLiveData<Resource<ProfileResponse>?>()
+    val userPostsResult = MutableLiveData<Resource<PostListResponse>>()
+    val friendRequestResult = MutableLiveData<Resource<Unit>?>()
+
+    var userPostsPage = 1
+    var userPostsResponse: PostListResponse? = null
 
     fun getCommunityPosts(token: String, category: String, isNewCategory: Boolean = false) = viewModelScope.launch {
         // If we are switching categories, reset the pagination state first
@@ -574,6 +586,15 @@ class CommunityViewModel(
                 )
             }
         }
+        // update post profile cache
+        userPostsResponse?.let { response ->
+            val list = response.data.toMutableList()
+            val index = list.indexOfFirst { it.id == updatedPost.id }
+            if (index != -1) {
+                list[index] = updatedPost
+                userPostsResponse = response.copy(data = list)
+            }
+        }
     }
 
     fun deletePostFromCache(postId: Int) {
@@ -590,6 +611,119 @@ class CommunityViewModel(
                     posts = response.data.posts.copy(data = list)
                 )
             )
+        }
+    }
+
+    fun getUserProfile(token: String, userId: Int) = viewModelScope.launch {
+        safeGetProfileCall(token, userId)
+    }
+
+    fun getUserPosts(token: String, userId: Int, isNewUser: Boolean = false) = viewModelScope.launch {
+        if (isNewUser) {
+            userPostsPage = 1
+            userPostsResponse = null
+        }
+        safeGetUserPostsCall(token, userId)
+    }
+
+    fun sendFriendRequest(token: String, userId: Int) = viewModelScope.launch {
+        safeFriendActionCall { profileRepository.sendFriendRequest(token, userId) }
+    }
+
+    fun acceptFriendRequest(token: String, userId: Int) = viewModelScope.launch {
+        safeFriendActionCall { profileRepository.acceptFriendRequest(token, userId) }
+    }
+
+    fun cancelFriendRequest(token: String, userId: Int) = viewModelScope.launch {
+        safeFriendActionCall { profileRepository.cancelFriendRequest(token, userId) }
+    }
+
+    fun removeFriend(token: String, userId: Int) = viewModelScope.launch {
+        safeFriendActionCall { profileRepository.removeFriend(token, userId) }
+    }
+
+    fun blockFriend(token: String, userId: Int) = viewModelScope.launch {
+        safeFriendActionCall { profileRepository.blockFriend(token, userId) }
+    }
+
+    fun unblockFriend(token: String, userId: Int) = viewModelScope.launch {
+        safeFriendActionCall { profileRepository.unblockFriend(token, userId) }
+    }
+
+    fun clearProfileState() { profileResult.value = null }
+    fun clearFriendRequestState() { friendRequestResult.value = null }
+
+    private suspend fun safeGetProfileCall(token: String, userId: Int) {
+        profileResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = profileRepository.getUserProfile(token, userId)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        profileResult.postValue(Resource.Success(it))
+                    }
+                } else {
+                    profileResult.postValue(Resource.Error(response.message()))
+                }
+            } else {
+                profileResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> profileResult.postValue(Resource.Error("Network Failure"))
+                else -> profileResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
+
+    private suspend fun safeGetUserPostsCall(token: String, userId: Int) {
+        userPostsResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = communityRepository.getUserPosts(token, userId, userPostsPage)
+                userPostsResult.postValue(handleUserPostsResponse(response))
+            } else {
+                userPostsResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> userPostsResult.postValue(Resource.Error("Network Failure"))
+                else -> userPostsResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
+        }
+    }
+
+    private fun handleUserPostsResponse(response: Response<PostListResponse>): Resource<PostListResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+                userPostsPage++
+                if (userPostsResponse == null) {
+                    userPostsResponse = resultResponse
+                } else {
+                    val merged = ((userPostsResponse?.data ?: emptyList()) + resultResponse.data).toMutableList()
+                    userPostsResponse = resultResponse.copy(data = merged)
+                }
+                return Resource.Success(userPostsResponse ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    // single helper for all friend actions that return no body
+    private suspend fun safeFriendActionCall(action: suspend () -> Unit) {
+        friendRequestResult.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                action()
+                friendRequestResult.postValue(Resource.Success(Unit))
+            } else {
+                friendRequestResult.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> friendRequestResult.postValue(Resource.Error("Network Failure"))
+                else -> friendRequestResult.postValue(Resource.Error("Conversion Error: ${t.message}"))
+            }
         }
     }
 
@@ -620,6 +754,7 @@ class CommunityViewModel(
         return false
     }
 
-    fun getUserId() = userRepository.getUser()
 
+
+    fun getUserId() = userRepository.getUser()
 }

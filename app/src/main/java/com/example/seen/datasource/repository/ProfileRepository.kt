@@ -7,8 +7,8 @@ import retrofit2.Response
 
 class ProfileRepository {
 
-    suspend fun getProfile(token: String): Response<ProfileResponse> =
-        RetrofitInstance.api.getProfile(token)
+    suspend fun getUserProfile(token: String, userId: Int): Response<ProfileResponse> =
+        RetrofitInstance.api.getUserProfile(token, userId)
 
     suspend fun sendFriendRequest(token: String, userId: Int) =
         RetrofitInstance.api.sendFriendRequest(token, userId)
@@ -33,4 +33,5 @@ class ProfileRepository {
 
     suspend fun getFriendsProfile(token: String): Response<List<PostUser>> =
         RetrofitInstance.api.getFriendsProfile(token)
+
 }

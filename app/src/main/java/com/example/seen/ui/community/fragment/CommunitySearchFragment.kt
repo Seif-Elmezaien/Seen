@@ -103,6 +103,7 @@ class CommunitySearchFragment : Fragment() {
         setupListeners()
         showEmptyState()
         attachScrollListener() // attach to default tab's RV
+        observeEditDeletePost()
 
         viewModel.getUserId().observe(viewLifecycleOwner) { user ->
             postsAdapter.userId = user.id

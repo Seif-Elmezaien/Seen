@@ -206,10 +206,14 @@ class HomeFragment : Fragment() {
 
             viewModel.getUser().observe(viewLifecycleOwner) { user ->
                 if (user != null) {
-                    val action = HomeFragmentDirections.actionHomeFragmentToProfileFragment(it.id)
+                    val action = HomeFragmentDirections.actionHomeFragmentToProfileFragment(user.id)
                     findNavController().navigate(action)
                 }
             }
+        }
+
+        binding.ivNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
         }
 
         binding.cdReminder.setOnClickListener {

@@ -24,6 +24,7 @@ import com.example.seen.R
 import com.example.seen.databinding.FragmentCommunityBinding
 import com.example.seen.datasource.local.SeenDatabase
 import com.example.seen.datasource.repository.CommunityRepository
+import com.example.seen.datasource.repository.ProfileRepository
 import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.domain.model.community.Comment
 import com.example.seen.domain.model.community.Data
@@ -138,12 +139,14 @@ class CommunityFragment : Fragment() {
         val db = SeenDatabase(requireContext().applicationContext)
         val userRepository = UserRepository(db)
         val communityRepository = CommunityRepository()
+        val profileRepository = ProfileRepository()
 
         // create factory
         val factory = CommunityViewModelProviderFactory(
             requireActivity().application,
             userRepository,
-            communityRepository
+            communityRepository,
+            profileRepository
         )
 
         // initialize ViewModel by activity
