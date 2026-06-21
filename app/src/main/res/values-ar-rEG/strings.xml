@@ -366,5 +366,8 @@
     <string name="delete_account_title">حذف الحساب</string>
     <string name="delete_account_body">حذف حسابك وجميع بياناتك بشكل نهائي.</string>
 
-
+    <!-- ChatList Fragment -->
+    <string name="chats">المحادثات</string>
+    <string name="chat_list_empty_title">لا يوجد محادثات</string>
+    <string name="chat_list_empty_description"> ابحث و ابدأ محادثتك و تواصل مع الآخرين</string>
 </resources>

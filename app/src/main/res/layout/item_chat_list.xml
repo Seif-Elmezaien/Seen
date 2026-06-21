@@ -5,12 +5,12 @@
     android:id="@+id/cvItemHomeLogs"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="30dp"
-    android:layout_marginStart="30dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
     android:layout_marginBottom="16dp"
     app:cardBackgroundColor="@color/background"
     app:cardElevation="10dp"
-    app:strokeWidth="2dp"
+    app:strokeWidth="1dp"
     app:strokeColor="@color/primary"
     app:cardCornerRadius="8dp">
 
@@ -21,13 +21,24 @@
         android:padding="16dp"
         android:background="#0DFFFFFF">
 
-        <ImageView
-            android:id="@+id/ivNotification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_friend_notification"
+        <FrameLayout
+            android:id="@+id/flAccountAvatarStroke"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/avatar_border_type2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:padding="0dp"
+                android:src="@drawable/profile"
+                app:shapeAppearanceOverlay="@style/CircleImage"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvUsername"
@@ -35,18 +46,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/cairo_bold"
-            android:text="طلب صداقة"
+            android:text="منتصر إسماعيل"
             android:textColor="@color/title"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/ivNotification"
-            app:layout_constraintTop_toTopOf="@+id/ivNotification" />
+            app:layout_constraintStart_toEndOf="@+id/flAccountAvatarStroke"
+            app:layout_constraintTop_toTopOf="@+id/flAccountAvatarStroke" />
 
         <TextView
             android:id="@+id/tvLastMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="250dp"
             android:fontFamily="@font/cairo"
-            android:text="Eyad Hisham ارسل طلب صداقة"
+            android:text="ولا يهمك، خلي بالك من نفسك وقولي الرقم نزل ولا لأ 👍"
             android:textColor="@color/description"
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="@+id/tvUsername"
@@ -58,11 +70,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/cairo"
-            android:text="منذ 5 دقائق"
+            android:text="3:00 م"
             android:textColor="@color/primary"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_new_msg_dot"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvNotificationDate"
+            app:layout_constraintStart_toStartOf="@+id/tvNotificationDate"
+            app:layout_constraintTop_toBottomOf="@+id/tvNotificationDate" />
 
         <TextView
             android:id="@+id/tvDeleteNotification"

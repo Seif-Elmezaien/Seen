@@ -360,6 +360,10 @@
     <string name="delete_account_title">Delete Account</string>
     <string name="delete_account_body">Permanently delete your account and all data.</string>
 
+    <!-- ChatList Fragment -->
+    <string name="chats">Chats</string>
+    <string name="chat_list_empty_title">There are no conversations</string>
+    <string name="chat_list_empty_description">Search, start your conversation, and connect with others.</string>
 
 
 
