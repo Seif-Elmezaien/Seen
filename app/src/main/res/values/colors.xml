@@ -7,6 +7,7 @@
     <color name="background">#FFFFFF</color>
     <color name="background_card_log_display">#FFFFFF</color>
     <color name="background_card_settings_header">#80F9FAFB</color>
+    <color name="chat_receiver">#161A41</color>
 
     <color name="analysis_text">#6976EB</color>
 
@@ -20,7 +21,7 @@
     <color name="text_gery2">#B7B7B7</color>
 
     <color name="description_30">#40808080</color>
-    <color name="comment_background">#1AD9D9D9</color>
+    <color name="comment_background">#40D9D9D9</color>
     <color name="primary_30">#4D6976EB</color>
     <color name="primary_20">#406976EB</color>
     <color name="primary_10">#1A6976EB</color>

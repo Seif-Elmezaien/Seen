@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="end"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="6dp">
+
+    <FrameLayout
+        android:id="@+id/flAccountAvatarStroke"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/avatar_border_type2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:padding="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile"
+            app:shapeAppearanceOverlay="@style/CircleImage" />
+    </FrameLayout>
+
+
+    <ImageView
+        android:id="@+id/ivMessageImage"
+        android:layout_width="250dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_message_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/flAccountAvatarStroke"
+        app:layout_constraintTop_toTopOf="@+id/flAccountAvatarStroke" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/cairo"
+        android:layout_marginTop="10dp"
+        android:text="10:30 AM"
+        android:textColor="@color/description"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/ivMessageImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivMessageImage" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_not_seen"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+        app:layout_constraintEnd_toStartOf="@+id/tvDate"
+        app:layout_constraintTop_toTopOf="@+id/tvDate" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
