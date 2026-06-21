@@ -127,6 +127,10 @@ class CommunityFragment : Fragment() {
         binding.btnSearchPost.setOnClickListener {
             findNavController().navigate(R.id.action_communityFragment_to_communitySearchFragment)
         }
+
+        binding.btnChats.setOnClickListener {
+            findNavController().navigate(R.id.action_communityFragment_to_chatListFragment)
+        }
     }
 
     private fun getToken() {

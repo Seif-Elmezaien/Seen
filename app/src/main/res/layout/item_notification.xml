@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvUsername"
+            android:id="@+id/tvNotificationTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -42,15 +42,15 @@
             app:layout_constraintTop_toTopOf="@+id/ivNotification" />
 
         <TextView
-            android:id="@+id/tvLastMessage"
+            android:id="@+id/tvNotificationDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/cairo"
             android:text="Eyad Hisham ارسل طلب صداقة"
             android:textColor="@color/description"
             android:textSize="10sp"
-            app:layout_constraintStart_toStartOf="@+id/tvUsername"
-            app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+            app:layout_constraintStart_toStartOf="@+id/tvNotificationTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvNotificationTitle" />
 
 
         <TextView

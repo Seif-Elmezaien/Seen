@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_communityFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_communityFragment_to_chatListFragment"
+            app:destination="@id/chatListFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
@@ -173,5 +176,21 @@
         <action
             android:id="@+id/action_notificationFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.example.seen.ui.chat.fragment.ChatListFragment"
+        android:label="ChatListFragment" >
+        <action
+            android:id="@+id/action_chatListFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.seen.ui.chat.fragment.ChatFragment"
+        android:label="ChatFragment" >
+        <argument
+            android:name="receiver_id"
+            app:argType="integer" />
     </fragment>
 </navigation>

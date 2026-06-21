@@ -368,6 +368,11 @@
 
     <!-- ChatList Fragment -->
     <string name="chats">المحادثات</string>
+    <string name="chats_title_bottom_sheet">ابحث و ابدأ محادثة جديدة</string>
     <string name="chat_list_empty_title">لا يوجد محادثات</string>
     <string name="chat_list_empty_description"> ابحث و ابدأ محادثتك و تواصل مع الآخرين</string>
+
+    <!-- Chat Fragment -->
+    <string name="chat_empty_title">لا يوجد رسائل بعد</string>
+    <string name="chat_empty_description">كن أول من يبدأ المحادثة</string>
 </resources>

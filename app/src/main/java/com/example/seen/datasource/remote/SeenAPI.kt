@@ -5,6 +5,10 @@ import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
+import com.example.seen.domain.model.chat.response.ConversationDetailsResponse
+import com.example.seen.domain.model.chat.response.ConversationResponse
+import com.example.seen.domain.model.chat.response.ConversationSearchResponse
+import com.example.seen.domain.model.chat.response.GetMessagesResponse
 import com.example.seen.domain.model.chatbot.AskChatbotRequest
 import com.example.seen.domain.model.chatbot.AskChatbotResponse
 import com.example.seen.domain.model.chatbot.GetChatbotHistoryResponse
@@ -280,5 +284,60 @@ interface SeenAPI {
     suspend fun getChatbotHistory(
         @Header("Authorization") token: String
     ) : Response<GetChatbotHistoryResponse>
+
+    // ─── Chats ───────────────────────────────────────────────────────────────
+
+    @GET("conversations")
+    suspend fun getConversations(
+        @Header("Authorization") token: String
+    ): Response<ConversationResponse>
+
+    @GET("conversations/{conversation_id}")
+    suspend fun getConversationDetails(
+        @Header("Authorization") token: String,
+        @Path("conversation_id") conversationId: Int
+    ): Response<ConversationDetailsResponse>
+
+    @GET("conversations/search")
+    suspend fun searchChatFriends(
+        @Header("Authorization") token: String,
+        @Query("query") query: String
+    ): Response<ConversationSearchResponse>
+
+    @GET("messages/chat/{receiver_id}")
+    suspend fun getMessages(
+        @Header("Authorization") token: String,
+        @Path("receiver_id") receiverId: Int
+    ): Response<GetMessagesResponse>
+//
+//    @Multipart
+//    @POST("messages")
+//    suspend fun sendMessage(
+//        @Header("Authorization") token: String,
+//        @Part("receiver_id") receiverId: RequestBody,
+//        @Part("message") message: RequestBody?,
+//        @Part image: MultipartBody.Part?,
+//        @Part voice: MultipartBody.Part?,
+//        @Part video: MultipartBody.Part?
+//    ): Response<>
+//
+//    @PUT("messages/{id}")
+//    suspend fun updateMessage(
+//        @Header("Authorization") token: String,
+//        @Path("id") messageId: Int,
+//        @Body body: UpdateMessageRequest
+//    ): Response<>
+//
+//    @DELETE("messages/{id}")
+//    suspend fun deleteMessage(
+//        @Header("Authorization") token: String,
+//        @Path("id") messageId: Int
+//    ): Response<>
+//
+//    @POST("conversations/{conversation_id}/mark-as-read")
+//    suspend fun markAsRead(
+//        @Header("Authorization") token: String,
+//        @Path("conversation_id") conversationId: Int
+//    ): Response<>
 
 }

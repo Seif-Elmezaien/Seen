@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.community.fragment.CommunitySearchFragment">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_add_medication_bottom_sheet"
+    android:paddingBottom="32dp">
+
+    <!-- Drag handle -->
+    <View
+        android:id="@+id/dragHandle"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clHeaderChatList"
@@ -23,7 +36,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginStart="25dp"
             android:src="@drawable/ic_chat_header"
-            app:layout_constraintStart_toEndOf="@+id/ivBack"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -33,22 +46,12 @@
             android:layout_margin="8dp"
             android:fontFamily="@font/cairo_bold"
             android:gravity="start"
-            android:text="@string/chats"
+            android:text="@string/chats_title_bottom_sheet"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/ivChat"
             app:layout_constraintStart_toEndOf="@+id/ivChat"
             app:layout_constraintTop_toTopOf="@+id/ivChat" />
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_arrow_left"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearchChats"
@@ -76,57 +79,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <LinearLayout
-        android:id="@+id/layoutEmptyState"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="32dp"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/clHeaderChatList"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/ic_chat_list_empty"
-            android:alpha="0.6" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/chat_list_empty_title"
-            android:fontFamily="@font/cairo_bold"
-            android:textSize="16sp"
-            android:textColor="@color/title"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/chat_list_empty_description"
-            android:fontFamily="@font/cairo_bold"
-            android:textSize="13sp"
-            android:textColor="#99A1AF"
-            android:gravity="center" />
-    </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvChats"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        android:clipToPadding="false"
-        android:layout_marginTop="32dp"
-        android:paddingBottom="30dp"
-        tools:listitem="@layout/item_chat_list"
-        app:layout_constraintTop_toBottomOf="@id/clHeaderChatList"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/rvLikes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="32dp"
+        tools:listitem="@layout/item_account_search"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/clHeaderChatList" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -674,7 +674,7 @@ class PostDetailsFragment : Fragment() {
     }
 
     private fun showDeleteCommentDialog(comment: Comment) {
-        android.app.AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setTitle("Delete Comment")
             .setMessage("Are you sure you want to delete this comment?")
             .setPositiveButton("Delete") { _, _ ->

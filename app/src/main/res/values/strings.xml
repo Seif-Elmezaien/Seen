@@ -362,8 +362,12 @@
 
     <!-- ChatList Fragment -->
     <string name="chats">Chats</string>
+    <string name="chats_title_bottom_sheet">Search and Start New Conversation</string>
     <string name="chat_list_empty_title">There are no conversations</string>
     <string name="chat_list_empty_description">Search, start your conversation, and connect with others.</string>
 
+    <!-- Chat Fragment -->
+    <string name="chat_empty_title">No messages yet</string>
+    <string name="chat_empty_description">Be the first to start the conversation</string>
 
 </resources>

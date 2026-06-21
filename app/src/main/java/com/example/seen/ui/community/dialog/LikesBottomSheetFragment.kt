@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.seen.databinding.ItemPostCommentLikesBinding
+import com.example.seen.databinding.ItemPostCommentLikesBottomSheetBinding
 import com.example.seen.ui.community.adapters.LikesAdapter
 import com.example.seen.ui.community.fragment.PostDetailsFragmentDirections
 import com.example.seen.ui.community.viewmodel.CommunityViewModel
@@ -21,14 +21,14 @@ class LikesBottomSheetFragment(
     private val commentId: Int? = null
 ) : BottomSheetDialogFragment() {
 
-    private var _binding: ItemPostCommentLikesBinding? = null
+    private var _binding: ItemPostCommentLikesBottomSheetBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: CommunityViewModel by activityViewModels()
     private lateinit var likesAdapter: LikesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = ItemPostCommentLikesBinding.inflate(inflater, container, false)
+        _binding = ItemPostCommentLikesBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
 

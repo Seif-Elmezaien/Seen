@@ -68,6 +68,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
 
     private var onSearchResultClickListener: ((PostUser) -> Unit)? = null
 
+
     fun setOnSearchResultClickListener(listener: (PostUser) -> Unit) {
         onSearchResultClickListener = listener
     }
