@@ -1,6 +1,6 @@
 package com.example.seen.domain.model.chat
 
-data class LatestMessage(
+data class ChatMessage(
     val id: Int,
     val conversation_id: Int,
     val sender_id: Int,
@@ -9,6 +9,7 @@ data class LatestMessage(
     val voice_url: String?,
     val video_url: String?,
     val is_read: Boolean,
-    val created_at: String?,
-    val updated_at: String?
+    val created_at: String,
+    val updated_at: String,
+    val sender: ChatUser?
 )

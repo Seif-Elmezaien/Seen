@@ -25,6 +25,7 @@ import java.util.TimeZone
 
 class ChatListAdapter(
     private val context: Context,
+    private var currentUserId: Int
 ) : RecyclerView.Adapter<ChatListAdapter.ChatViewHolder>() {
 
     inner class ChatViewHolder(
@@ -81,7 +82,12 @@ class ChatListAdapter(
 
         holder.binding.apply {
 
-            val otherUser = conversation.user2
+            val otherUser =
+                if (conversation.user1_id == currentUserId)
+                    conversation.user2
+                else
+                    conversation.user1
+
 
             tvUsername.text =
                 "${otherUser?.first_name ?: ""} ${otherUser?.last_name ?: ""}"
@@ -102,6 +108,11 @@ class ChatListAdapter(
 
     override fun getItemCount(): Int {
         return differ.currentList.size
+    }
+
+    fun updateCurrentUserId(id: Int) {
+        currentUserId = id
+        notifyDataSetChanged()
     }
 
     private fun getRelativeTime(timestamp: String): String {

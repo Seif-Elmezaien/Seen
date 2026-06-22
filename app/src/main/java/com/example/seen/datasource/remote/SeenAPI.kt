@@ -5,10 +5,13 @@ import com.example.seen.domain.model.authentication.CheckEmailResponse
 import com.example.seen.domain.model.authentication.LoginAndSignupResponse
 import com.example.seen.domain.model.authentication.LoginRequest
 import com.example.seen.domain.model.authentication.SignupRequest
+import com.example.seen.domain.model.chat.ChatMessage
+import com.example.seen.domain.model.chat.ChatPaginatedResponse
+import com.example.seen.domain.model.chat.Conversation
+import com.example.seen.domain.model.chat.SendMessageResponse
 import com.example.seen.domain.model.chat.response.ConversationDetailsResponse
 import com.example.seen.domain.model.chat.response.ConversationResponse
 import com.example.seen.domain.model.chat.response.ConversationSearchResponse
-import com.example.seen.domain.model.chat.response.GetMessagesResponse
 import com.example.seen.domain.model.chatbot.AskChatbotRequest
 import com.example.seen.domain.model.chatbot.AskChatbotResponse
 import com.example.seen.domain.model.chatbot.GetChatbotHistoryResponse
@@ -307,37 +310,37 @@ interface SeenAPI {
     @GET("messages/chat/{receiver_id}")
     suspend fun getMessages(
         @Header("Authorization") token: String,
-        @Path("receiver_id") receiverId: Int
-    ): Response<GetMessagesResponse>
-//
-//    @Multipart
-//    @POST("messages")
-//    suspend fun sendMessage(
-//        @Header("Authorization") token: String,
-//        @Part("receiver_id") receiverId: RequestBody,
-//        @Part("message") message: RequestBody?,
-//        @Part image: MultipartBody.Part?,
-//        @Part voice: MultipartBody.Part?,
-//        @Part video: MultipartBody.Part?
-//    ): Response<>
-//
-//    @PUT("messages/{id}")
-//    suspend fun updateMessage(
-//        @Header("Authorization") token: String,
-//        @Path("id") messageId: Int,
-//        @Body body: UpdateMessageRequest
-//    ): Response<>
-//
-//    @DELETE("messages/{id}")
-//    suspend fun deleteMessage(
-//        @Header("Authorization") token: String,
-//        @Path("id") messageId: Int
-//    ): Response<>
-//
-//    @POST("conversations/{conversation_id}/mark-as-read")
-//    suspend fun markAsRead(
-//        @Header("Authorization") token: String,
-//        @Path("conversation_id") conversationId: Int
-//    ): Response<>
+        @Path("receiver_id") receiverId: Int,
+        @Query("page") page: Int = 1
+    ): Response<ChatPaginatedResponse<ChatMessage>>
 
+    @Multipart
+    @POST("messages")
+    suspend fun sendMessage(
+        @Header("Authorization") token: String,
+        @Part("receiver_id") receiverId: RequestBody,
+        @Part("message") message: RequestBody?,
+        @Part image: MultipartBody.Part? = null,
+        @Part voice: MultipartBody.Part? = null,
+        @Part video: MultipartBody.Part? = null
+    ): Response<SendMessageResponse>
+
+    @PUT("messages/{id}")
+    suspend fun editMessage(
+        @Header("Authorization") token: String,
+        @Path("id") messageId: Int,
+        @Body body: Map<String, String>
+    ): Response<SendMessageResponse>
+
+    @DELETE("messages/{id}")
+    suspend fun deleteMessage(
+        @Header("Authorization") token: String,
+        @Path("id") messageId: Int
+    ): Response<Unit>
+
+    @POST("messages/mark-as-read/{conversationId}")
+    suspend fun markChatAsRead(
+        @Header("Authorization") token: String,
+        @Path("conversationId") conversationId: Int
+    ): Response<Unit>
 }

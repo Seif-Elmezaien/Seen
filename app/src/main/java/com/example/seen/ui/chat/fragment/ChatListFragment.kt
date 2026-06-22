@@ -21,8 +21,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.seen.R
 import com.example.seen.databinding.FragmentChatListBinding
 import com.example.seen.databinding.FragmentChatbotBinding
+import com.example.seen.datasource.local.SeenDatabase
+import com.example.seen.datasource.local.SeenDatabase.Companion.invoke
 import com.example.seen.datasource.repository.ChatRepository
 import com.example.seen.datasource.repository.ChatbotRepository
+import com.example.seen.datasource.repository.UserRepository
 import com.example.seen.ui.chat.adapter.ChatListAdapter
 import com.example.seen.ui.chat.viewmodel.ChatViewModel
 import com.example.seen.ui.chat.viewmodel.ChatViewModelProviderFactory
@@ -48,6 +51,8 @@ class ChatListFragment : Fragment() {
 
     private lateinit var adapter: ChatListAdapter
 
+    private var currentUserId: Int = -1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,10 +75,12 @@ class ChatListFragment : Fragment() {
     }
 
     private fun initializeViewModel() {
-        val chatRepository = ChatRepository()
-        val factory       =
-            ChatViewModelProviderFactory(requireActivity().application, chatRepository)
-
+        val db = SeenDatabase(requireContext().applicationContext)
+        val factory = ChatViewModelProviderFactory(
+            requireActivity().application,
+            ChatRepository(),
+            UserRepository(db)
+        )
         viewModel = ViewModelProvider(this, factory)[ChatViewModel::class.java]
     }
 
@@ -95,7 +102,7 @@ class ChatListFragment : Fragment() {
 
     private fun setupRecyclerView() {
 
-        adapter = ChatListAdapter(requireContext())
+        adapter = ChatListAdapter(requireContext(), currentUserId)
 
         binding.rvChats.apply {
             this.adapter = this@ChatListFragment.adapter
@@ -103,13 +110,16 @@ class ChatListFragment : Fragment() {
         }
 
         adapter.setOnItemClickListener { conversation ->
+            val otherUserId = if (conversation.user1_id == currentUserId)
+                conversation.user2?.id
+            else
+                conversation.user1?.id
 
-            val action =
-                ChatListFragmentDirections.actionChatListFragmentToChatFragment(
-                    conversation.user2!!.id
-                )
-
-            findNavController().navigate(action)
+            otherUserId?.let {
+                val action = ChatListFragmentDirections
+                    .actionChatListFragmentToChatFragment(it)
+                findNavController().navigate(action)
+            }
         }
     }
 
@@ -145,6 +155,14 @@ class ChatListFragment : Fragment() {
     }
 
     private fun observeConversations() {
+
+        // Get current user ID from Room first, then load messages
+        viewModel.getCurrentUser().observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                currentUserId = user.id
+                adapter.updateCurrentUserId(user.id)
+            }
+        }
 
         viewModel.conversations.observe(viewLifecycleOwner) { resource ->
 

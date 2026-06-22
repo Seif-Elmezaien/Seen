@@ -106,4 +106,6 @@ dependencies {
     // Markdown
     implementation("io.noties.markwon:core:4.6.2")
 
+    // Pusher
+    implementation("com.pusher:pusher-java-client:2.4.4")
 }

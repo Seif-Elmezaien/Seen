@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:gravity="end"
     android:paddingHorizontal="16dp"
     android:paddingVertical="6dp">
 
@@ -37,7 +36,7 @@
         android:layout_marginEnd="10dp"
         android:paddingHorizontal="14dp"
         android:paddingVertical="10dp"
-        android:text=""
+        android:text="asdasdsadadadadadasdadadadadsadadadda"
         android:textAlignment="textStart"
         android:textColor="@color/white"
         android:textSize="14sp"

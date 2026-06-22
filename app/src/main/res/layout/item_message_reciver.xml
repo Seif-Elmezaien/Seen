@@ -35,7 +35,7 @@
         android:layout_marginStart="10dp"
         android:paddingHorizontal="14dp"
         android:paddingVertical="10dp"
-        android:text=""
+        android:maxWidth="300dp"
         android:textAlignment="textStart"
         android:textColor="@color/chat_receiver"
         android:textSize="14sp"
@@ -53,15 +53,6 @@
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/tvMessage"
         app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_not_seen"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
-        app:layout_constraintStart_toEndOf="@+id/tvDate"
-        app:layout_constraintTop_toTopOf="@+id/tvDate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
